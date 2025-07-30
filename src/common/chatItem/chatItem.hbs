@@ -1,0 +1,11 @@
+export default `<div class="chatItem">
+  <img src="" alt="avatar" class="avatar"/>
+  <div class="chatInfo">
+    <div class="userName">{{userName}}</div>
+    <div class="lastMessage">{{lastMessage}}</div>
+  </div>
+  <div class="messageInfo">
+    <div class="time">{{time}}</div>
+    {{#if unreadCount}}<div class="unreadCount">{{unreadCount}}</div>{{/if}}
+  </div>
+</div>`;
