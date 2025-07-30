@@ -8,6 +8,7 @@ addNavigation({
   error404Path: '../ErrorPage/ErrorPage.html',
   error500Path: '../ErrorPage/ErrorPage.html',
   chatPath: '../ChatPage/NotActiveChat/NotActiveChat.html',
+  selectedChatPath: '../ChatPage/ActiveChat/ActiveChat.html',
 });
 
 registerInput();

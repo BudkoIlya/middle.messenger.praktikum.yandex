@@ -6,6 +6,7 @@ addNavigation({
   error404Path: './ErrorPage.html',
   error500Path: './ErrorPage.html',
   chatPath: '../ChatPage/NotActiveChat/NotActiveChat.html',
+  selectedChatPath: '../ChatPage/ActiveChat/ActiveChat.html',
 });
 
 const params = new URLSearchParams(window.location.search);

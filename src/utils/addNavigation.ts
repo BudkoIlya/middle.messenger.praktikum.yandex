@@ -2,7 +2,14 @@ import Handlebars from 'handlebars';
 import { navigation, type INavigation } from '../common/navigation';
 import '../common/navigation/styles/navigation.scss';
 
-export const addNavigation = ({ registerPath, loginPath,chatPath, error404Path, error500Path }: INavigation) => {
+export const addNavigation = ({
+  registerPath,
+  loginPath,
+  chatPath,
+  selectedChatPath,
+  error404Path,
+  error500Path,
+}: INavigation) => {
   document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('header');
 
@@ -11,7 +18,7 @@ export const addNavigation = ({ registerPath, loginPath,chatPath, error404Path, 
       registerPath,
       loginPath,
       chatPath,
-      selectedChatPath: '',
+      selectedChatPath,
       profilePath: '',
       editProfilePath: '',
       editPasswordPath: '',

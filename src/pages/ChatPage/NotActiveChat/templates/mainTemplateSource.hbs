@@ -1,9 +1,9 @@
 export default `
 <div class="chat">
-  <aside class="chatList">
-    <a class="userNameLink" href="/">Будко Илья</a>
-    <form class="form">
-      {{> input name="search" placholder="Поиск" }}
+  <aside class="chat__list">
+    <a class="chat__name-link" href="/">Будко Илья</a>
+    <form>
+      {{> input class="chat__search-input" name="search" placholder="Поиск" }}
     </form>
     {{> chatItem userName="Роман" lastMessage="Привет" time="12:00" unreadCount="1"}}
     {{> chatItem userName="Алиса" lastMessage="Привет" time="12:02" unreadCount="1"}}
@@ -15,8 +15,8 @@ export default `
     {{> chatItem userName="Артём" lastMessage="Привет" time="Пт" }}
     {{> chatItem userName="Артём" lastMessage="Привет" time="1 июля" }}
   </aside>
-  <section class="notSelectedChat">
-    <h2 class="emptyChatMessage">Выберите чат</h2>
+  <section class="chat__dialog">
+    <h2 class="chat__empty-message">Выберите чат</h2>
   </section>
 </div>
 `;
