@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
-import viteTsconfigPaths from 'vite-tsconfig-paths';
 import pluginChecker from 'vite-plugin-checker';
 
 export default defineConfig(() => {
@@ -10,7 +9,6 @@ export default defineConfig(() => {
     build: {
       outDir: resolve(__dirname, 'dist'),
       plugins: [
-        viteTsconfigPaths(),
         pluginChecker({ typescript: true, eslint: { lintCommand: 'eslint "./src/**/*.{ts}"' } }),
       ],
     },

@@ -95,7 +95,7 @@
       padding: 20px
     }
 
-    .chat__form {
+    .chat__form.form {
       display: grid;
       gap: 10px;
       grid-template-columns: 30px 1fr 50px;
@@ -119,20 +119,19 @@
           background-size: cover;
         }
       }
-    }
+      .form__input.chat__message {
+        width: 100%;
+        background: #EDECEC;
+        border: none;
+        border-radius: 15px;
 
-    .form__input.chat__message {
-      width: 100%;
-      background: #EDECEC;
-      border: none;
-      border-radius: 15px;
+        &::placeholder {
+          color: #DAD9DD;
+        }
 
-      &::placeholder {
-        color: #DAD9DD;
-      }
-
-      &:focus {
-        outline: none;
+        &:focus {
+          outline: none;
+        }
       }
     }
   }
