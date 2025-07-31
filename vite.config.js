@@ -15,7 +15,11 @@ export default defineConfig(() => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'src/index.html'),
-          registerPage: resolve(__dirname, 'src/pages/RegisterPage/RegisterPage.html')
+          registerPage: resolve(__dirname, 'src/pages/RegisterPage/RegisterPage.html'),
+          loginPage: resolve(__dirname, 'src/pages/LoginPage/LoginPage.html'),
+          errorPage: resolve(__dirname, 'src/pages/ErrorPage/ErrorPage.html'),
+          activeChat: resolve(__dirname, 'src/pages/ChatPage/ActiveChat/ActiveChat.html'),
+          notActiveChat: resolve(__dirname, 'src/pages/ChatPage/NotActiveChat/NotActiveChat.html'),
         },
       },
     },
