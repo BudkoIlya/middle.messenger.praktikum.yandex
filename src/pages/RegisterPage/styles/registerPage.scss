@@ -1,0 +1,9 @@
+@use 'src/styles/common';
+
+.main {
+  @include common.form;
+
+  .registerLink {
+    margin-top: 10px;
+  }
+}
