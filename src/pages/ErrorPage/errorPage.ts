@@ -20,16 +20,7 @@ if (type) {
 
   if (title) {
     title.textContent = type;
-  }
 
-  switch (type) {
-    case '404':
-      document.title = '404';
-      break;
-    case '500':
-      document.title = '500';
-      break;
-    default:
-      document.title = 'Неизвестная ошибка';
   }
+  document.title = type;
 }
