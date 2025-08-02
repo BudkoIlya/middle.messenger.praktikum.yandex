@@ -1,24 +1,10 @@
 export default `
 <div class="chat">
-  <aside class="chat__sidebar">
-    <a class="chat__user-link" href="/">Будко Илья</a>
-    <form>
-      {{> input name="search" placholder="Поиск" class="chat__search" }}
-    </form>
-    {{> chatItem userName="Роман" lastMessage="Привет" time="12:00" unreadCount="1"}}
-    {{> chatItem userName="Алиса" lastMessage="Привет" time="12:02" unreadCount="1"}}
-    {{> chatItem userName="Артём" lastMessage="Привет" time="12:00" }}
-    {{> chatItem userName="Роман" lastMessage="Привет" time="12:00" }}
-    {{> chatItem userName="Артём" lastMessage="Привет" time="12:00" }}
-    {{> chatItem userName="Артём" lastMessage="Привет" time="12:00" class="chat__item--active" }}
-    {{> chatItem userName="Артём" lastMessage="Привет" time="12:00" }}
-    {{> chatItem userName="Артём" lastMessage="Привет" time="Пт" }}
-    {{> chatItem userName="Артём" lastMessage="Привет" time="1 июля" }}
-  </aside>
+  {{> ChatItems}}
   <section class="chat__dialog">
     <div class="chat__header">
       <h3 class="chat_user-title">Артём</h3>
-      <div class="chat__edit">...</div>
+      <span class="chat__edit">...</span>
     </div>
     <div class="chat__messages">
       {{> message class="chat__received_message" text="Привет" time="12:00"}}
@@ -26,8 +12,8 @@ export default `
     </div>
     <form class="chat__form form">
       {{> img alt="Добавить" src="/assets/add_btn.svg" class="chat__add-file-btn"}}
-      {{> input name="send_meesage" placholder="Сообщение" class="form__input chat__message" }}
-      {{> button name="send" text="<img alt='Отправить' src='/assets/arrow.svg' class='chat__add-file-btn>'"}}
+      {{> input name="send_meesage" placeholder="Сообщение" class="form__input chat__message" }}
+      {{> button type='submit' className="form__send-message" name="send" text="<img alt='Отправить' src='/assets/arrow.svg' class='chat__add-file-btn>'"}}
     </form>
   </section>
 </div>

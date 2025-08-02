@@ -7,6 +7,9 @@ addNavigation({
   error500Path: './ErrorPage.html',
   chatPath: '../ChatPage/NotActiveChat/NotActiveChat.html',
   selectedChatPath: '../ChatPage/ActiveChat/ActiveChat.html',
+  profilePath: '../ProfilePage/ProfilePage.html',
+  editProfilePath: '../ProfilePage/ProfilePage.html',
+  editPasswordPath: '../EditPasswordPage/EditPasswordPage.html',
 });
 
 const params = new URLSearchParams(window.location.search);

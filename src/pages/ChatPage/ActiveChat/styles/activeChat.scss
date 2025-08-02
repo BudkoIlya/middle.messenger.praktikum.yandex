@@ -1,54 +1,11 @@
 @use 'src/styles/common';
 @use 'src/styles/main';
+@use '../../common/styles/common' as chatCommon;
 
-#app {
-  padding: main.$mainPadding 0 0 0;
-}
+@include chatCommon.mainPadding;
 
 .main {
-  height: calc(100vh - #{common.$navHeight} - #{main.$mainMargin} * 2 - #{main.$mainPadding});
-
-  .chat {
-    height: 100%;
-    display: grid;
-    grid-template-columns: 500px 1.5fr;
-  }
-
-  .chat__sidebar {
-    overflow: hidden;
-    width: 500px;
-    background-color: #FAF8F8;
-    padding: 20px;
-    border-radius: 0 0 0 10px;
-    height: 100%;
-
-    .chat__item--active {
-      background: #BBE7F8;
-    }
-
-    .chat__user-link {
-      display: block;
-      color: common.$blue;
-      font-size: 20px;
-      font-weight: normal;
-      margin-bottom: 10px;
-      text-decoration: none;
-    }
-
-    .chat__search {
-      width: 100%;
-      background: #EDECEC;
-      border: none;
-
-      &::placeholder {
-        color: #DAD9DD;
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
+  @include chatCommon.chat;
 
   .chat__dialog {
     display: grid;
@@ -71,62 +28,65 @@
         transform: rotate(90deg);
         cursor: pointer;
       }
+    }
+  }
 
+  .chat__messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .chat__received_message {
+      border-radius: 0 8px 8px 8px;
     }
 
-    .chat__messages {
+    .chat__answer_message {
+      align-self: end;
+      border-radius: 8px 8px 0 8px;
+
+      .message__time {
+        color: common.$blue;
+      }
+    }
+
+  }
+
+  .chat__messages, .chat__form.form {
+    padding: 20px
+  }
+
+  .chat__form.form {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 30px 1fr 50px;
+    align-items: center;
+
+    .chat__add-file-btn {
+      transform: scale(1.5);
+      cursor: pointer;
+    }
+
+    .form__send-message {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      .chat__received_message {
-        border-radius: 0 8px 8px 8px;
-      }
-      .chat__answer_message {
-        align-self: end;
-        border-radius: 8px 8px 0 8px;
-        .message__time {
-          color: common.$blue;
-        }
-      }
-
-    }
-
-    .chat__messages, .chat__form.form {
-      padding: 20px
-    }
-
-    .chat__form.form {
-      display: grid;
-      gap: 10px;
-      grid-template-columns: 30px 1fr 50px;
       align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
 
-      .chat__add-file-btn {
-        transform: scale(1.5);
-        cursor: pointer;
+    .form__input.chat__message {
+      width: 100%;
+      background: #EDECEC;
+      border: none;
+      border-radius: 15px;
+
+      &::placeholder {
+        color: #DAD9DD;
       }
 
-      .form__send-message {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-      }
-      .form__input.chat__message {
-        width: 100%;
-        background: #EDECEC;
-        border: none;
-        border-radius: 15px;
-
-        &::placeholder {
-          color: #DAD9DD;
-        }
-
-        &:focus {
-          outline: none;
-        }
+      &:focus {
+        outline: none;
       }
     }
   }
