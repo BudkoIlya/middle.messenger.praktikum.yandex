@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const urlParams = new URLSearchParams(window.location.search);
   const mode = urlParams.get('mode');
+  if (mode) {
+    document.title = mode === 'view' ? 'Профиль' : 'Редактирование профиля';
+  }
+
   const isDisabled = mode === 'view' ? 'disabled' : '';
 
   const context = {
