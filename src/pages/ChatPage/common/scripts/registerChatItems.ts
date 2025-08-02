@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+
 import ChatItems from '../templates/ChatItems.hbs';
 import { registerButton, registerChatItem } from '../../../../utils';
 

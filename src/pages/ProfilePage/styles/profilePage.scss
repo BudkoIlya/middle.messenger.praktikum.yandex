@@ -1,8 +1,7 @@
-@use 'src/styles/common';
+@use "src/styles/common";
 
 .main {
   @include common.form;
-
 
   .avatar {
     width: 100px;
@@ -32,16 +31,18 @@
     .editAvatarImg {
       transform: scale(0.7);
     }
+
     .label {
       .title {
         cursor: pointer;
         font-size: 14px;
-
       }
     }
+
     .editProfileInput {
       display: none;
     }
+
     .editProfileTitle {
       display: flex;
       align-items: center;
@@ -61,12 +62,16 @@
     flex-direction: column;
     gap: 5px;
     align-items: center;
+
     .deleteBtn {
       color: common.$red;
     }
-    .cancelBtn, .deleteBtn {
+
+    .cancelBtn,
+    .deleteBtn {
       cursor: pointer;
     }
+
     .cancelBtn {
       .link {
         color: black;

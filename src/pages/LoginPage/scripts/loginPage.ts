@@ -1,5 +1,6 @@
-import { registerButton, registerInput, addNavigation } from '../../../utils';
 import Handlebars from 'handlebars';
+
+import { registerButton, registerInput, addNavigation } from '../../../utils';
 import mainTemplateSource from '../templates/mainTemplateSource.hbs';
 
 addNavigation({

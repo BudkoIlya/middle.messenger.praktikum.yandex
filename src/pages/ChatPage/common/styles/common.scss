@@ -1,12 +1,11 @@
-@use 'src/styles/common';
-@use 'src/styles/main';
+@use "src/styles/common";
+@use "src/styles/main";
 
 @mixin mainPadding {
   #app {
     padding: main.$mainPadding 0 0 0;
   }
 }
-
 
 @mixin chat {
   height: calc(100vh - #{common.$navHeight} - #{main.$mainMargin} * 2 - #{main.$mainPadding});
@@ -20,7 +19,7 @@
   .chat__sidebar {
     overflow: hidden;
     width: 500px;
-    background-color: #FAF8F8;
+    background-color: #faf8f8;
     padding: 20px;
     border-radius: 0 0 0 10px;
     height: 100%;
@@ -46,7 +45,7 @@
     }
 
     .chat__item--active {
-      background: #BBE7F8;
+      background: #bbe7f8;
     }
 
     .chat__user-link {
@@ -60,11 +59,11 @@
 
     .chat__search {
       width: 100%;
-      background: #EDECEC;
+      background: #edecec;
       border: none;
 
       &::placeholder {
-        color: #DAD9DD;
+        color: #dad9dd;
       }
 
       &:focus {
@@ -72,6 +71,4 @@
       }
     }
   }
-
-
 }

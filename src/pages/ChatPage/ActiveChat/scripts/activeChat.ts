@@ -1,5 +1,6 @@
-import { addNavigation, registerButton, registerInput, registerMessage } from '../../../../utils';
 import Handlebars from 'handlebars';
+
+import { addNavigation, registerButton, registerInput, registerMessage } from '../../../../utils';
 import mainTemplateSource from '../templates/mainTemplateSource.hbs';
 import { chatItem } from '../../../../common/chatItem';
 import { CONTEXT, registerChatItems } from '../../common/scripts/registerChatItems';

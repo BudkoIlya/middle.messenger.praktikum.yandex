@@ -8,7 +8,9 @@
       "dom.iterable",
       "ES2023"
     ],
-    "types": ["vite/client"],
+    "types": [
+      "vite/client"
+    ],
     "noImplicitAny": false,
     "allowJs": true,
     "skipLibCheck": true,
@@ -24,5 +26,8 @@
     "noEmit": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "vite.config.js"
+  ]
 }

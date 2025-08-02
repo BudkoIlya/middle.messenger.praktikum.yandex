@@ -1,7 +1,6 @@
-@use 'src/styles/common';
-@use 'src/styles/main';
-@use '../../common/styles/common' as chatCommon;
-
+@use "src/styles/common";
+@use "src/styles/main";
+@use "../../common/styles/common" as chatCommon;
 @include chatCommon.mainPadding;
 
 .main {
@@ -37,22 +36,22 @@
     gap: 10px;
 
     .chat__received_message {
-      border-radius: 0 8px 8px 8px;
+      border-radius: 0 8px 8px;
     }
 
     .chat__answer_message {
       align-self: end;
-      border-radius: 8px 8px 0 8px;
+      border-radius: 8px 8px 0;
 
       .message__time {
         color: common.$blue;
       }
     }
-
   }
 
-  .chat__messages, .chat__form.form {
-    padding: 20px
+  .chat__messages,
+  .chat__form.form {
+    padding: 20px;
   }
 
   .chat__form.form {
@@ -77,12 +76,12 @@
 
     .form__input.chat__message {
       width: 100%;
-      background: #EDECEC;
+      background: #edecec;
       border: none;
       border-radius: 15px;
 
       &::placeholder {
-        color: #DAD9DD;
+        color: #dad9dd;
       }
 
       &:focus {
