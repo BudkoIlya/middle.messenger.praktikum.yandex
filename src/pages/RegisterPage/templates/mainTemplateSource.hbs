@@ -4,11 +4,11 @@ export default `
     <h2 class="title">Регистрации</h2>
     {{> input title='Почта' name='email' }}
     {{> input title='Логин' name='login' }}
-    {{> input title='Имя' name='name' }}
+    {{> input title='Имя' name='first_name' }}
     {{> input title='Фамилия' name='second_name' }}
-    {{> input title='Пароль' name='password' }}
-    {{> input title='Подтверждение пароля' name='confirm_password' }}
-    {{> button text='Зарегистрироваться' name='register' className='registerBtn'}}
+    {{> input type='password' title='Пароль' name='password' }}
+    {{> input type='password' title='Подтверждение пароля' name='confirm_password' }}
+    {{> button type='submit' text='Зарегистрироваться' name='register' className='registerBtn'}}
   </form>
   <a class="registerLink" href="../LoginPage/LoginPage.html">Вход</a>
 </div>

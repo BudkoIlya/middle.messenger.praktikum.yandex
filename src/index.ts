@@ -7,4 +7,7 @@ addNavigation({
   selectedChatPath: './pages/ChatPage/ActiveChat/ActiveChat.html',
   error404Path: './pages/ErrorPage/ErrorPage.html',
   error500Path: './pages/ErrorPage/ErrorPage.html',
+  profilePath: './pages/ProfilePage/ProfilePage.html',
+  editProfilePath: './pages/ProfilePage/ProfilePage.html',
+  editPasswordPath: './pages/EditPasswordPage/EditPasswordPage.html',
 });

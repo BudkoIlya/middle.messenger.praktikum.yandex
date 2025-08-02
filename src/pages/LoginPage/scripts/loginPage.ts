@@ -9,6 +9,9 @@ addNavigation({
   error500Path: '../ErrorPage/ErrorPage.html',
   chatPath: '../ChatPage/NotActiveChat/NotActiveChat.html',
   selectedChatPath: '../ChatPage/ActiveChat/ActiveChat.html',
+  profilePath: '../ProfilePage/ProfilePage.html',
+  editProfilePath: '../ProfilePage/ProfilePage.html',
+  editPasswordPath: '../EditPasswordPage/EditPasswordPage.html',
 });
 
 registerInput();
