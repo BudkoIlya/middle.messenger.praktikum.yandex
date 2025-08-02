@@ -21,7 +21,7 @@ export default defineConfig(() => {
           activeChat: resolve(__dirname, 'src/pages/ChatPage/ActiveChat/ActiveChat.html'),
           notActiveChat: resolve(__dirname, 'src/pages/ChatPage/NotActiveChat/NotActiveChat.html'),
           profilePage: resolve(__dirname, 'src/pages/ProfilePage/ProfilePage.html'),
-          passwordEditPage: resolve(__dirname, 'src/pages/passwordEditPage/passwordEditPage.html'),
+          passwordEditPage: resolve(__dirname, 'src/pages/EditPasswordPage/EditPasswordPage.html'),
         },
       },
     },
