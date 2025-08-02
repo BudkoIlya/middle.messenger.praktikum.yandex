@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const context = {
     inputs: [
       { title: 'Старый пароль', name: 'oldPassword', type: 'password' },
-      { title: 'Новый пароль', name: 'newPassword',  type: 'password' },
+      { title: 'Новый пароль', name: 'newPassword', type: 'password' },
       { title: 'Повторить новый пароль', name: 'confirmNewPassword', type: 'password' },
     ],
   };

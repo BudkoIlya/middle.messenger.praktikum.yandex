@@ -1,4 +1,4 @@
-@use "src/styles/common";
+@use 'src/styles/common';
 
 .chatItem {
   display: grid;
@@ -19,7 +19,7 @@
     border-radius: 50%;
     position: relative;
 
-    &[src=""]::before {
+    &[src='']::before {
       content: attr(alt);
       display: flex;
       align-items: center;

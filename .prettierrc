@@ -7,5 +7,6 @@
   "trailingComma": "all",
   "bracketSpacing": true,
   "arrowParens": "always",
-  "parser": "typescript"
+  "endOfLine": "lf",
+  "htmlWhitespaceSensitivity": "css"
 }

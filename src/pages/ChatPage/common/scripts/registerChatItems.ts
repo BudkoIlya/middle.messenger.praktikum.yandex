@@ -23,6 +23,6 @@ export const CONTEXT = {
   ],
   button: {
     name: 'Добавить',
-    class: 'add_btn'
-  }
+    class: 'add_btn',
+  },
 };

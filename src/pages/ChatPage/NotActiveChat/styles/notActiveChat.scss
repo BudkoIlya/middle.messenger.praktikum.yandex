@@ -1,6 +1,6 @@
-@use "src/styles/common";
-@use "src/styles/main";
-@use "../../common/styles/common" as chatCommon;
+@use 'src/styles/common';
+@use 'src/styles/main';
+@use '../../common/styles/common' as chatCommon;
 @include chatCommon.mainPadding;
 
 .main {

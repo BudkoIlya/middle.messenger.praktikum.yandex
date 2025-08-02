@@ -20,7 +20,6 @@ if (type) {
 
   if (title) {
     title.textContent = type;
-
   }
   document.title = type;
 }
