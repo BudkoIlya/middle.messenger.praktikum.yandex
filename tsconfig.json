@@ -8,7 +8,9 @@
       "dom.iterable",
       "ES2023"
     ],
-    "types": ["vite/client"],
+    "types": [
+      "vite/client"
+    ],
     "noImplicitAny": false,
     "allowJs": true,
     "skipLibCheck": true,

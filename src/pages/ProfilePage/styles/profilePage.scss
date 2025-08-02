@@ -3,7 +3,6 @@
 .main {
   @include common.form;
 
-
   .avatar {
     width: 100px;
     height: 100px;
@@ -11,7 +10,7 @@
     border-radius: 50%;
     position: relative;
 
-    &[src=""]::before {
+    &[src='']::before {
       content: attr(alt);
       display: flex;
       align-items: center;
@@ -32,16 +31,18 @@
     .editAvatarImg {
       transform: scale(0.7);
     }
+
     .label {
       .title {
         cursor: pointer;
         font-size: 14px;
-
       }
     }
+
     .editProfileInput {
       display: none;
     }
+
     .editProfileTitle {
       display: flex;
       align-items: center;
@@ -61,12 +62,16 @@
     flex-direction: column;
     gap: 5px;
     align-items: center;
+
     .deleteBtn {
       color: common.$red;
     }
-    .cancelBtn, .deleteBtn {
+
+    .cancelBtn,
+    .deleteBtn {
       cursor: pointer;
     }
+
     .cancelBtn {
       .link {
         color: black;

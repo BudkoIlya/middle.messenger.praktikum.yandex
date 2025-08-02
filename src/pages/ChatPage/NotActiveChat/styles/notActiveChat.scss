@@ -1,7 +1,6 @@
 @use 'src/styles/common';
 @use 'src/styles/main';
 @use '../../common/styles/common' as chatCommon;
-
 @include chatCommon.mainPadding;
 
 .main {
@@ -9,14 +8,13 @@
 
   .chat__dialog {
     display: flex;
-    align-items: center;
-    justify-items: center;
+    place-items: center center;
     width: 100%;
 
     .chat__empty-message {
       width: 100%;
       text-align: center;
-      color: #DAD9DD;
+      color: #dad9dd;
     }
   }
 }

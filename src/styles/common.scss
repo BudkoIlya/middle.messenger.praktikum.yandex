@@ -1,7 +1,6 @@
-$blue: #4585FD;
-$grey: #AFADAD;
-$red: #F44336;
-
+$blue: #4585fd;
+$grey: #afadad;
+$red: #f44336;
 $navHeight: 59px;
 
 @mixin form {
@@ -19,7 +18,7 @@ $navHeight: 59px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 0 10px rgb(0 0 0 / 35%);
     padding: 40px;
     border-radius: 10px;
 

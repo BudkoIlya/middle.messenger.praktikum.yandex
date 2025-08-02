@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+
 import { navigation, type INavigation } from '../common/navigation';
 import '../common/navigation/styles/navigation.scss';
 

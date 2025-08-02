@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+
 import { chatItem } from '../common/chatItem';
 import '../common/chatItem/styles/chatItem.scss';
 

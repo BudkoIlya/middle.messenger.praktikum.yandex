@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+
 import ChatItems from '../templates/ChatItems.hbs';
 import { registerButton, registerChatItem } from '../../../../utils';
 
@@ -22,6 +23,6 @@ export const CONTEXT = {
   ],
   button: {
     name: 'Добавить',
-    class: 'add_btn'
-  }
+    class: 'add_btn',
+  },
 };
