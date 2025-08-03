@@ -34,6 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
       { title: 'Логин', name: 'login', disabled: isDisabled, value: 'login', type: 'text' },
       { title: 'Имя', name: 'name', disabled: isDisabled, value: 'Имя', type: 'text' },
       { title: 'Фамилия', name: 'second_name', disabled: isDisabled, value: 'Фамилия', type: 'text' },
+      { title: 'Телефон', name: 'phone', disabled: isDisabled, value: 'Телефон', type: 'text' },
+      {
+        title: 'Отображаемое имя',
+        name: 'display_name',
+        disabled: isDisabled,
+        value: 'Отображаемое имя',
+        type: 'text',
+      },
     ],
     isViewMode: mode === 'view',
   };
