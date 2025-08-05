@@ -1,0 +1,92 @@
+@use 'src/styles/common';
+
+.main {
+  @include common.form;
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+    background: common.$grey;
+    border-radius: 50%;
+    position: relative;
+
+    &[src='']::before {
+      content: attr(alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      width: 80px;
+      height: 80px;
+      background-color: common.$grey;
+      font-size: 12px;
+    }
+  }
+
+  .editAvatar {
+    .editAvatarImg {
+      transform: scale(0.7);
+    }
+
+    .label {
+      .title {
+        cursor: pointer;
+        font-size: 14px;
+      }
+    }
+
+    .editProfileInput {
+      display: none;
+    }
+
+    .editProfileTitle {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+
+  .form_profile {
+    input[disabled] {
+      cursor: not-allowed;
+    }
+  }
+
+  .buttons {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+
+    .deleteBtn {
+      color: common.$red;
+    }
+
+    .cancelBtn,
+    .deleteBtn {
+      cursor: pointer;
+    }
+
+    .cancelBtn {
+      .link {
+        color: black;
+      }
+    }
+  }
+
+  .link {
+    text-decoration: none;
+    color: white;
+  }
+
+  .customBtn {
+    background: white;
+    border: none;
+    color: black;
+  }
+}

@@ -1,0 +1,20 @@
+export default `
+<div class="chat">
+  {{> ChatItems}}
+  <section class="chat__dialog">
+    <div class="chat__header">
+      <h3 class="chat_user-title">Артём</h3>
+      <span class="chat__edit">...</span>
+    </div>
+    <div class="chat__messages">
+      {{> message class="chat__received_message" text="Привет" time="12:00"}}
+      {{> message class="chat__answer_message" text="Привет" time="12:01" needStatus="true"}}
+    </div>
+    <form class="chat__form form">
+      {{> img alt="Добавить" src="/assets/add_btn.svg" class="chat__add-file-btn"}}
+      {{> input name="message" placeholder="Сообщение" class="form__input chat__message" }}
+      {{> button type='submit' className="form__send-message" name="send" text="<img alt='Отправить' src='/assets/arrow.svg' class='chat__add-file-btn>'"}}
+    </form>
+  </section>
+</div>
+`;
