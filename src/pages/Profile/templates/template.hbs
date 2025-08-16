@@ -1,0 +1,32 @@
+export default `
+{{> img alt='Аватар' src='' class='avatar' }}
+<form class="editAvatar">
+  {{> input class='editProfileInput' title="<span class='editProfileTitle'>
+      <img alt='Редатировать' src='/assets/edit.svg' class='editAvatarImg'/>
+      <span>Изменить</span>
+    </span>" type='file' name='avatar' accept="image/jpeg"}}
+</form>
+
+
+<form class="form form_profile">
+  {{#each inputs}}
+    {{> input value=this.value title=this.title name=this.name disabled=this.disabled }}
+  {{/each}}
+  {{#if
+    isViewMode}}{{> button path=this.buttons.editBtn.path id=this.buttons.editBtn.id text=this.buttons.editBtn.text name=this.buttons.editBtn.name className=this.buttons.editBtn.className}}
+  {{else}}
+    {{> button type='submit' text='Сохранить' name='save_profile' className='saveProfileBtn'}}
+  {{/if}}
+
+</form>
+<div class="buttons">
+  {{#if isViewMode}}
+    {{> button text="<a class='link' href='../EditPasswordPage/EditPasswordPage.html'>Изменить пароль</a>" name='edit_password' className='editPasswordBtn'}}
+    <button class="deleteBtn customBtn">Удалить</button>
+  {{else}}
+    <button class="cancelBtn customBtn">
+      <a data-id={{this.buttons.cancelBtn.id}} class='link' href={{this.buttons.cancelBtn.path}}>Отменить</a>
+    </button>
+  {{/if}}
+</div>
+`;

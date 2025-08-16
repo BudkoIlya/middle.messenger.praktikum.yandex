@@ -1,18 +1,12 @@
 {
+  "parser": "@typescript-eslint/parser",
   "compilerOptions": {
     "experimentalDecorators": true,
     "useDefineForClassFields": true,
     "target": "ES2023",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "ES2023"
-    ],
-    "types": [
-      "vite/client"
-    ],
-    "noImplicitAny": false,
-    "allowJs": true,
+    "lib": ["dom", "dom.iterable", "ES2023"],
+    "types": ["vite/client"],
+
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -22,9 +16,14 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "noEmit": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": true,
+    "strictNullChecks": true
   },
   "include": ["src"]
 }

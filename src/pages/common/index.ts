@@ -1,0 +1,1 @@
+export { HandlePages } from './handlePages';

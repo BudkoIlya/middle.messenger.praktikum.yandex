@@ -1,0 +1,78 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 14,
+    "sourceType": "module",
+    "createDefaultProgram": true,
+    "project": "./tsconfig.json"
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2023": true
+  },
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "prettier/prettier": "off",
+    "lines-between-class-members": ["warn", "always", { "exceptAfterSingleLine": false }],
+    "eol-last": ["error", "always"],
+    "no-loss-of-precision": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "groups": [
+          ["builtin", "external"],
+          ["sibling", "parent", "index", "internal"]
+        ]
+      }
+    ],
+    "import/no-cycle": "error",
+    "arrow-body-style": "warn",
+    "max-len": ["error", {
+      "code": 120,
+      "tabWidth": 2,
+      "ignoreComments": true,
+      "ignoreTrailingComments": true,
+      "ignoreUrls": true,
+      "ignoreRegExpLiterals": true,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true
+    }],
+    "class-methods-use-this": "off",
+    "global-require": "off",
+    "max-classes-per-file": "warn",
+    "no-use-before-define": "off",
+    "no-shadow": "off",
+    "no-unused-vars": "off",
+
+    "@typescript-eslint/no-use-before-define": "warn",
+    "@typescript-eslint/no-shadow": "error",
+    "@typescript-eslint/no-useless-constructor": "error",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-unused-expressions": "warn",
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        "selector": "variable",
+        "format": ["camelCase", "PascalCase", "UPPER_CASE"],
+        "leadingUnderscore": "allow"
+      }
+    ],
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/no-loss-of-precision": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { "args": "all", "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrors": "none"  }],
+
+    "testing-library/render-result-naming-convention": "off",
+
+    "import/prefer-default-export": "off",
+    "import/named": "error",
+    "no-console": ["warn", { "allow": ["warn", "error", "info"] }]
+  },
+  "plugins": ["@typescript-eslint", "import", "prettier"]
+}

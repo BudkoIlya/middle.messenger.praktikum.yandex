@@ -1,0 +1,11 @@
+export default `
+  <form class="form">
+    <h2 class="title">Регистрация</h2>
+    {{#each inputs}}
+      {{> input type=this.type value=this.value title=this.title name=this.name}}
+    {{/each}}
+    {{> button type=this.button.type text=this.button.text name=this.button.name className=this.button.class}}
+    <a data-id={{this.link.id}} class="registerLink" href={{this.link.path}}>Вход</a>
+  </form>
+`;
+
