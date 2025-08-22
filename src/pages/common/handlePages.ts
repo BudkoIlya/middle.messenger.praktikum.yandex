@@ -3,9 +3,10 @@ import { type ElementsKeys, type IItem } from '../../common/HandlebarsRegistrati
 import type { Components, Pages } from './types';
 import { Links } from '../../components/header/scripts/contants';
 import { COMPONENT_STYLES, COMPONENTS_BY_KEY, PAGE_BY_LINK, PAGE_STYLES } from './constants';
+import type { Props } from '../../common/Block/Block';
 
 export class HandlePages extends HandlebarsRegister {
-  page: Pages | null = null;
+  private _page: Pages | null = null;
 
   private _loadedComponentStyles = new Set<ElementsKeys>();
 
@@ -13,7 +14,7 @@ export class HandlePages extends HandlebarsRegister {
 
   constructor() {
     super();
-    this.setLinks(Links.homepage); // Открытие страницы по умолчанию
+    this.setLink(Links.homepage); // Открытие страницы по умолчанию
   }
 
   private async _loadStyles(link: Links, components?: Components[] | null): Promise<void> {
@@ -34,15 +35,12 @@ export class HandlePages extends HandlebarsRegister {
   }
 
   private _registerComponents(components: Components[]) {
-    const items = components.map<IItem>((key) => ({
-      key,
-      template: COMPONENTS_BY_KEY[key],
-    }));
+    const items = components.map<IItem>((key) => ({ key, template: COMPONENTS_BY_KEY[key] }));
     this.register(items);
   }
 
-  async setLinks(link: Links) {
-    if (this.page) {
+  async setLink(link: Links) {
+    if (this._page) {
       this._destroy();
     }
 
@@ -54,12 +52,17 @@ export class HandlePages extends HandlebarsRegister {
       this._registerComponents(components);
     }
 
-    this.page = createPage();
-    this.page?.mount('#main');
+    this._page = createPage();
+    this._page?.mount('#main');
+  }
+
+  componentDidUpdate(oldProps: Props, newProps: Props): boolean {
+    return oldProps.class !== newProps.class;
   }
 
   private _destroy() {
     this.unRegister();
-    this.page = null;
+    this._page?.unmount();
+    this._page = null;
   }
 }

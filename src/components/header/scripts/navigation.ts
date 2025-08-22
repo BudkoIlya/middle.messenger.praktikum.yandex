@@ -7,15 +7,15 @@ import { navigation } from '../template';
 import { NAVIGATION_CONTEXT, type Links } from './contants';
 
 export class Navigation extends HandlebarsRegister {
-  pages: HandlePages | null = null;
+  private _pages: HandlePages | null = null;
 
   constructor() {
     super([{ key: ElementsKeys.header, template: navigation }]);
-    this.pages = new HandlePages();
+    this._pages = new HandlePages();
   }
 
-  setLinks(link: Links) {
-    this.pages?.setLinks(link);
+  private _setLink(link: Links) {
+    this._pages?.setLink(link);
   }
 
   private _setupRoutListener(element: HTMLElement) {
@@ -26,7 +26,7 @@ export class Navigation extends HandlebarsRegister {
 
       if (activeLink) {
         const id = activeLink.getAttribute('data-id') as Links;
-        this.setLinks(id);
+        this._setLink(id);
       }
     });
   }

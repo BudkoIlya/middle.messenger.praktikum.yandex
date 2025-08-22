@@ -58,6 +58,7 @@ class HTTPTransport {
     });
   }
 
+  // Не стал добавлять отдельно каждый метод, сделал универсальный с аргументов method
   fetch<T = unknown>(method = Method.GET, url: string, options: RequestOptions = {}, timeout?: number): Promise<T> {
     return this.request<T>(url, { ...options, method }, timeout);
   }
@@ -77,7 +78,7 @@ class HTTPTransport {
           return executeRequest();
         }
         throw new Error(
-          `Max retries exceeded (${retries}). Last error: ${error instanceof Error ? error.message : String(error)}`,
+          `Превышено максимальное количество попыток (${retries}). Последняя ошибка: ${error instanceof Error ? error.message : String(error)}`,
         );
       }
     };

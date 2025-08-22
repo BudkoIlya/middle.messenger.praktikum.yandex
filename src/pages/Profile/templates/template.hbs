@@ -6,8 +6,6 @@ export default `
       <span>Изменить</span>
     </span>" type='file' name='avatar' accept="image/jpeg"}}
 </form>
-
-
 <form class="form form_profile">
   {{#each inputs}}
     {{> input value=this.value title=this.title name=this.name disabled=this.disabled }}
@@ -21,11 +19,11 @@ export default `
 </form>
 <div class="buttons">
   {{#if isViewMode}}
-    {{> button text="<a class='link' href='../EditPasswordPage/EditPasswordPage.html'>Изменить пароль</a>" name='edit_password' className='editPasswordBtn'}}
+    {{> button path=this.buttons.editPasswordBtn.path id=this.buttons.editPasswordBtn.id text=this.buttons.editPasswordBtn.text name=this.buttons.editPasswordBtn.name className=this.buttons.editPasswordBtn.className}}
     <button class="deleteBtn customBtn">Удалить</button>
   {{else}}
-    <button class="cancelBtn customBtn">
-      <a data-id={{this.buttons.cancelBtn.id}} class='link' href={{this.buttons.cancelBtn.path}}>Отменить</a>
+    <button class="cancelBtn customBtn" data-id={{this.buttons.cancelBtn.id}} data-path={{this.buttons.cancelBtn.path}}>
+      Отменить
     </button>
   {{/if}}
 </div>

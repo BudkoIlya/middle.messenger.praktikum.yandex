@@ -24,10 +24,11 @@
   "scripts": {
     "dev": "vite",
     "start": "npm run build && vite preview",
-    "prebild": "npm run format && npm run lint && npm run lint:scss",
+    "prebild": "npm run format && npm run tsc && npm run lint && npm run lint:scss",
     "build": "npm run prebild && vite build",
-    "lint": "eslint src --max-warnings=0",
+    "lint": "eslint --ext .ts src --max-warnings=0",
     "lint:scss": "stylelint src/**/*.scss",
+    "tsc": "tsc --noEmit",
     "format": "prettier --write src"
   },
   "engines": {

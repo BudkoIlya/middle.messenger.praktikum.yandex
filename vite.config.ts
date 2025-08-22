@@ -1,8 +1,6 @@
-import { defineConfig, normalizePath } from 'vite';
+import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import pluginChecker from 'vite-plugin-checker';
-
-const SRC = normalizePath(resolve(__dirname, 'src'));
 
 export default defineConfig(() => ({
   base: '/',
@@ -10,13 +8,15 @@ export default defineConfig(() => ({
   publicDir: resolve(__dirname, 'public'),
   plugins: [
     pluginChecker({
-      typescript: { tsconfigPath: './tsconfig.json' },
+      typescript: {
+        tsconfigPath: `./tsconfig.json`,
+      },
       eslint: {
-        lintCommand: `eslint "${SRC}/**/*.ts"`,
+        lintCommand: `eslint "./**/*.ts"`,
         dev: { logLevel: ['error'] },
       },
       stylelint: {
-        lintCommand: `stylelint "${SRC}/**/*.scss"`,
+        lintCommand: `stylelint "./**/*.scss"`,
         dev: { logLevel: ['error'] },
       },
     }),

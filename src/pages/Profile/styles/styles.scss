@@ -1,5 +1,8 @@
 @use 'src/styles/common';
 
+$widthBtn: 100px;
+$bgColorBtn: white;
+
 #main {
   @include common.form('formProfileContainer');
 
@@ -72,23 +75,20 @@
 
       .deleteBtn {
         color: common.$red;
+        background: $bgColorBtn;
+        width: $widthBtn;
       }
 
       .cancelBtn,
       .deleteBtn {
         cursor: pointer;
       }
-
-      .cancelBtn {
-        .link {
-          color: black;
-        }
-      }
     }
 
-    .link {
-      text-decoration: none;
-      color: white;
+    .cancelBtn {
+      background: $bgColorBtn;
+      width: $widthBtn;
+      color: black;
     }
 
     .customBtn {

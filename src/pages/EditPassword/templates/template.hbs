@@ -1,0 +1,19 @@
+export default `
+{{> img alt='Аватар' src='' class='avatar' }}
+<form class="editAvatar">
+  {{> input class='editProfileInput' title="<span class='editProfileTitle'>
+      <img alt='Редатировать' src='/assets/edit.svg' class='editAvatarImg'/>
+      <span>Изменить</span>
+    </span>" type='file' name='avatar' accept="image/jpeg"}}
+</form>
+<form class="form">
+  {{#each inputs}}
+    {{> input value=this.value title=this.title name=this.name type=this.type}}
+  {{/each}}
+  {{> button type='submit' text='Сохранить' name='save_password'}}
+</form>
+<div class="buttons">
+  {{> button className='cancelBtn' text=this.editBtn.text path=this.editBtn.path id=this.editBtn.id}}
+</div>
+`;
+

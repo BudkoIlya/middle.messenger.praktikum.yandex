@@ -5,7 +5,9 @@ export enum Links {
   homepage = 'homepage',
   login = 'login',
   profile = 'profile',
-  // chat = 'chat',
+  editPassword = 'editPassword',
+  chat = 'chat',
+  activeChat = 'activeChat',
 }
 
 interface Page {
@@ -29,6 +31,9 @@ export const Paths: IPageVariantsByLink = {
     view: { id: Links.profile, path: `/${Links.profile}?mode=view` },
     edit: { id: Links.profile, path: `/${Links.profile}?mode=edit` },
   },
+  [Links.editPassword]: { id: Links.editPassword, path: `/${Links.editPassword}` },
+  [Links.chat]: { id: Links.chat, path: `/${Links.chat}` },
+  [Links.activeChat]: { id: Links.activeChat, path: `/${Links.activeChat}` },
 };
 
 export const NAVIGATION_CONTEXT: { links: INavigation[] } = {
@@ -37,6 +42,8 @@ export const NAVIGATION_CONTEXT: { links: INavigation[] } = {
     { ...Paths[Links.register], text: 'Регистрация' },
     { ...Paths[Links.login], text: 'Вход' },
     { ...Paths[Links.profile].view, text: 'Профиль' },
-    // { ...Paths[Links.chat], text: 'Чат' },
+    { ...Paths[Links.editPassword], text: 'Изменить пароль' },
+    { ...Paths[Links.chat], text: 'Чат' },
+    { ...Paths[Links.activeChat], text: 'Выбранный чат' },
   ],
 };

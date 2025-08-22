@@ -1,2 +1,7 @@
 export default `
-<button data-path={{path}} data-id={{id}} type='{{#if type}}{{type}}{{else}}button{{/if}}' class='btn {{className}}' name='{{name}}'>{{{text}}}</button>`;
+<button
+    {{#if path}}data-path='{{path}}'{{/if}}
+    {{#if id}}data-id='{{id}}'{{/if}}
+    type='{{#if type}}{{type}}{{else}}button{{/if}}'
+    class='btn {{className}}' name='{{name}}'>{{{text}}}
+</button>`;

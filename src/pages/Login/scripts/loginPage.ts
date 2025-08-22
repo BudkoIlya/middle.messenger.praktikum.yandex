@@ -24,18 +24,16 @@ const CONTEXT: IContext = {
 
 export class LoginPage extends Block {
   constructor() {
-    super('div');
+    super('div', { events: [({ element, remove }) => addRoutChangeListener({ element, remove })] });
 
     const div = this.getContent();
     if (div) {
       div.className = 'formLoginContainer';
-      addRoutChangeListener({ element: div });
     }
   }
 
   render(): string {
     const mainTmp = Handlebars.compile(LoginPageCom);
-    // TODO: здесь надо сделать обработчик на каждый input на onBlur для валидации и для кнопки
     return mainTmp(CONTEXT);
   }
 }

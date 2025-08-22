@@ -1,3 +1,5 @@
+@use 'src/styles/common';
+
 .label {
   font-size: 20px;
 
@@ -6,5 +8,9 @@
     border-radius: 5px;
     border: 1px solid rgb(0 0 0 / 60%);
     padding: 0 15px;
+
+    &.error {
+      border: 1px solid common.$red;
+    }
   }
 }

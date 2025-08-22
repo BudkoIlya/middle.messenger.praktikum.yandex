@@ -1,0 +1,12 @@
+export default `<aside class="chat__sidebar">
+  <div class="chat__sidebar-header">
+    <a class="chat__user-link" data-id={{id}} href={{path}}>Имя Фамилия</a>
+    {{> button name=this.button.name className=this.button.className text="<img class='img' alt='Добавить' src='/assets/add_btn.svg'>Добавить</img>"}}
+  </div>
+  <form>
+    {{> input name="search" placeholder="Поиск" class="chat__search" }}
+  </form>
+  {{#each chatItems}}
+    {{> chatItem userName=this.userName lastMessage=this.lastMessage time=this.time unreadCount=this.unreadCount class=this.class }}
+  {{/each}}
+</aside>`

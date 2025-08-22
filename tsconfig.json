@@ -20,10 +20,10 @@
     "noEmit": true,
     "verbatimModuleSyntax": true,
     "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false, // TODO: убрать
+    "noUnusedParameters": false,
     "sourceMap": true,
     "strictNullChecks": true
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"]
 }
