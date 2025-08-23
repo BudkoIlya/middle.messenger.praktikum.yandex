@@ -39,9 +39,12 @@ export class ActiveChatPage extends Block {
   }
 
   componentDidMount(): void {
+    const element = this.getContent();
+    if (!element) return;
+
     const input = this.props.input as Input;
     const button = this.props.button as Button;
-    const remove = checkValidationByFields([input], button);
+    const remove = checkValidationByFields(element, [input], button);
     if (remove) this._removeValidation = remove;
   }
 

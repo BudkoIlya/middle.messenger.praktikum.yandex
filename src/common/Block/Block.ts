@@ -90,10 +90,6 @@ export abstract class Block {
     this._isUpdated = isUpdated;
   }
 
-  get element(): HTMLElement | null {
-    return this._element;
-  }
-
   private _addEvents() {
     const events = this.props.events || {};
     const element = this._element;
@@ -174,6 +170,7 @@ export abstract class Block {
       } else {
         // последующие — заменили старый корень новым
         this._element.replaceWith(newRoot);
+        this._element = newRoot;
       }
     } else {
       // обычный режим: элемент уже есть, меняем содержимое
@@ -202,7 +199,7 @@ export abstract class Block {
   protected abstract render(): string;
 
   getContent(): HTMLElement | null {
-    return this.element;
+    return this._element;
   }
 
   mount(selector: string) {
