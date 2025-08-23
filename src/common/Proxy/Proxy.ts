@@ -4,21 +4,19 @@ const checkPrivateProp = (prop: string) => {
   if (prop.startsWith('_')) throw new Error('Нет прав');
 };
 
-export function createProxy<T extends Record<string, unknown>>(
-  props: Props<T>,
-  setIsUpdated: (value: boolean) => void,
-): Props<T> {
+export function createProxy(props: Props, setIsUpdated: (value: boolean) => void): Props {
   return new Proxy(props, {
-    get(target: Props<T>, prop: string) {
+    get(target: Props, prop: string) {
       checkPrivateProp(prop);
-      const value = target[prop as keyof Props<T>];
+      const value = target[prop as keyof Props];
       if (typeof value === 'function') {
         // Используем универсальный тип для функций
         const functionValue = value as (...args: unknown[]) => unknown;
         return functionValue.bind(target);
       }
+      return value;
     },
-    set<K extends keyof Props<T>>(target: Props<T>, prop: K, value: Props<T>[K]) {
+    set<K extends keyof Props>(target: Props, prop: K, value: Props[K]) {
       checkPrivateProp(prop as string);
 
       if (target[prop] !== value) {
@@ -28,7 +26,7 @@ export function createProxy<T extends Record<string, unknown>>(
 
       return true;
     },
-    deleteProperty(target: Props<T>, prop: string) {
+    deleteProperty(target: Props, prop: string) {
       if (prop in target) {
         throw new Error('Нет доступа');
       }

@@ -1,10 +1,12 @@
+import Handlebars from 'handlebars';
+
 import { EventBus } from '../EvenBus';
 import { createProxy } from '../Proxy';
 import type { BaseBlock, Props } from './types';
 
 //TODO: разобраться как монтировать теперь компоненты и преобразовывать это всё в один шаблон
 
-export abstract class Block<T extends Record<string, unknown>> implements BaseBlock {
+export abstract class Block implements BaseBlock {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -14,15 +16,15 @@ export abstract class Block<T extends Record<string, unknown>> implements BaseBl
 
   private _element: HTMLElement | null = null;
 
-  private _meta: { tagName: string; props: Props<T> };
+  private _meta: { tagName: string; props: Props };
 
   private _eventBus: EventBus;
 
-  props: Props<T>;
+  props: Props;
 
   private _isUpdated = false;
 
-  protected constructor(tagName: string = 'div', props: Props<T>) {
+  protected constructor(tagName: string = 'div', props: Props) {
     const eventBus = new EventBus();
     this._eventBus = eventBus;
     this._meta = { tagName, props };
@@ -44,6 +46,10 @@ export abstract class Block<T extends Record<string, unknown>> implements BaseBl
     this._element = this._createDocumentElement(tagName);
   }
 
+  private _createDocumentElement(tagName: string): HTMLElement {
+    return document.createElement(tagName);
+  }
+
   private _init() {
     this._createResources();
     this._eventBus.emit(Block.EVENTS.FLOW_RENDER);
@@ -59,16 +65,16 @@ export abstract class Block<T extends Record<string, unknown>> implements BaseBl
     this._eventBus.emit(Block.EVENTS.FLOW_CDM);
   }
 
-  private _componentDidUpdate(oldProps: Props<T>, newProps: Props<T>) {
+  private _componentDidUpdate(oldProps: Props, newProps: Props) {
     const shouldUpdate = this.componentDidUpdate(oldProps, newProps);
     if (shouldUpdate) this._eventBus.emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  protected componentDidUpdate(_oldProps: Props<T>, _newProps: Props<T>) {
+  protected componentDidUpdate(_oldProps: Props, _newProps: Props) {
     return true;
   }
 
-  setProps = (nextProps: Partial<Props<T>>) => {
+  setProps = (nextProps: Partial<Props>) => {
     if (!nextProps) return;
     const oldValue = { ...this.props };
     Object.assign(this.props, nextProps);
@@ -86,7 +92,39 @@ export abstract class Block<T extends Record<string, unknown>> implements BaseBl
     return this._element;
   }
 
-  private _render() {}
+  private _render() {
+    // const fragment = this._compile(this.render(), this.props.props);
+    //
+    // console.log('[RENDER] fragment children:', fragment.childNodes.length);
+    // if (!this._element) {
+    //   return;
+    // }
+    //
+    // this._element.innerHTML = '';
+    // this._element.append(...Array.from(fragment.childNodes));
+    //
+    // console.log('[RENDER] root after fill:', this._element.outerHTML);
+    // console.log({ child: this.props.children });
+    //
+    // this.props.children?.forEach(({ item }) => {
+    //   const content = item.getContent();
+    //
+    //   console.log({ content: content?.innerHTML });
+    //
+    //   if (content) {
+    //     this._element!.append(content);
+    //   }
+    // });
+  }
+
+  private _compile(template: string, context: Record<string, unknown>): DocumentFragment {
+    const tmpl = Handlebars.compile(template);
+    const html = tmpl(context || {});
+    const temp = document.createElement('template');
+    temp.innerHTML = html;
+
+    return temp.content;
+  }
 
   protected abstract render(): string;
 
@@ -115,14 +153,10 @@ export abstract class Block<T extends Record<string, unknown>> implements BaseBl
 
     this._eventBus = null as unknown as EventBus;
     this._element = null;
-    this._meta = {} as unknown as { tagName: string; props: Props<T> };
-    this.props = {} as unknown as Props<T>;
+    this._meta = {} as unknown as { tagName: string; props: Props };
+    this.props = {} as unknown as Props;
   }
 
-  private _createDocumentElement(tagName: string): HTMLElement {
-    return document.createElement(tagName);
-  }
-
-  private _makePropsProxy = (props: Props<T>, setIsUpdated: (value: boolean) => void): Props<T> =>
-    createProxy<T>(props, setIsUpdated);
+  private _makePropsProxy = (props: Props, setIsUpdated: (value: boolean) => void): Props =>
+    createProxy(props, setIsUpdated);
 }

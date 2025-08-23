@@ -1,6 +1,6 @@
 import type { IChatItem } from './chatItem';
 
-export interface IChatItems {
+export interface IChatItems extends Record<string, unknown> {
   id: string;
   path: string;
   chatItems: IChatItem[];

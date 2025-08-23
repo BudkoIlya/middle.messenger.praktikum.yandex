@@ -1,19 +1,18 @@
 import { Block } from '../../../../../../../common/Block';
 import type { IChatItem } from '../types';
+import { default as chatItem } from '../chatItem.hbs';
 
-export class ChatItem extends Block<IChatItem> {
+export class ChatItem extends Block {
   constructor(props: IChatItem) {
-    super('label', { props });
+    super('div', { props });
 
-    const label = this.getContent();
-    if (label) {
-      label.className = 'label';
+    const div = this.getContent();
+    if (div) {
+      div.className = 'chatItem';
     }
   }
 
   render(): string {
-    // const mainTmp = Handlebars.compile(RegisterPageComp);
-    // return mainTmp(CONTEXT);
-    return '';
+    return chatItem;
   }
 }
