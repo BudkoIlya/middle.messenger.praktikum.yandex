@@ -1,5 +1,3 @@
-import Handlebars from 'handlebars';
-
 import { LoginPageCom } from '../templates';
 import { Block } from '../../../common/Block';
 import type { IInput } from '../../../components';
@@ -22,10 +20,9 @@ const CONTEXT: IContext = {
   link: Paths[Links.register],
 };
 
-export class LoginPage extends Block<{ id: string }> {
+export class LoginPage extends Block {
   constructor() {
     super('div', {
-      props: { id: 'string' },
       // events: [({ element, remove }) => addRoutChangeListener({ element, remove })]
     });
 
@@ -36,7 +33,6 @@ export class LoginPage extends Block<{ id: string }> {
   }
 
   render(): string {
-    const mainTmp = Handlebars.compile(LoginPageCom);
-    return mainTmp(CONTEXT);
+    return LoginPageCom;
   }
 }

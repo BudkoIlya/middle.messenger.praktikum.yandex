@@ -48,7 +48,7 @@ const getContext = (isViewMode: boolean): IContext => {
   };
 };
 
-export class ProfilePage extends Block<{ id: string }> {
+export class ProfilePage extends Block {
   private _isViewMode = false;
 
   private _defineMode() {
@@ -65,7 +65,7 @@ export class ProfilePage extends Block<{ id: string }> {
 
   constructor() {
     super('div', {
-      props: { id: 'id' },
+      // props: { id: 'id' },
       // events: [
       //   ({ element, remove }) =>
       //     addRoutChangeListener({

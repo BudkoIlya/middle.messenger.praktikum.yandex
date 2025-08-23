@@ -1,12 +1,9 @@
-import Handlebars from 'handlebars';
-
 import { NotActivePageComp } from '../templates';
 import { Block } from '../../../../common/Block';
 // import { addRoutChangeListener } from '../../../../utils';
 // import { Links } from '../../../../components/header/scripts/contants';
-import { getContext } from '../../common';
 
-export class NotActiveChatPage extends Block<{ id: string }> {
+export class NotActiveChatPage extends Block {
   constructor() {
     super('div', {
       props: { id: '1' },
@@ -22,7 +19,6 @@ export class NotActiveChatPage extends Block<{ id: string }> {
   }
 
   render(): string {
-    const mainTmp = Handlebars.compile(NotActivePageComp);
-    return mainTmp(getContext());
+    return NotActivePageComp;
   }
 }

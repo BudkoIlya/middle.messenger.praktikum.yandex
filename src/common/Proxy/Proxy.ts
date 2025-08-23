@@ -1,7 +1,7 @@
 import type { Props } from '../Block/types';
 
-const checkPrivateProp = (prop: string) => {
-  if (prop.startsWith('_')) throw new Error('Нет прав');
+const checkPrivateProp = (prop: string | symbol) => {
+  if (typeof prop === 'string' && prop.startsWith('_')) throw new Error('Нет прав');
 };
 
 export function createProxy(props: Props, setIsUpdated: (value: boolean) => void): Props {
@@ -16,11 +16,11 @@ export function createProxy(props: Props, setIsUpdated: (value: boolean) => void
       }
       return value;
     },
-    set<K extends keyof Props>(target: Props, prop: K, value: Props[K]) {
+    set(target: Props, prop: string | symbol, value: Props[keyof Props]) {
       checkPrivateProp(prop as string);
-
-      if (target[prop] !== value) {
-        target[prop] = value;
+      const key = prop as keyof Props;
+      if (target[key] !== value) {
+        target[key] = value;
         setIsUpdated(true);
       }
 

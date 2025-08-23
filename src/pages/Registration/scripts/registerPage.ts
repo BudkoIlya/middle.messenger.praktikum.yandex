@@ -25,7 +25,7 @@ const CONTEXT: IContext = {
   link: Paths[Links.login],
 };
 
-export class RegisterPage extends Block<{ id: string }> {
+export class RegisterPage extends Block {
   constructor() {
     super('div', { props: { id: '1' } });
 

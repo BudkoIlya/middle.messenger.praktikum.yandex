@@ -1,6 +1,6 @@
 import { Block } from '../../common/Block';
 
-export class HomePage extends Block<{ id: string }> {
+export class HomePage extends Block {
   constructor() {
     super('h1', { props: { id: '' } });
 

@@ -1,26 +1,24 @@
-import Handlebars from 'handlebars';
-
 import { Block } from '../../../common/Block';
-import type { IButton, IInput } from '../../../components';
-import { Links, Paths } from '../../../components/header/scripts/contants';
+// import type { IButton, IInput } from '../../../components';
+// import { Links, Paths } from '../../../components/header/scripts/contants';
 // import { addRoutChangeListener } from '../../../utils';
 import { EditPasswordComp } from '../templates';
 
-interface IContext {
-  inputs: IInput[];
-  editBtn: IButton;
-}
+// interface IContext {
+//   inputs: IInput[];
+//   editBtn: IButton;
+// }
 
-const CONTEXT: IContext = {
-  inputs: [
-    { title: 'Старый пароль', name: 'old_password', type: 'password' },
-    { title: 'Новый пароль', name: 'new_password', type: 'password' },
-    { title: 'Повторите пароль', name: 'confirm_password', type: 'password' },
-  ],
-  editBtn: { text: 'Отменить', id: Links.profile, path: Paths['profile'].view.path },
-};
+// const CONTEXT: IContext = {
+//   inputs: [
+//     { title: 'Старый пароль', name: 'old_password', type: 'password' },
+//     { title: 'Новый пароль', name: 'new_password', type: 'password' },
+//     { title: 'Повторите пароль', name: 'confirm_password', type: 'password' },
+//   ],
+//   editBtn: { text: 'Отменить', id: Links.profile, path: Paths['profile'].view.path },
+// };
 
-export class EditPasswordPage extends Block<{ id: string }> {
+export class EditPasswordPage extends Block {
   constructor() {
     super('div', {
       props: { id: 'id' },
@@ -42,7 +40,6 @@ export class EditPasswordPage extends Block<{ id: string }> {
   }
 
   render(): string {
-    const mainTmp = Handlebars.compile(EditPasswordComp);
-    return mainTmp(CONTEXT);
+    return EditPasswordComp;
   }
 }

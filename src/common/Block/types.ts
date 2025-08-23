@@ -6,16 +6,6 @@ export interface BaseBlock {
   unmount(): void;
 }
 
-// export type Child = {
-//   item: BaseBlock;
-//   children?: Child[];
-// };
-
 export type Props = {
-  // props: T | Block<Record<string, unknown>>;
-  [key: string]: {
-    [key: string]: unknown | Block;
-  };
-  // item?: BaseBlock;
-  // children?: Child[];
+  [key: string]: unknown | Block;
 };

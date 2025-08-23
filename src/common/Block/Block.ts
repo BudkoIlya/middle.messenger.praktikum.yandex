@@ -2,11 +2,11 @@ import Handlebars from 'handlebars';
 
 import { EventBus } from '../EvenBus';
 import { createProxy } from '../Proxy';
-import type { BaseBlock, Props } from './types';
+import type { Props } from './types';
 
 //TODO: разобраться как монтировать теперь компоненты и преобразовывать это всё в один шаблон
 
-export abstract class Block implements BaseBlock {
+export abstract class Block {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -93,6 +93,38 @@ export abstract class Block implements BaseBlock {
   }
 
   private _render() {
+    if (!this._element) {
+      return;
+    }
+
+    const props = this.props.props || {};
+    const context: Record<string, unknown> = {};
+
+    Object.entries(props).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        context[key] = value
+          .map((item) => (item instanceof Block ? (item.getContent()?.outerHTML ?? '') : item))
+          .join('');
+      } else if (value instanceof Block) {
+        context[key] = value.getContent()?.outerHTML ?? '';
+      } else {
+        context[key] = value;
+      }
+    });
+
+    const fragment = this._compile(this.render(), context);
+
+    this._element.innerHTML = '';
+    this._element.append(...Array.from(fragment.childNodes));
+
+    Object.values(props).forEach((value) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => item instanceof Block && item.dispatchComponentDidMount());
+      } else if (value instanceof Block) {
+        value.dispatchComponentDidMount();
+      }
+    });
+
     // const fragment = this._compile(this.render(), this.props.props);
     //
     // console.log('[RENDER] fragment children:', fragment.childNodes.length);
