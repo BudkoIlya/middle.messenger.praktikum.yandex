@@ -1,3 +1,3 @@
-export { chatItems, message } from './templates';
+export { chatItems, message } from './components';
 export { getContext } from './scripts';
-export { chatItem } from './templates/chatItems/chatItem';
+export { chatItem } from './components/chatItems/chatItem';

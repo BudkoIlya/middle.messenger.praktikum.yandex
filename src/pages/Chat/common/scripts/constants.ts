@@ -1,5 +1,5 @@
 // import type { IButton } from '../../../../components';
-import type { IChatItems } from '../templates/chatItems';
+import type { IChatItems } from '../components/chatItems';
 import { Links, Paths } from '../../../../components/header/scripts/contants';
 //
 // export interface IContext extends IChatItems {

@@ -39,8 +39,8 @@ export const PAGE_STYLES: Record<Links, () => Promise<unknown>> = {
 export const COMPONENT_STYLES: Partial<Record<ElementsKeys, () => Promise<unknown>>> = {
   [input]: () => import('../../components/input/styles/input.scss'),
   [button]: () => import('../../components/button/styles/button.scss'),
-  [chatItem]: () => import('../../pages/Chat/common/templates/chatItems/chatItem/styles/chatItem.scss'),
-  [message]: () => import('../../pages/Chat/common/templates/message/styles/styles.scss'),
+  [chatItem]: () => import('../../pages/Chat/common/components/chatItems/chatItem/styles/chatItem.scss'),
+  [message]: () => import('../../pages/Chat/common/components/message/styles/styles.scss'),
 };
 
 export const PAGE_BY_LINK: IPageByLink = {

@@ -3,11 +3,16 @@ import type { IInput } from '../types';
 import input from '../input.hbs';
 
 export class Input extends Block {
-  constructor(props: IInput) {
-    super('label', { props });
+  constructor({ class: className, ...props }: IInput) {
+    super('label', props);
 
     const label = this.getContent();
-    if (label) label.className = 'input';
+    if (label) {
+      label.classList.add('label');
+      if (className) {
+        label.querySelector('input')?.classList.add(className);
+      }
+    }
   }
 
   render() {

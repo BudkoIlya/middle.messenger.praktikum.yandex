@@ -1,6 +1,6 @@
 import { ActivePageComp } from '../templates';
 import { Block } from '../../../../common/Block';
-import { ChatItems } from '../../common/templates/chatItems';
+import { ChatItems } from '../../common/components/chatItems';
 
 export class ActiveChatPage extends Block {
   constructor() {

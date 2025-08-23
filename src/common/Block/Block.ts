@@ -16,17 +16,20 @@ export abstract class Block {
 
   private _element: HTMLElement | null = null;
 
-  private _meta: { tagName: string; props: Props };
+  private _meta: { tagName?: string; props: Props };
 
   private _eventBus: EventBus;
+
+  private _rootless = false;
 
   props: Props;
 
   private _isUpdated = false;
 
-  protected constructor(tagName: string = 'div', props: Props) {
+  protected constructor(tagName: string = '', props: Props) {
     const eventBus = new EventBus();
     this._eventBus = eventBus;
+    this._rootless = !tagName;
     this._meta = { tagName, props };
     this.props = this._makePropsProxy(props, this._setIsUpdated.bind(this));
 
@@ -43,6 +46,7 @@ export abstract class Block {
 
   private _createResources() {
     const { tagName } = this._meta;
+    if (this._rootless || !tagName) return;
     this._element = this._createDocumentElement(tagName);
   }
 
@@ -93,13 +97,10 @@ export abstract class Block {
   }
 
   private _render() {
-    if (!this._element) {
-      return;
-    }
-
-    const props = this.props.props || {};
+    const props = this.props.props || this.props;
     const context: Record<string, unknown> = {};
 
+    // Разворачиваем дочерние компоненты в HTML
     Object.entries(props).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         context[key] = value
@@ -114,9 +115,28 @@ export abstract class Block {
 
     const fragment = this._compile(this.render(), context);
 
-    this._element.innerHTML = '';
-    this._element.append(...Array.from(fragment.childNodes));
+    if (this._rootless) {
+      const newRoot = fragment.firstElementChild as HTMLElement | null;
 
+      if (!newRoot) {
+        return;
+      }
+
+      if (!this._element) {
+        // первый рендер — просто зафиксировали корень
+        this._element = newRoot;
+      } else {
+        // последующие — заменили старый корень новым
+        this._element.replaceWith(newRoot);
+      }
+    } else {
+      // обычный режим: элемент уже есть, меняем содержимое
+      if (!this._element) return;
+      this._element.innerHTML = '';
+      this._element.append(...Array.from(fragment.childNodes));
+    }
+
+    // монтирование детей
     Object.values(props).forEach((value) => {
       if (Array.isArray(value)) {
         value.forEach((item) => item instanceof Block && item.dispatchComponentDidMount());
@@ -124,29 +144,6 @@ export abstract class Block {
         value.dispatchComponentDidMount();
       }
     });
-
-    // const fragment = this._compile(this.render(), this.props.props);
-    //
-    // console.log('[RENDER] fragment children:', fragment.childNodes.length);
-    // if (!this._element) {
-    //   return;
-    // }
-    //
-    // this._element.innerHTML = '';
-    // this._element.append(...Array.from(fragment.childNodes));
-    //
-    // console.log('[RENDER] root after fill:', this._element.outerHTML);
-    // console.log({ child: this.props.children });
-    //
-    // this.props.children?.forEach(({ item }) => {
-    //   const content = item.getContent();
-    //
-    //   console.log({ content: content?.innerHTML });
-    //
-    //   if (content) {
-    //     this._element!.append(content);
-    //   }
-    // });
   }
 
   private _compile(template: string, context: Record<string, unknown>): DocumentFragment {
