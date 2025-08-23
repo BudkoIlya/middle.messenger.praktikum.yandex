@@ -2,16 +2,17 @@ import Handlebars from 'handlebars';
 
 import { ActivePageComp } from '../templates';
 import { Block } from '../../../../common/Block';
-import { addRoutChangeListener } from '../../../../utils';
-import { Links } from '../../../../components/header/scripts/contants';
+// import { addRoutChangeListener } from '../../../../utils';
+// import { Links } from '../../../../components/header/scripts/contants';
 import { getContext } from '../../common';
 
-export class ActiveChatPage extends Block {
+export class ActiveChatPage extends Block<{ id: string }> {
   constructor() {
     super('div', {
-      events: [
-        ({ element, remove }) => addRoutChangeListener({ element, remove, selector: `a[data-id="${Links.profile}"]` }),
-      ],
+      props: { id: '' },
+      // events: [
+      //   ({ element, remove }) => addRoutChangeListener({ element, remove, selector: `a[data-id="${Links.profile}"]` }),
+      // ],
     });
 
     const div = this.getContent();

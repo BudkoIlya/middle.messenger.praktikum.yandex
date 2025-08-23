@@ -1,5 +1,5 @@
 export interface IInput {
-  title: string;
+  title?: string;
   name: string;
   disabled?: string;
   accept?: string;
@@ -7,4 +7,5 @@ export interface IInput {
   class?: string;
   placeholder?: string;
   value?: string;
+  [key: string]: unknown;
 }

@@ -1,9 +1,9 @@
-import type { IButon } from '../../../../components';
+import type { IButton } from '../../../../components';
 import type { IChatItems } from '../templates/chatItems';
 import { Links, Paths } from '../../../../components/header/scripts/contants';
 
 interface IContext extends IChatItems {
-  button: Omit<IButon, 'text'>;
+  button: Omit<IButton, 'text'>;
 }
 
 export const getContext = (active = false): IContext => ({

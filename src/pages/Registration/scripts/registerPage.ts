@@ -2,14 +2,13 @@ import Handlebars from 'handlebars';
 
 import { RegisterPageComp } from '../templates';
 import { Block } from '../../../common/Block';
-import type { IInput } from '../../../components';
-import type { IButon } from '../../../components';
+import type { IButton, IInput } from '../../../components';
 import { type IPageVariantsByLink, Links, Paths } from '../../../components/header/scripts/contants';
-import { addRoutChangeListener, checkValidationByFields } from '../../../utils';
+// import { addRoutChangeListener, checkValidationByFields } from '../../../utils';
 
 interface IContext {
   inputs: IInput[];
-  button: IButon;
+  button: IButton;
   link: IPageVariantsByLink['login'];
 }
 
@@ -26,25 +25,11 @@ const CONTEXT: IContext = {
   link: Paths[Links.login],
 };
 
-export class RegisterPage extends Block {
+export class RegisterPage extends Block<{ id: string }> {
   constructor() {
-    super('div', {
-      events: [
-        (...arg) => addRoutChangeListener(...arg),
-        (...arg) =>
-          checkValidationByFields(...arg, [
-            'login',
-            'first_name',
-            'second_name',
-            'password',
-            'confirm_password',
-            'email',
-            'phone',
-          ]),
-      ],
-    });
+    super('div', { props: { id: '1' } });
 
-    this.componentDidUpdate = (oldProps, newProps) => oldProps.class !== newProps.class;
+    // this.componentDidUpdate = (oldProps, newProps) => oldProps.class !== newProps.class;
 
     const div = this.getContent();
     if (div) {

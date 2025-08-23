@@ -2,16 +2,16 @@ import Handlebars from 'handlebars';
 
 import { Block } from '../../../common/Block';
 import { ProfileComp } from '../templates';
-import type { IButon, IInput } from '../../../components';
+import type { IButton, IInput } from '../../../components';
 import { type IPageVariantsByLink, Links, Paths } from '../../../components/header/scripts/contants';
-import { addRoutChangeListener } from '../../../utils';
+// import { addRoutChangeListener } from '../../../utils';
 
 interface IContext {
   inputs: IInput[];
   isViewMode?: boolean;
   buttons: {
-    editBtn: IButon;
-    editPasswordBtn: IButon;
+    editBtn: IButton;
+    editPasswordBtn: IButton;
     cancelBtn: IPageVariantsByLink['profile']['view'];
   };
 }
@@ -48,7 +48,7 @@ const getContext = (isViewMode: boolean): IContext => {
   };
 };
 
-export class ProfilePage extends Block {
+export class ProfilePage extends Block<{ id: string }> {
   private _isViewMode = false;
 
   private _defineMode() {
@@ -65,23 +65,24 @@ export class ProfilePage extends Block {
 
   constructor() {
     super('div', {
-      events: [
-        ({ element, remove }) =>
-          addRoutChangeListener({
-            element,
-            remove,
-            selector: `button[data-id="${Links.profile}"]`,
-            attribute: 'data-path',
-          }),
-        ({ element, remove }) => addRoutChangeListener({ element, remove, selector: `a[href^="${Links.profile}"]` }),
-        ({ element, remove }) =>
-          addRoutChangeListener({
-            element,
-            remove,
-            selector: `button[data-id="${Links.editPassword}"]`,
-            attribute: 'data-path',
-          }),
-      ],
+      props: { id: 'id' },
+      // events: [
+      //   ({ element, remove }) =>
+      //     addRoutChangeListener({
+      //       element,
+      //       remove,
+      //       selector: `button[data-id="${Links.profile}"]`,
+      //       attribute: 'data-path',
+      //     }),
+      //   ({ element, remove }) => addRoutChangeListener({ element, remove, selector: `a[href^="${Links.profile}"]` }),
+      //   ({ element, remove }) =>
+      //     addRoutChangeListener({
+      //       element,
+      //       remove,
+      //       selector: `button[data-id="${Links.editPassword}"]`,
+      //       attribute: 'data-path',
+      //     }),
+      // ],
     });
 
     const div = this.getContent();

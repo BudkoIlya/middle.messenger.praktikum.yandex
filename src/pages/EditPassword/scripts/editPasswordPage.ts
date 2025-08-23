@@ -1,14 +1,14 @@
 import Handlebars from 'handlebars';
 
 import { Block } from '../../../common/Block';
-import type { IButon, IInput } from '../../../components';
+import type { IButton, IInput } from '../../../components';
 import { Links, Paths } from '../../../components/header/scripts/contants';
-import { addRoutChangeListener } from '../../../utils';
+// import { addRoutChangeListener } from '../../../utils';
 import { EditPasswordComp } from '../templates';
 
 interface IContext {
   inputs: IInput[];
-  editBtn: IButon;
+  editBtn: IButton;
 }
 
 const CONTEXT: IContext = {
@@ -20,18 +20,19 @@ const CONTEXT: IContext = {
   editBtn: { text: 'Отменить', id: Links.profile, path: Paths['profile'].view.path },
 };
 
-export class EditPasswordPage extends Block {
+export class EditPasswordPage extends Block<{ id: string }> {
   constructor() {
     super('div', {
-      events: [
-        ({ element, remove }) =>
-          addRoutChangeListener({
-            element,
-            remove,
-            selector: `button[data-id="${Links.profile}"]`,
-            attribute: 'data-path',
-          }),
-      ],
+      props: { id: 'id' },
+      // events: [
+      //   ({ element, remove }) =>
+      //     addRoutChangeListener({
+      //       element,
+      //       remove,
+      //       selector: `button[data-id="${Links.profile}"]`,
+      //       attribute: 'data-path',
+      //     }),
+      // ],
     });
 
     const div = this.getContent();

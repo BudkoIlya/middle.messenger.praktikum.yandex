@@ -7,7 +7,9 @@ import { RegisterPage } from '../Registration';
 import { HomePage } from '../Home';
 import { LoginPage } from '../Login';
 import { ProfilePage } from '../Profile';
-import { button as btnComp, input as inputCom, img as imgComp } from '../../components';
+import { button as btnComp } from '../../components/button';
+import { input as inputComp } from '../../components/input';
+import { img as imgComp } from '../../components/img';
 import { EditPasswordPage } from '../EditPassword';
 import { ActiveChatPage, NotActiveChatPage } from '../Chat';
 import { chatItems as chatItemsComp, chatItem as chatItemComp, message as messageComp } from '../Chat/common';
@@ -16,7 +18,7 @@ const { input, button, img, chatItems, chatItem, message } = ElementsKeys;
 const { register, homepage, login, profile, editPassword, chat, activeChat } = Links;
 
 export const COMPONENTS_BY_KEY: Record<Components, Template<unknown>> = {
-  [input]: inputCom,
+  [input]: inputComp,
   [button]: btnComp,
   [img]: imgComp,
   [message]: messageComp,

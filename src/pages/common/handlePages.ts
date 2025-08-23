@@ -3,7 +3,6 @@ import { type ElementsKeys, type IItem } from '../../common/HandlebarsRegistrati
 import type { Components, Pages } from './types';
 import { Links } from '../../components/header/scripts/contants';
 import { COMPONENT_STYLES, COMPONENTS_BY_KEY, PAGE_BY_LINK, PAGE_STYLES } from './constants';
-import type { Props } from '../../common/Block/Block';
 
 export class HandlePages extends HandlebarsRegister {
   private _page: Pages | null = null;
@@ -56,9 +55,9 @@ export class HandlePages extends HandlebarsRegister {
     this._page?.mount('#main');
   }
 
-  componentDidUpdate(oldProps: Props, newProps: Props): boolean {
-    return oldProps.class !== newProps.class;
-  }
+  // componentDidUpdate(oldProps: Props, newProps: Props): boolean {
+  //   return oldProps.class !== newProps.class;
+  // }
 
   private _destroy() {
     this.unRegister();

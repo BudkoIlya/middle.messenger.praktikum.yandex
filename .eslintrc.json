@@ -12,6 +12,13 @@
     "node": true,
     "es2023": true
   },
+  "settings": {
+    "import/resolver": {
+      "typescript": { "project": "./tsconfig.json" },
+      "node": { "extensions": [ ".ts", ".mts", ".mjs"] }
+    },
+    "import/parsers": { "@typescript-eslint/parser": [".js",  ".ts", ".mts", ".mjs"] }
+  },
   "extends": [
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"

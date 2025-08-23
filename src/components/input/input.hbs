@@ -1,6 +1,6 @@
-export default `<label class="label">
+export default `
   {{#if title}}<span class="title">{{{title}}}</span>{{/if}}
   <input type="{{#if type}}{{type}}{{else}}text{{/if}}" value="{{value}}" class="input {{class}}"
          placeholder="{{placeholder}}" title="{{title}}"
          name="{{name}}" {{disabled}} accept={{accept}}>
-</label>`;
+`;

@@ -1,2 +1,3 @@
+export type { IButton } from './types';
 export { default as button } from './button.hbs';
-export type { IButon } from './types';
+export { Button } from './scripts';

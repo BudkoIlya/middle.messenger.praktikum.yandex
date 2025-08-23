@@ -4,4 +4,5 @@ export interface IChatItem {
   lastMessage: string;
   time: string;
   unreadCount?: string;
+  [key: string]: unknown;
 }
