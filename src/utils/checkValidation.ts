@@ -23,17 +23,17 @@ export const checkValidationByFields = (
   inputs: Input[],
   button?: Button,
 ): (() => void) | void => {
-  const setProps: Array<() => void> = [];
+  const removes: Array<() => void> = [];
 
   const validateInput = (input: Input): boolean => {
-    const inputEl = document.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
+    const inputEl = element.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
 
     if (!inputEl) return true;
     const { name, value } = inputEl;
     // Убираем class error на blue, чтобы он не множился на каждый blur
     const baseClass = inputEl.className.replace(/\berror\b/g, '').trim();
     const isValid = validate(name as InputsName, value.trim());
-    inputEl.className = isValid ? baseClass : `${baseClass} error`;
+    input.setProps({ ...input.props, class: isValid ? baseClass : `${baseClass} error` });
     return isValid;
   };
 
@@ -41,16 +41,14 @@ export const checkValidationByFields = (
     const inputEl = element.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
     if (!inputEl) return;
     const blurHandler = () => validateInput(input);
-    const prevEvents = input.props.events || {};
-    input.setProps({ events: { ...prevEvents, blur: blurHandler } });
-    setProps.push(() => input.setProps({ events: prevEvents }));
+    const focusHandler = () => {
+      const baseClass = ((input.props.class as string) || '').replace(/\berror\b/g, '').trim();
+      input.setProps({ ...input.props, class: baseClass });
+    };
 
-    // const focusHandler = () => {
-    //   const baseClass = ((input.props.class as string) || '').replace(/\berror\b/g, '').trim();
-    //   input.setProps({ class: baseClass });
-    // };
-    // inputEl.addEventListener('focus', focusHandler);
-    // listeners.push({ element: inputEl, event: 'focus', handler: focusHandler });
+    const prevEvents = input.props.events || {};
+    input.setProps({ ...input.props, events: { ...prevEvents, blur: blurHandler, focus: focusHandler } });
+    removes.push(() => input.setProps({ ...input.props, events: prevEvents }));
   });
 
   if (button) {
@@ -68,11 +66,11 @@ export const checkValidationByFields = (
       }
     };
     const prevEvents = button.props.events || {};
-    button.setProps({ events: { ...prevEvents, click: handler } });
-    setProps.push(() => button.setProps({ events: prevEvents }));
+    button.setProps({ ...button.props, events: { ...prevEvents, click: handler } });
+    removes.push(() => button.setProps({ ...button.props, events: prevEvents }));
   }
 
-  if (setProps.length) {
-    return () => setProps.forEach((remove) => remove());
+  if (removes.length) {
+    return () => removes.forEach((remove) => remove());
   }
 };

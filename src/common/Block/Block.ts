@@ -76,7 +76,7 @@ export abstract class Block {
     return true;
   }
 
-  setProps = (nextProps: Partial<Props>) => {
+  setProps = (nextProps: Props) => {
     if (!nextProps) return;
     const oldValue = { ...this.props };
     Object.assign(this.props, nextProps);

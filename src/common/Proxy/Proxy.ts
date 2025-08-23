@@ -1,7 +1,7 @@
 import type { Props } from '../Block/types';
 
 const checkPrivateProp = (prop: string | symbol) => {
-  if (typeof prop === 'string' && prop.startsWith('_')) throw new Error('Нет прав');
+  if (typeof prop === 'string' && prop.startsWith('_')) throw new Error('Нет доступа');
 };
 
 export function createProxy(props: Props, setIsUpdated: (value: boolean) => void): Props {
