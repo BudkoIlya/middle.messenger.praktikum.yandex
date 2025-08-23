@@ -96,22 +96,52 @@ export abstract class Block {
     return this._element;
   }
 
-  private _render() {
-    const props = this.props.props || this.props;
+  private _unwrap(value: unknown): unknown {
+    if (Array.isArray(value)) {
+      const isFlat = value.every((item) => item instanceof Block || typeof item !== 'object' || item === null);
+      const mapped = value.map((item) => this._unwrap(item));
+      return isFlat ? mapped.join('') : mapped;
+    }
+
+    if (value instanceof Block) {
+      return value.getContent()?.outerHTML ?? '';
+    }
+
+    if (value && typeof value === 'object') {
+      const obj: Record<string, unknown> = {};
+      Object.entries(value as Record<string, unknown>).forEach(([k, v]) => {
+        obj[k] = this._unwrap(v);
+      });
+      return obj;
+    }
+
+    return value;
+  }
+
+  private _prepareContext(props: Props): Record<string, unknown> {
     const context: Record<string, unknown> = {};
 
-    // Разворачиваем дочерние компоненты в HTML
     Object.entries(props).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        context[key] = value
-          .map((item) => (item instanceof Block ? (item.getContent()?.outerHTML ?? '') : item))
-          .join('');
-      } else if (value instanceof Block) {
-        context[key] = value.getContent()?.outerHTML ?? '';
-      } else {
-        context[key] = value;
-      }
+      context[key] = this._unwrap(value);
     });
+
+    return context;
+  }
+
+  private _recursiveChildren(value: unknown, cb: (child: Block) => void): void {
+    if (Array.isArray(value)) {
+      value.forEach((item) => this._recursiveChildren(item, cb));
+    } else if (value instanceof Block) {
+      cb(value);
+    } else if (value && typeof value === 'object') {
+      Object.values(value).forEach((item) => this._recursiveChildren(item, cb));
+    }
+  }
+
+  private _render() {
+    const props = this.props;
+
+    const context = this._prepareContext(props);
 
     const fragment = this._compile(this.render(), context);
 
@@ -137,13 +167,7 @@ export abstract class Block {
     }
 
     // монтирование детей
-    Object.values(props).forEach((value) => {
-      if (Array.isArray(value)) {
-        value.forEach((item) => item instanceof Block && item.dispatchComponentDidMount());
-      } else if (value instanceof Block) {
-        value.dispatchComponentDidMount();
-      }
-    });
+    this._recursiveChildren(props, (child) => child.dispatchComponentDidMount());
   }
 
   private _compile(template: string, context: Record<string, unknown>): DocumentFragment {

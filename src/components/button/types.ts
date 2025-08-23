@@ -7,4 +7,5 @@ export interface IButton {
   id?: string;
   path?: string;
   name?: string;
+  [key: string]: unknown;
 }

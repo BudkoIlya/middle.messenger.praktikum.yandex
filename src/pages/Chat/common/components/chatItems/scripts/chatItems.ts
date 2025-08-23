@@ -16,12 +16,11 @@ interface IChatItems {
 
 export class ChatItems extends Block {
   constructor(props: IChatItems) {
-    const chatItems = getContext().chatItems;
-    const chatItemsChildren = chatItems.map((item) => new ChatItem(item));
+    const chatItems = getContext().chatItems.map((item) => new ChatItem(item));
 
     super('aside', {
       ...props,
-      chatItems: chatItemsChildren,
+      chatItems,
       input: new Input({ name: 'search', placeholder: 'Поиск', class: 'chat__search' }),
       button: new Button({
         name: 'add',
