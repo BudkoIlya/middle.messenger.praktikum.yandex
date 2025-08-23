@@ -1,3 +1,5 @@
+import type { Events } from '../../common/Block/types';
+
 export interface IInput {
   title?: string;
   name: string;
@@ -7,5 +9,6 @@ export interface IInput {
   class?: string;
   placeholder?: string;
   value?: string;
+  events?: Events;
   [key: string]: unknown;
 }

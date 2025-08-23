@@ -4,8 +4,6 @@ import { EventBus } from '../EvenBus';
 import { createProxy } from '../Proxy';
 import type { Props } from './types';
 
-//TODO: разобраться как монтировать теперь компоненты и преобразовывать это всё в один шаблон
-
 export abstract class Block {
   static EVENTS = {
     INIT: 'init',
@@ -22,9 +20,9 @@ export abstract class Block {
 
   private _rootless = false;
 
-  props: Props;
-
   private _isUpdated = false;
+
+  props: Props;
 
   protected constructor(tagName: string = '', props: Props) {
     const eventBus = new EventBus();
@@ -94,6 +92,24 @@ export abstract class Block {
 
   get element(): HTMLElement | null {
     return this._element;
+  }
+
+  private _addEvents() {
+    const events = this.props.events || {};
+    const element = this._element;
+    if (!element) return;
+    Object.entries(events).forEach(([event, listener]) => {
+      element.addEventListener(event, listener, true);
+    });
+  }
+
+  private _removeEvents() {
+    const element = this._element;
+    if (!element) return;
+    const events = this.props.events || {};
+    Object.entries(events).forEach(([event, listener]) => {
+      element.removeEventListener(event, listener, true);
+    });
   }
 
   private _unwrap(value: unknown): unknown {
@@ -168,6 +184,10 @@ export abstract class Block {
 
     // монтирование детей
     this._recursiveChildren(props, (child) => child.dispatchComponentDidMount());
+
+    // При перерендере удаляем старые эвенты
+    this._removeEvents();
+    this._addEvents();
   }
 
   private _compile(template: string, context: Record<string, unknown>): DocumentFragment {
@@ -195,6 +215,7 @@ export abstract class Block {
   }
 
   unmount(): void {
+    this._removeEvents();
     this._destroy();
   }
 

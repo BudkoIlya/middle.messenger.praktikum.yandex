@@ -1,11 +1,8 @@
 import type { Block } from './Block';
 
-export interface BaseBlock {
-  getContent(): HTMLElement | null;
-  mount(selector: string): void;
-  unmount(): void;
-}
+export type Events = Record<string, EventListener>;
 
 export type Props = {
+  events?: Events;
   [key: string]: unknown | Block;
 };

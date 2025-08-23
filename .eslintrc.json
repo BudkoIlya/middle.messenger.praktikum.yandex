@@ -78,7 +78,7 @@
 
     "import/prefer-default-export": "off",
     "import/named": "error",
-    "no-console": ["warn", { "allow": ["warn", "error", "info"] }]
+    "no-console": ["warn", { "allow": ["warn", "error", "info","table"] }]
   },
   "plugins": ["@typescript-eslint/eslint-plugin", "import", "prettier"]
 }
