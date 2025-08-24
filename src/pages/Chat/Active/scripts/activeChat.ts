@@ -10,7 +10,7 @@ import { Message } from '../../../../components/message';
 export class ActiveChatPage extends Block {
   constructor() {
     super('div', {
-      chatItems: new ChatItems(),
+      chatItems: new ChatItems({ active: true }),
       messages: [
         new Message({ text: 'Привет', time: '12:00', class: 'chat__received_message' }),
         new Message({ text: 'Привет', time: '12:01', needStatus: true, class: 'chat__answer_message' }),

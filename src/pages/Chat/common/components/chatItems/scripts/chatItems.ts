@@ -20,8 +20,8 @@ export class ButtonText extends Block {
 }
 
 export class ChatItems extends Block {
-  constructor() {
-    const chatItems = getContext().chatItems.map((item) => new ChatItem(item));
+  constructor({ active }: { active: boolean }) {
+    const chatItems = getContext(active).chatItems.map((item) => new ChatItem(item));
 
     super('aside', {
       chatItems,
