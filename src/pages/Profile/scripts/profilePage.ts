@@ -46,7 +46,6 @@ const getContext = (isViewMode: boolean): IContext => {
       editPasswordBtn: {
         text: 'Изменить пароль',
         name: 'edit_password',
-        className: 'editProfileBtn',
         id: Links.editPassword,
         path: Paths.editPassword.path,
       },
@@ -100,10 +99,12 @@ export class ProfilePage extends Block {
     const inputs = this.props.inputs as Input[];
     const saveBtn = (this.props.buttons as Record<string, unknown>).saveBtn as Button;
     const editBtn = (this.props.buttons as Record<string, unknown>).editBtn as Button;
+    const editPasswordBtn = (this.props.buttons as Record<string, unknown>).editPasswordBtn as Button;
     const cancelBtn = (this.props.buttons as Record<string, unknown>).cancelBtn as Button;
     checkValidationByFields(element, inputs, saveBtn);
     addRoutChangeListener({ element: editBtn });
     addRoutChangeListener({ element: cancelBtn });
+    addRoutChangeListener({ element: editPasswordBtn });
   }
 
   render(): string {
