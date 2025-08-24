@@ -13,9 +13,10 @@ import { img as imgComp } from '../../components/img';
 import { EditPasswordPage } from '../EditPassword/';
 import { ActiveChatPage, NotActiveChatPage } from '../Chat';
 import { chatItems as chatItemsComp, chatItem as chatItemComp, message as messageComp } from '../Chat/common';
+import { ErrorPage } from '../Error';
 
 const { input, button, img, chatItems, chatItem, message } = ElementsKeys;
-const { register, homepage, login, profile, editPassword, chat, activeChat } = Links;
+const { register, homepage, login, profile, editPassword, chat, activeChat, error404, error500 } = Links;
 
 export const COMPONENTS_BY_KEY: Record<Components, Template<unknown>> = {
   [input]: inputComp,
@@ -34,6 +35,8 @@ export const PAGE_STYLES: Record<Links, () => Promise<unknown>> = {
   [editPassword]: () => import('../EditPassword/styles/styles.scss'),
   [chat]: () => import('../Chat/NotActive/styles/styles.scss'),
   [activeChat]: () => import('../Chat/Active/styles/styles.scss'),
+  [error404]: () => import('../Error/styles/styles.scss'),
+  [error500]: () => import('../Error/styles/styles.scss'),
 };
 
 export const COMPONENT_STYLES: Partial<Record<ElementsKeys, () => Promise<unknown>>> = {
@@ -57,4 +60,6 @@ export const PAGE_BY_LINK: IPageByLink = {
     components: [button, input, img, message, chatItem, chatItems],
     createPage: () => new NotActiveChatPage(),
   }),
+  [error404]: () => ({ createPage: () => new ErrorPage({ text: '404' }) }),
+  [error500]: () => ({ createPage: () => new ErrorPage({ text: '500' }) }),
 };

@@ -1,15 +1,22 @@
 import { NotActivePageComp } from '../templates';
 import { Block } from '../../../../common/Block';
-// import { addRoutChangeListener } from '../../../../utils';
-// import { Links } from '../../../../components/header/scripts/contants';
+import { Input } from '../../../../components/input';
+import { Button } from '../../../../components/button';
+import { Img } from '../../../../components/img/scripts/img';
+import { ChatItems } from '../../common/components/chatItems';
 
 export class NotActiveChatPage extends Block {
   constructor() {
     super('div', {
-      props: { id: '1' },
-      // events: [
-      //   (element, remove) => addRoutChangeListener({ element, remove, selector: `a[data-id="${Links.profile}"]` }),
-      // ],
+      chatItems: new ChatItems(),
+      img: new Img({ alt: 'Добавить', src: '/assets/add_btn.svg', class: 'chat__add-file-btn' }),
+      input: new Input({ name: 'message', placeholder: 'Сообщение' }),
+      button: new Button({
+        type: 'submit',
+        className: 'form__send-message',
+        name: 'message',
+        text: new Img({ alt: 'Отправить', src: '/assets/arrow.svg', class: 'chat__add-file-btn' }),
+      }),
     });
 
     const div = this.getContent();

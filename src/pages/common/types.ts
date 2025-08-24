@@ -7,6 +7,7 @@ import type { ProfilePage } from '../Profile';
 import type { EditPasswordPage } from '../EditPassword';
 import type { NotActiveChatPage } from '../Chat';
 import type { ActiveChatPage } from '../Chat';
+import type { ErrorPage } from '../Error';
 
 export type Components = Exclude<ElementsKeys, 'header'>;
 
@@ -17,6 +18,7 @@ export type Pages =
   | ProfilePage
   | EditPasswordPage
   | ActiveChatPage
-  | NotActiveChatPage;
+  | NotActiveChatPage
+  | ErrorPage;
 
 export type IPageByLink = Record<Links, () => { components?: Components[] | null; createPage: () => Pages }>;

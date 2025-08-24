@@ -21,7 +21,6 @@ export class Navigation extends HandlebarsRegister {
   private _setupRoutListener(element: HTMLElement) {
     window.addEventListener('popstate', () => {
       const currentPath = window.location.pathname;
-
       const activeLink = element.querySelector(`a[href^="${currentPath}"], button[data-path^="${currentPath}"]`);
 
       if (activeLink) {

@@ -41,8 +41,7 @@ const validate = (name: InputsName, value: string): boolean => {
 const norm = (s: string) => s.replace(/\s+/g, ' ').trim();
 const classFromProps = (input: Input) => norm(String(input.props.class ?? '').replace(/\berror\b/g, ''));
 
-const buildClass = (base: string, withError: boolean) =>
-  norm([base, withError ? 'error' : ''].filter(Boolean).join(' '));
+const buildClass = (base: string, withError: boolean) => norm([base, withError ? 'error' : ''].join(' '));
 
 const validateInput = (input: Input, element: HTMLElement): boolean => {
   const inputEl = element.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
@@ -135,7 +134,7 @@ export const checkValidationByFields = (
         if (el) acc[el.name] = el.value;
         return acc;
       }, {});
-      console.table(values);
+      console.table({ values });
 
       if (results.some(({ isValid }) => !isValid)) return;
     };

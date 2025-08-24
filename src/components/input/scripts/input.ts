@@ -4,7 +4,7 @@ import input from '../input.hbs';
 
 export class Input extends Block {
   constructor(props: IInput) {
-    super('', props);
+    super('', { ...props });
   }
 
   render() {

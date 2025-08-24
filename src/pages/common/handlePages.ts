@@ -13,7 +13,8 @@ export class HandlePages extends HandlebarsRegister {
 
   constructor() {
     super();
-    this.setLink(Links.homepage); // Открытие страницы по умолчанию
+    const currentPath = window.location.pathname.replace('/', '') as Links;
+    this.setLink(currentPath || Links.homepage); // Открытие страницы по умолчанию
   }
 
   private async _loadStyles(link: Links, components?: Components[] | null): Promise<void> {

@@ -3,4 +3,5 @@ export interface IMessage {
   text: string;
   time: string;
   needStatus?: boolean;
+  [key: string]: unknown;
 }
