@@ -5,7 +5,7 @@ $shadowColor: rgb(0 0 0 / 35%);
 
 @mixin form($className) {
   .#{$className} {
-    height: 100%;
+    height: 97%;
     width: 30%;
     box-shadow: 0 0 10px $shadowColor;
     padding: 20px 40px;

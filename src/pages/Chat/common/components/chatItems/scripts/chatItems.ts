@@ -7,12 +7,9 @@ import { default as chatItemsTemplate } from '../chatItems.hbs';
 import { Input } from '../../../../../../components/input';
 import { Button } from '../../../../../../components/button';
 import { Img } from '../../../../../../components/img/scripts/img';
-
-interface IChatItems {
-  id: string;
-  path: string;
-  [key: string]: unknown;
-}
+import { Link } from '../../../../../../components/link';
+import { Paths } from '../../../../../../components/header/scripts/contants';
+import { addRoutChangeListener } from '../../../../../../utils';
 
 export class ButtonText extends Block {
   constructor() {
@@ -25,12 +22,17 @@ export class ButtonText extends Block {
 }
 
 export class ChatItems extends Block {
-  constructor(props: IChatItems) {
+  constructor() {
     const chatItems = getContext().chatItems.map((item) => new ChatItem(item));
 
     super('aside', {
-      ...props,
       chatItems,
+      link: new Link({
+        className: 'chat__user-link',
+        id: Paths.profile.view.id,
+        path: Paths.profile.view.path,
+        text: 'Имя Фамилия',
+      }),
       input: new Input({ name: 'search', placeholder: 'Поиск', class: 'chat__search' }),
       button: new Button({
         name: 'add',
@@ -43,6 +45,14 @@ export class ChatItems extends Block {
     if (aside) {
       aside.classList.add('chat__sidebar');
     }
+  }
+
+  componentDidMount(): void {
+    const element = this.getContent();
+    if (!element) return;
+
+    const link = this.props.link as Link;
+    addRoutChangeListener({ element: link });
   }
 
   render(): string {

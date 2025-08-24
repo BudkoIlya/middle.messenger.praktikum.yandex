@@ -10,7 +10,7 @@ import { ProfilePage } from '../Profile';
 import { button as btnComp } from '../../components/button';
 import { input as inputComp } from '../../components/input';
 import { img as imgComp } from '../../components/img';
-import { EditPasswordPage } from '../EditPassword';
+import { EditPasswordPage } from '../EditPassword/';
 import { ActiveChatPage, NotActiveChatPage } from '../Chat';
 import { chatItems as chatItemsComp, chatItem as chatItemComp, message as messageComp } from '../Chat/common';
 

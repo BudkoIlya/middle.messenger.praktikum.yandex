@@ -22,9 +22,7 @@ export class ActiveChatPage extends Block {
     });
 
     super('div', {
-      id: '1',
-      path: '2',
-      chatItems: new ChatItems({ id: '1', path: '1' }),
+      chatItems: new ChatItems(),
       img: new Img({ alt: 'Добавить', src: '/assets/add_btn.svg', class: 'chat__add-file-btn' }),
       input,
       button,

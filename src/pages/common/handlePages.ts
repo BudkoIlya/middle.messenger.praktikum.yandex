@@ -55,10 +55,6 @@ export class HandlePages extends HandlebarsRegister {
     this._page?.mount('#main');
   }
 
-  // componentDidUpdate(oldProps: Props, newProps: Props): boolean {
-  //   return oldProps.class !== newProps.class;
-  // }
-
   private _destroy() {
     this.unRegister();
     this._page?.unmount();

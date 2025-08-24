@@ -1,10 +1,10 @@
-import Handlebars from 'handlebars';
-
 import { Block } from '../../../common/Block';
 import { ProfileComp } from '../templates';
-import type { IButton, IInput } from '../../../components';
-import { type IPageVariantsByLink, Links, Paths } from '../../../components/header/scripts/contants';
-// import { addRoutChangeListener } from '../../../utils';
+import { type IButton } from '../../../components/button';
+import { type IInput, Input } from '../../../components/input';
+import { Links, Paths } from '../../../components/header/scripts/contants';
+import { Button } from '../../../components/button';
+import { addRoutChangeListener, checkValidationByFields } from '../../../utils';
 
 interface IContext {
   inputs: IInput[];
@@ -12,7 +12,9 @@ interface IContext {
   buttons: {
     editBtn: IButton;
     editPasswordBtn: IButton;
-    cancelBtn: IPageVariantsByLink['profile']['view'];
+    deleteBtn: IButton;
+    cancelBtn: IButton;
+    saveBtn: IButton;
   };
 }
 
@@ -21,14 +23,19 @@ const getContext = (isViewMode: boolean): IContext => {
   return {
     inputs: [
       { title: 'Почта', name: 'email', disabled, value: 'example@yandex.ru' },
-      { title: 'Логин', name: 'login', disabled, value: 'Логин' },
-      { title: 'Имя', name: 'name', disabled, value: 'Имя' },
+      { title: 'Логин', name: 'login', disabled, value: 'Login' },
+      { title: 'Имя', name: 'first_name', disabled, value: 'Имя' },
       { title: 'Фамилия', name: 'second_name', disabled, value: 'Фамилия' },
-      { title: 'Телефон', name: 'phone', disabled, value: 'Телефон' },
-      { title: 'Отображаемое имя', name: 'display_name', disabled, value: 'Отображаемое имя' },
+      { title: 'Телефон', name: 'phone', disabled, value: '89201009090' },
+      { title: 'Отображаемое имя', name: 'display_name', disabled, value: 'Display_Name' },
     ],
     isViewMode,
     buttons: {
+      saveBtn: {
+        text: 'Сохранить',
+        name: 'save_profile',
+        className: 'saveProfileBtn',
+      },
       editBtn: {
         text: 'Редактировать',
         name: 'edit_profile',
@@ -43,47 +50,42 @@ const getContext = (isViewMode: boolean): IContext => {
         id: Links.editPassword,
         path: Paths.editPassword.path,
       },
-      cancelBtn: Paths.profile.view,
+      deleteBtn: {
+        text: 'Удалить',
+        name: 'delete_profile',
+        className: 'deleteBtn customBtn',
+      },
+      cancelBtn: {
+        text: 'Отменить',
+        name: 'cancel',
+        className: 'cancelBtn customBtn',
+        id: Links.profile,
+        path: Paths.profile.view.path,
+      },
     },
   };
 };
 
-export class ProfilePage extends Block {
-  private _isViewMode = false;
-
-  private _defineMode() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode');
-    if (mode) {
-      document.title = mode === 'view' ? 'Профиль' : 'Редактирование профиля';
-    }
-
-    this._isViewMode = mode === 'view';
-
-    return getContext(this._isViewMode);
+const defineMode = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode');
+  if (mode) {
+    document.title = mode === 'view' ? 'Профиль' : 'Редактирование профиля';
   }
 
+  return getContext(mode === 'view');
+};
+
+export class ProfilePage extends Block {
   constructor() {
-    super('div', {
-      // props: { id: 'id' },
-      // events: [
-      //   ({ element, remove }) =>
-      //     addRoutChangeListener({
-      //       element,
-      //       remove,
-      //       selector: `button[data-id="${Links.profile}"]`,
-      //       attribute: 'data-path',
-      //     }),
-      //   ({ element, remove }) => addRoutChangeListener({ element, remove, selector: `a[href^="${Links.profile}"]` }),
-      //   ({ element, remove }) =>
-      //     addRoutChangeListener({
-      //       element,
-      //       remove,
-      //       selector: `button[data-id="${Links.editPassword}"]`,
-      //       attribute: 'data-path',
-      //     }),
-      // ],
-    });
+    const context = defineMode();
+
+    const inputs = context.inputs.map((el) => new Input(el));
+    const buttons = Object.fromEntries(
+      Object.entries(context.buttons).map(([key, cfg]) => [key, new Button(cfg as IButton)]),
+    );
+
+    super('div', { inputs, buttons, isViewMode: context.isViewMode });
 
     const div = this.getContent();
     if (div) {
@@ -91,9 +93,20 @@ export class ProfilePage extends Block {
     }
   }
 
+  componentDidMount(): void {
+    const element = this.getContent();
+    if (!element) return;
+
+    const inputs = this.props.inputs as Input[];
+    const saveBtn = (this.props.buttons as Record<string, unknown>).saveBtn as Button;
+    const editBtn = (this.props.buttons as Record<string, unknown>).editBtn as Button;
+    const cancelBtn = (this.props.buttons as Record<string, unknown>).cancelBtn as Button;
+    checkValidationByFields(element, inputs, saveBtn);
+    addRoutChangeListener({ element: editBtn });
+    addRoutChangeListener({ element: cancelBtn });
+  }
+
   render(): string {
-    const mainTmp = Handlebars.compile(ProfileComp);
-    const context = this._defineMode();
-    return mainTmp(context);
+    return ProfileComp;
   }
 }

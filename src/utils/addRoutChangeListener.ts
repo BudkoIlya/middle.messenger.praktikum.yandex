@@ -1,34 +1,24 @@
+import type { Button } from '../components/button';
+import type { Link } from '../components/link';
+
 interface IAddRoutChangeListener {
-  element: HTMLElement;
-  selector?: string;
+  element?: Link | Button;
   attribute?: string;
-  remove?: boolean;
 }
 
-const listenerFn =
-  (attribute = 'href', el: Element) =>
-  (e: Event) => {
-    e.preventDefault();
+const listenerFn = (path: string) => (e: Event) => {
+  e.preventDefault();
 
-    const path = el.getAttribute(attribute) || '/';
+  history.pushState({ page: path }, path, path);
+  window.dispatchEvent(new PopStateEvent('popstate', { state: { page: path } }));
+};
 
-    history.pushState({ page: path }, path, path);
-    window.dispatchEvent(new PopStateEvent('popstate', { state: { page: path } }));
-  };
+export const addRoutChangeListener = ({ element }: IAddRoutChangeListener) => {
+  if (!element) return;
 
-export const addRoutChangeListener = ({
-  element,
-  selector = 'a[href]',
-  attribute = 'href',
-  remove,
-}: IAddRoutChangeListener) => {
-  const el = element.querySelector(selector);
-  if (!el) return;
+  const path = element.props.path as string;
 
-  if (remove) {
-    el.removeEventListener('click', listenerFn(attribute, el));
-    return;
-  }
+  const prevEvents = element.props.events || {};
 
-  el.addEventListener('click', listenerFn(attribute, el));
+  element.setProps({ ...element.props, events: { ...prevEvents, click: listenerFn(path) } });
 };

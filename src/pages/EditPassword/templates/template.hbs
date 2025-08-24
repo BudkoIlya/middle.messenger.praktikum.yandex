@@ -7,13 +7,11 @@ export default `
     </span>" type='file' name='avatar' accept="image/jpeg"}}
 </form>
 <form class="form">
-  {{#each inputs}}
-    {{> input value=this.value title=this.title name=this.name type=this.type}}
-  {{/each}}
-  {{> button type='submit' text='Сохранить' name='save_password'}}
+  {{{inputs}}}
+  {{{saveBtn}}}
 </form>
-<div class="buttons">
-  {{> button className='cancelBtn' text=this.editBtn.text path=this.editBtn.path id=this.editBtn.id}}
-</div>
+<!--<div class="buttons">-->
+  {{{cancelBtn}}}
+<!--</div>?-->
 `;
 
