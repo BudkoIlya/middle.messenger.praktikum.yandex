@@ -5,7 +5,6 @@
     "target": "ES2023",
     "lib": ["dom", "dom.iterable", "ES2023"],
     "types": ["vite/client"],
-
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -20,7 +19,7 @@
     "verbatimModuleSyntax": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": false,
+    "noUnusedParameters": true,
     "sourceMap": true,
     "strictNullChecks": true
   },
