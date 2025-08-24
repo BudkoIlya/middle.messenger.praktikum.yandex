@@ -1,8 +1,11 @@
 import Handlebars from 'handlebars';
+import { v4 } from 'uuid';
 
 import { EventBus } from '../EvenBus';
 import { createProxy } from '../Proxy';
 import type { Props } from './types';
+
+type EventsMap = Record<string, EventListener>;
 
 export abstract class Block {
   static EVENTS = {
@@ -11,6 +14,8 @@ export abstract class Block {
     FLOW_CDU: 'flow:component-did-update',
     FLOW_RENDER: 'flow:render',
   } as const;
+
+  private _id: string = v4();
 
   private _element: HTMLElement | null = null;
 
@@ -21,6 +26,19 @@ export abstract class Block {
   private _rootless = false;
 
   private _isUpdated = false;
+
+  private _isDestroyed = false;
+
+  // Храним функцию для снятия всех обработчиков, навешанных последним рендером
+  private _removeEvents?: () => void;
+
+  private _onInit = this._init.bind(this);
+
+  private _onCDM = this._componentDidMount.bind(this);
+
+  private _onCDU = this._componentDidUpdate.bind(this);
+
+  private _onRender = this._render.bind(this);
 
   props: Props;
 
@@ -35,11 +53,15 @@ export abstract class Block {
     eventBus.emit(Block.EVENTS.INIT);
   }
 
+  get id(): string {
+    return this._id;
+  }
+
   private _registerEvents(eventBus: EventBus) {
-    eventBus.on(Block.EVENTS.INIT, this._init.bind(this));
-    eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
-    eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
-    eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+    eventBus.on(Block.EVENTS.INIT, this._onInit);
+    eventBus.on(Block.EVENTS.FLOW_CDM, this._onCDM);
+    eventBus.on(Block.EVENTS.FLOW_CDU, this._onCDU);
+    eventBus.on(Block.EVENTS.FLOW_RENDER, this._onRender);
   }
 
   private _createResources() {
@@ -91,32 +113,40 @@ export abstract class Block {
   }
 
   private _addEvents() {
-    const events = this.props.events || {};
-    const element = this._element;
-    if (!element) return;
+    const events: EventsMap = (this.props.events || {}) as EventsMap;
+    const el = this._element;
+    if (!el) return;
+
+    const removers: Array<() => void> = [];
+
     Object.entries(events).forEach(([event, listener]) => {
-      element.addEventListener(event, listener, true);
+      if (typeof listener !== 'function') return;
+
+      el.addEventListener(event, listener);
+      removers.push(() => el.removeEventListener(event, listener));
     });
+
+    this._removeEvents = () => removers.forEach((fn) => fn());
   }
 
-  private _removeEvents() {
-    const element = this._element;
-    if (!element) return;
-    const events = this.props.events || {};
-    Object.entries(events).forEach(([event, listener]) => {
-      element.removeEventListener(event, listener, true);
-    });
+  private _removeAllEvents() {
+    this._removeEvents?.();
+    this._removeEvents = undefined;
   }
 
+  // Превращаем значения пропсов в контекст для шаблона.
+  // Вместо outerHTML у детей возвращаем заглушки <div data-block-id="...">
   private _unwrap(value: unknown): unknown {
     if (Array.isArray(value)) {
-      const isFlat = value.every((item) => item instanceof Block || typeof item !== 'object' || item === null);
       const mapped = value.map((item) => this._unwrap(item));
+      const isFlat = mapped.every(
+        (item) => typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean' || item === null,
+      );
       return isFlat ? mapped.join('') : mapped;
     }
 
     if (value instanceof Block) {
-      return value.getContent()?.outerHTML ?? '';
+      return `<div data-block-id="${value.id}"></div>`;
     }
 
     if (value && typeof value === 'object') {
@@ -132,35 +162,47 @@ export abstract class Block {
 
   private _prepareContext(props: Props): Record<string, unknown> {
     const context: Record<string, unknown> = {};
-
     Object.entries(props).forEach(([key, value]) => {
       context[key] = this._unwrap(value);
     });
-
     return context;
   }
 
-  private _recursiveChildren(value: unknown, cb: (child: Block) => void): void {
+  private _forEachChild(value: unknown, cb: (child: Block) => void): void {
     if (Array.isArray(value)) {
-      value.forEach((item) => this._recursiveChildren(item, cb));
+      value.forEach((item) => this._forEachChild(item, cb));
     } else if (value instanceof Block) {
       cb(value);
     } else if (value && typeof value === 'object') {
-      Object.values(value).forEach((item) => this._recursiveChildren(item, cb));
+      Object.values(value).forEach((item) => this._forEachChild(item, cb));
     }
   }
 
+  private _injectChildren(fragment: DocumentFragment) {
+    this._forEachChild(this.props, (child) => {
+      const stub = fragment.querySelector(`[data-block-id="${child.id}"]`);
+      const node = child.getContent();
+      if (stub && node) {
+        stub.replaceWith(node);
+      }
+    });
+  }
+
   private _render() {
+    this._removeAllEvents();
+
     const props = this.props;
-
     const context = this._prepareContext(props);
-
     const fragment = this._compile(this.render(), context);
+
+    // Подменяем заглушки реальными DOM-узлами детей до вставки фрагмента
+    this._injectChildren(fragment);
 
     if (this._rootless) {
       const newRoot = fragment.firstElementChild as HTMLElement | null;
 
       if (!newRoot) {
+        this._addEvents();
         return;
       }
 
@@ -179,11 +221,9 @@ export abstract class Block {
       this._element.append(...Array.from(fragment.childNodes));
     }
 
-    // монтирование детей
-    this._recursiveChildren(props, (child) => child.dispatchComponentDidMount());
+    // Сообщаем детям, что они в дереве
+    this._forEachChild(props, (child) => child.dispatchComponentDidMount());
 
-    // При перерендере удаляем старые эвенты
-    this._removeEvents();
     this._addEvents();
   }
 
@@ -192,7 +232,6 @@ export abstract class Block {
     const html = tmpl(context || {});
     const temp = document.createElement('template');
     temp.innerHTML = html;
-
     return temp.content;
   }
 
@@ -205,22 +244,35 @@ export abstract class Block {
   mount(selector: string) {
     const root = document.querySelector(selector);
     const content = this.getContent();
-    if (content && root) {
+    if (root && content) {
       root.replaceChildren(content);
       this.dispatchComponentDidMount();
     }
   }
 
   unmount(): void {
-    this._removeEvents();
+    this._removeAllEvents();
     this._destroy();
   }
 
+  private _cleanupChildren() {
+    this._forEachChild(this.props, (child) => child.unmount());
+  }
+
   private _destroy(): void {
-    this._eventBus.off(Block.EVENTS.INIT, this._init.bind(this));
-    this._eventBus.off(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
-    this._eventBus.off(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
-    this._eventBus.off(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+    if (this._isDestroyed) return;
+    this._isDestroyed = true;
+
+    this._removeAllEvents?.();
+
+    this._cleanupChildren();
+
+    this._element?.remove();
+
+    this._eventBus.off(Block.EVENTS.INIT, this._onInit);
+    this._eventBus.off(Block.EVENTS.FLOW_CDM, this._onCDM);
+    this._eventBus.off(Block.EVENTS.FLOW_CDU, this._onCDU);
+    this._eventBus.off(Block.EVENTS.FLOW_RENDER, this._onRender);
 
     this._eventBus = null as unknown as EventBus;
     this._element = null;

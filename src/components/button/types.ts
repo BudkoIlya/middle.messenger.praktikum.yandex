@@ -2,7 +2,7 @@ import type { Block } from '../../common/Block';
 import type { Events } from '../../common/Block/types';
 
 export interface IButton {
-  text: string | Block;
+  text: string | Block | Block[];
   type?: HTMLButtonElement['type'];
   className?: string;
   id?: string;

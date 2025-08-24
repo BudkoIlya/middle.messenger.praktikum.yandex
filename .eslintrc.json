@@ -53,7 +53,6 @@
     }],
     "class-methods-use-this": "off",
     "global-require": "off",
-    "max-classes-per-file": "warn",
     "no-use-before-define": "off",
     "no-shadow": "off",
     "no-unused-vars": "off",

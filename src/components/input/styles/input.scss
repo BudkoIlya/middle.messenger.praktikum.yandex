@@ -2,6 +2,20 @@
 
 .label {
   font-size: 20px;
+  position: relative;
+
+  .helpText {
+    display: none;
+  }
+
+  .input.error + .helpText {
+    display: inline-block;
+    color: common.$red;
+    font-size: 13px;
+    position: absolute;
+    left: 0;
+    bottom: -15px;
+  }
 
   .input {
     height: 36px;
@@ -10,7 +24,7 @@
     padding: 0 15px;
 
     &.error {
-      border: 1px solid common.$red;
+      border: 1px solid common.$red !important;
     }
   }
 }

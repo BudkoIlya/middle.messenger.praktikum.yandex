@@ -14,6 +14,16 @@ interface IChatItems {
   [key: string]: unknown;
 }
 
+export class ButtonText extends Block {
+  constructor() {
+    super('span', {});
+  }
+
+  render() {
+    return 'Добавить';
+  }
+}
+
 export class ChatItems extends Block {
   constructor(props: IChatItems) {
     const chatItems = getContext().chatItems.map((item) => new ChatItem(item));
@@ -24,7 +34,7 @@ export class ChatItems extends Block {
       input: new Input({ name: 'search', placeholder: 'Поиск', class: 'chat__search' }),
       button: new Button({
         name: 'add',
-        text: new Img({ src: '/assets/add_btn.svg', alt: 'Добавить' }),
+        text: [new Img({ src: '/assets/add_btn.svg', alt: 'Добавить' }), new ButtonText()],
         className: 'add_btn',
       }),
     });

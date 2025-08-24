@@ -7,8 +7,6 @@ import { Input } from '../../../../components/input';
 import { checkValidationByFields } from '../../../../utils';
 
 export class ActiveChatPage extends Block {
-  private _removeValidation?: () => void;
-
   constructor() {
     const input = new Input({
       name: 'message',
@@ -44,13 +42,7 @@ export class ActiveChatPage extends Block {
 
     const input = this.props.input as Input;
     const button = this.props.button as Button;
-    const remove = checkValidationByFields(element, [input], button);
-    if (remove) this._removeValidation = remove;
-  }
-
-  unmount(): void {
-    this._removeValidation?.();
-    super.unmount();
+    checkValidationByFields(element, [input], button);
   }
 
   render(): string {
