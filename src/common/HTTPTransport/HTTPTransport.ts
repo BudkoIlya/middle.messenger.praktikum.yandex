@@ -12,8 +12,8 @@ function queryStringify(data: Record<string, unknown>): string {
 }
 
 class HTTPTransport {
-  private async request<T = unknown>(url: string, options: FullRequestOptions, timeout: number = 5000): Promise<T> {
-    const { method, data, headers = DEFAULT_HEADER } = options;
+  private async request<T = unknown>(url: string, options: FullRequestOptions): Promise<T> {
+    const { method, data, headers = DEFAULT_HEADER, timeout = 3000 } = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -59,19 +59,19 @@ class HTTPTransport {
   }
 
   // Не стал добавлять отдельно каждый метод, сделал универсальный с аргументов method
-  fetch<T = unknown>(method = Method.GET, url: string, options: RequestOptions = {}, timeout?: number): Promise<T> {
-    return this.request<T>(url, { ...options, method }, timeout);
+  fetch<T = unknown>(method = Method.GET, url: string, options: RequestOptions = {}): Promise<T> {
+    return this.request<T>(url, { ...options, method });
   }
 
   fetchWithRetry<T = unknown>(url: string, options: FetchWithRetryOptions = {}): Promise<T> {
-    const { method = Method.GET, retries = 2, retryDelay = 500, timeout, ...httpOptions } = options;
+    const { method = Method.GET, retries = 2, retryDelay = 500, ...httpOptions } = options;
 
     let attempts = 0;
 
     const executeRequest = async (): Promise<T> => {
       attempts++;
       try {
-        return await this.fetch<T>(method, url, httpOptions, timeout);
+        return await this.fetch<T>(method, url, httpOptions);
       } catch (error) {
         if (attempts <= retries) {
           await new Promise((resolve) => setTimeout(resolve, retryDelay));

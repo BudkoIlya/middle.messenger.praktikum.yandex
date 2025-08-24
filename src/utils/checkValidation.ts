@@ -1,32 +1,6 @@
 import type { Input } from '../components';
 import type { Button } from '../components/button';
-
-type InputsName =
-  | 'first_name'
-  | 'second_name'
-  | 'login'
-  | 'display_name'
-  | 'email'
-  | 'password'
-  | 'new_password'
-  | 'old_password'
-  | 'confirm_password'
-  | 'phone'
-  | 'message';
-
-const patterns: Record<InputsName, RegExp> = {
-  first_name: /^[A-ZА-ЯЁ][A-Za-zА-Яа-яЁё-]*$/,
-  second_name: /^[A-ZА-ЯЁ][A-Za-zА-Яа-яЁё-]*$/,
-  login: /^(?=.*[A-Za-z])[A-Za-z0-9_-]{3,20}$/,
-  display_name: /^(?=.*[A-Za-z])[A-Za-z0-9_-]{3,20}$/,
-  email: /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]+$/,
-  password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
-  new_password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
-  confirm_password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
-  old_password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/,
-  phone: /^\+?\d{10,15}$/,
-  message: /.+/,
-};
+import { type InputsName, REG_EXP_BY_INPUT_NAME } from './constants';
 
 const isUpdatingOnFocus = new WeakMap<Input, boolean>();
 
@@ -34,7 +8,7 @@ const getInput = (element: HTMLElement, input: Input) =>
   element.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
 
 const validate = (name: InputsName, value: string): boolean => {
-  const rule = patterns[name];
+  const rule = REG_EXP_BY_INPUT_NAME[name];
   return rule.test(value);
 };
 
