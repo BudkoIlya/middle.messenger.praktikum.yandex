@@ -1,0 +1,18 @@
+export default `
+<label class="label">
+  {{#if title}}<span class="title">{{{title}}}</span>{{/if}}
+  <input
+     type="{{#if type}}{{type}}{{else}}text{{/if}}"
+     value="{{value}}"
+     {{#if class}}
+       class="input {{class}}"
+       {{else}}class="input
+     {{/if}}
+     placeholder="{{placeholder}}"
+     title="{{title}}"
+     name="{{name}}"
+     {{disabled}}
+     {{#if accept}}accept={{accept}}{{/if}}>
+  <span class="helpText">Недопустимые символы</span>
+</label>
+`;

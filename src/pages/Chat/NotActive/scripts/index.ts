@@ -1,0 +1,1 @@
+export { NotActiveChatPage } from './notActiveChat';

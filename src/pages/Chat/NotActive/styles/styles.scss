@@ -1,0 +1,24 @@
+@use 'src/styles/common';
+@use 'src/styles/main';
+@use '../../common/styles/common' as chatCommon;
+@include chatCommon.mainPadding;
+
+#main {
+  height: calc(100vh - #{main.$navHeight} - #{main.$mainMargin} * 2 - #{main.$mainPadding});
+
+  @include chatCommon.chat('notActiveChat');
+
+  .notActiveChat {
+    .chat__dialog {
+      display: flex;
+      place-items: center center;
+      width: 100%;
+
+      .chat__empty-message {
+        width: 100%;
+        text-align: center;
+        color: #dad9dd;
+      }
+    }
+  }
+}
