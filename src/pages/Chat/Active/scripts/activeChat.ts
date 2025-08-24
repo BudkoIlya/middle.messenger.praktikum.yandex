@@ -1,7 +1,7 @@
 import { ActivePageComp } from '../templates';
 import { Block } from '../../../../common/Block';
 import { ChatItems } from '../../common/components/chatItems';
-import { Img } from '../../../../components/img/scripts/img';
+import { Img } from '../../../../components/img/';
 import { Button } from '../../../../components/button';
 import { Input } from '../../../../components/input';
 import { checkValidationByFields } from '../../../../utils';

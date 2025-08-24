@@ -1,12 +1,10 @@
 import { Block } from '../../../../../../common/Block';
 import { ChatItem } from '../chatItem';
-// import { type IChatItem } from '../chatItem';
 import { getContext } from '../../../scripts';
-// import { Input } from '../../../../../../components/input';
 import { default as chatItemsTemplate } from '../chatItems.hbs';
 import { Input } from '../../../../../../components/input';
 import { Button } from '../../../../../../components/button';
-import { Img } from '../../../../../../components/img/scripts/img';
+import { Img } from '../../../../../../components/img/';
 import { Link } from '../../../../../../components/link';
 import { Paths } from '../../../../../../components/header/scripts/contants';
 import { addRoutChangeListener } from '../../../../../../utils';

@@ -2,7 +2,7 @@ import { NotActivePageComp } from '../templates';
 import { Block } from '../../../../common/Block';
 import { Input } from '../../../../components/input';
 import { Button } from '../../../../components/button';
-import { Img } from '../../../../components/img/scripts/img';
+import { Img } from '../../../../components/img';
 import { ChatItems } from '../../common/components/chatItems';
 
 export class NotActiveChatPage extends Block {
