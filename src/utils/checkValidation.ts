@@ -1,6 +1,7 @@
-import type { Input } from '../components';
-import type { Button } from '../components/button';
-import { type InputsName, REG_EXP_BY_INPUT_NAME } from './constants';
+import type { Button, Input } from '@components';
+
+import { REG_EXP_BY_INPUT_NAME } from './constants';
+import type { InputsName } from './constants';
 
 const isUpdatingOnFocus = new WeakMap<Input, boolean>();
 

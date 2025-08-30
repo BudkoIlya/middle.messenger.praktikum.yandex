@@ -1,6 +1,7 @@
-import { Block } from '../../../common/Block';
-import type { IImg } from '../types';
+import { Block } from '@common/Block';
+
 import { img } from '../template';
+import type { IImg } from '../types';
 
 export class Img extends Block {
   constructor({ class: className, alt, src }: IImg) {

@@ -1,10 +1,12 @@
+import { Block } from '@common';
+import { Button } from '@components/button';
+import { Links, Paths } from '@components/header/scripts/contants';
+import { Input } from '@components/input';
+import { Link } from '@components/link';
+import { addRoutChangeListener, checkValidationByFields } from '@utils';
+import type { IButton, IInput } from '@components';
+
 import { RegisterPageComp } from '../templates';
-import { Block } from '../../../common/Block';
-import { Button, type IButton } from '../../../components/button';
-import { type IInput, Input } from '../../../components/input';
-import { Links, Paths } from '../../../components/header/scripts/contants';
-import { addRoutChangeListener, checkValidationByFields } from '../../../utils';
-import { Link } from '../../../components/link';
 
 interface IContext {
   inputs: IInput[];

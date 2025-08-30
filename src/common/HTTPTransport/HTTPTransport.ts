@@ -1,6 +1,8 @@
-import { type FetchWithRetryOptions, type FullRequestOptions, Method, type RequestOptions } from './types';
+import { typedObjectEntries } from '@utils';
+
 import { DEFAULT_HEADER } from './constants';
-import { typedObjectEntries } from '../../utils';
+import { Method } from './types';
+import type { FetchWithRetryOptions, FullRequestOptions, RequestOptions } from './types';
 
 function queryStringify(data: Record<string, unknown>): string {
   const keys = Object.keys(data);

@@ -1,5 +1,4 @@
-import type { Button } from '../components/button';
-import type { Link } from '../components/link';
+import type { Button, Link } from '@components';
 
 interface IAddRoutChangeListener {
   element?: Link | Button;

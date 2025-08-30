@@ -1,6 +1,6 @@
 import Handlebars from 'handlebars';
 
-import type { IMountBlock, IItem } from './types';
+import type { IItem, IMountBlock } from './types';
 
 export class HandlebarsRegister {
   items: IMountBlock = new Map();

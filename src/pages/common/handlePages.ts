@@ -1,8 +1,9 @@
-import { HandlebarsRegister } from '../../common/HandlebarsRegistration';
-import { type ElementsKeys, type IItem } from '../../common/HandlebarsRegistration/types';
-import type { Components, Pages } from './types';
-import { Links } from '../../components/header/scripts/contants';
+import { HandlebarsRegister } from '@common';
+import { Links } from '@components/header/scripts/contants';
+import type { ElementsKeys, IItem } from '@common/HandlebarsRegistration/types';
+
 import { COMPONENT_STYLES, COMPONENTS_BY_KEY, PAGE_BY_LINK, PAGE_STYLES } from './constants';
+import type { Components, Pages } from './types';
 
 export class HandlePages extends HandlebarsRegister {
   private _page: Pages | null = null;

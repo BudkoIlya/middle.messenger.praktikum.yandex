@@ -1,13 +1,14 @@
-import { Block } from '../../../../../../common/Block';
-import { ChatItem } from '../chatItem';
+import { Block } from '@common';
+import { Button } from '@components/button';
+import { Paths } from '@components/header/scripts/contants';
+import { Img } from '@components/img';
+import { Input } from '@components/input';
+import { Link } from '@components/link';
+import { addRoutChangeListener } from '@utils';
+
 import { getContext } from '../../../scripts';
+import { ChatItem } from '../chatItem';
 import { default as chatItemsTemplate } from '../chatItems.hbs';
-import { Input } from '../../../../../../components/input';
-import { Button } from '../../../../../../components/button';
-import { Img } from '../../../../../../components/img/';
-import { Link } from '../../../../../../components/link';
-import { Paths } from '../../../../../../components/header/scripts/contants';
-import { addRoutChangeListener } from '../../../../../../utils';
 
 export class ButtonText extends Block {
   constructor() {

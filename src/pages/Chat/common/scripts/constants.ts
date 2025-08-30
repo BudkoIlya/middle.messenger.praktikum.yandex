@@ -1,5 +1,6 @@
+import { Links, Paths } from '@components/header/scripts/contants';
+
 import type { IChatItems } from '../components/chatItems';
-import { Links, Paths } from '../../../../components/header/scripts/contants';
 
 export const getContext = (active = false): IChatItems => ({
   chatItems: [

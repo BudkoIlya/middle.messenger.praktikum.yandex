@@ -1,4 +1,4 @@
-import { Block } from '../../common/Block';
+import { Block } from '@common/Block';
 
 export class HomePage extends Block {
   constructor() {

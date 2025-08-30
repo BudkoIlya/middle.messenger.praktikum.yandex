@@ -1,10 +1,12 @@
 import Handlebars from 'handlebars';
 
-import { HandlebarsRegister } from '../../../common/HandlebarsRegistration';
-import { ElementsKeys } from '../../../common/HandlebarsRegistration/types';
-import { HandlePages } from '../../../pages/common';
+import { HandlebarsRegister } from '@common';
+import { ElementsKeys } from '@common/HandlebarsRegistration/types';
+import { HandlePages } from '@pages/common';
+
 import { navigation } from '../template';
-import { NAVIGATION_CONTEXT, type Links } from './contants';
+import { NAVIGATION_CONTEXT } from './contants';
+import type { Links } from './contants';
 
 export class Navigation extends HandlebarsRegister {
   private _pages: HandlePages | null = null;

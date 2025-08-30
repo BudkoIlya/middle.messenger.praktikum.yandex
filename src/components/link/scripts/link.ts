@@ -1,6 +1,7 @@
-import { Block } from '../../../common/Block';
-import type { ILink } from '../types';
+import { Block } from '@common/Block';
+
 import { LinkComp } from '../template';
+import type { ILink } from '../types';
 
 export class Link extends Block {
   constructor(props: ILink) {

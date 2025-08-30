@@ -1,4 +1,5 @@
-import { Block } from '../../../common/Block';
+import { Block } from '@common';
+
 import { ErrorComp } from '../template';
 
 export class ErrorPage extends Block {

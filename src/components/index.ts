@@ -1,6 +1,7 @@
-export { type IButton, button } from './button';
+export { type IButton, button, Button } from './button';
 export { type IInput, Input } from './input';
-export { type IImg, img } from './img';
-export { type IMessage, message } from './message';
+export { type IImg, img, Img } from './img';
+export { type IMessage, Message, message } from './message';
+export { type ILink, Link, LinkComp } from './link';
 
 export { Navigation } from './header';

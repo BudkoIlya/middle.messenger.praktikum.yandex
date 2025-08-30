@@ -1,11 +1,12 @@
-import { ActivePageComp } from '../templates';
-import { Block } from '../../../../common/Block';
+import { Block } from '@common';
+import { Button } from '@components/button';
+import { Img } from '@components/img';
+import { Input } from '@components/input';
+import { Message } from '@components/message';
+import { checkValidationByFields } from '@utils';
+
 import { ChatItems } from '../../common/components/chatItems';
-import { Img } from '../../../../components/img/';
-import { Button } from '../../../../components/button';
-import { Input } from '../../../../components/input';
-import { checkValidationByFields } from '../../../../utils';
-import { Message } from '../../../../components/message';
+import { ActivePageComp } from '../templates';
 
 export class ActiveChatPage extends Block {
   constructor() {

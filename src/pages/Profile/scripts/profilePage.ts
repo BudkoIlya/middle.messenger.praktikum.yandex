@@ -1,10 +1,11 @@
-import { Block } from '../../../common/Block';
+import { Block } from '@common';
+import { Button } from '@components/button';
+import { Links, Paths } from '@components/header/scripts/contants';
+import { Input } from '@components/input';
+import { addRoutChangeListener, checkValidationByFields } from '@utils';
+import type { IButton, IInput } from '@components';
+
 import { ProfileComp } from '../templates';
-import { type IButton } from '../../../components/button';
-import { type IInput, Input } from '../../../components/input';
-import { Links, Paths } from '../../../components/header/scripts/contants';
-import { Button } from '../../../components/button';
-import { addRoutChangeListener, checkValidationByFields } from '../../../utils';
 
 interface IContext {
   inputs: IInput[];

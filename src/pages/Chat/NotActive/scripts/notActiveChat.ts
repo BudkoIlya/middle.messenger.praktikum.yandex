@@ -1,9 +1,10 @@
-import { NotActivePageComp } from '../templates';
-import { Block } from '../../../../common/Block';
-import { Input } from '../../../../components/input';
-import { Button } from '../../../../components/button';
-import { Img } from '../../../../components/img';
+import { Block } from '@common';
+import { Button } from '@components/button';
+import { Img } from '@components/img';
+import { Input } from '@components/input';
+
 import { ChatItems } from '../../common/components/chatItems';
+import { NotActivePageComp } from '../templates';
 
 export class NotActiveChatPage extends Block {
   constructor() {
