@@ -1,0 +1,1 @@
+export { HandlebarsRegister } from './HandlebarsRegister';

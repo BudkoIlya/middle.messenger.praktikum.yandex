@@ -1,0 +1,11 @@
+@use 'src/styles/common';
+
+#main {
+  @include common.form('formLoginContainer');
+
+  .formLoginContainer {
+    .signInBtn {
+      margin-top: 20px;
+    }
+  }
+}

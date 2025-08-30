@@ -3,6 +3,7 @@
 $mainPadding: 20px;
 $mainMargin: 15px;
 $mainColorShadow: rgb(0 0 0 / 35%);
+$navHeight: 59px;
 
 * {
   box-sizing: border-box;
@@ -16,9 +17,6 @@ $mainColorShadow: rgb(0 0 0 / 35%);
   box-shadow: 0 0 10px $mainColorShadow;
 }
 
-.mainPageTitle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - #{common.$navHeight} - #{$mainMargin} * 2 - #{$mainPadding} * 2);
+#main {
+  height: calc(100% - #{$navHeight});
 }

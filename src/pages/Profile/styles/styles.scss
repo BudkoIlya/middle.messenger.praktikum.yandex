@@ -1,0 +1,103 @@
+@use 'src/styles/common';
+
+$widthBtn: 100px;
+$bgColorBtn: white;
+
+#main {
+  @include common.form('formProfileContainer');
+
+  .formProfileContainer {
+    display: grid;
+    grid-template-rows: max-content min-content max-content min-content;
+    place-items: center center;
+    justify-items: center;
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      background: common.$grey;
+      border-radius: 50%;
+      position: relative;
+      align-items: center;
+
+      &[src='']::before {
+        content: attr(alt);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        width: 80px;
+        height: 80px;
+        background-color: common.$grey;
+        font-size: 12px;
+      }
+    }
+
+    .editAvatar {
+      .editAvatarImg {
+        transform: scale(0.7);
+      }
+
+      .label {
+        .title {
+          cursor: pointer;
+          font-size: 14px;
+        }
+      }
+
+      .editProfileInput {
+        display: none;
+      }
+
+      .editProfileTitle {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+    }
+
+    .form_profile {
+      input[disabled] {
+        cursor: not-allowed;
+      }
+    }
+
+    .buttons {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+
+      .deleteBtn {
+        color: common.$red;
+        background: $bgColorBtn;
+        width: $widthBtn;
+      }
+
+      .cancelBtn,
+      .deleteBtn {
+        cursor: pointer;
+      }
+    }
+
+    .cancelBtn {
+      font-size: 14px;
+      background: $bgColorBtn;
+      width: $widthBtn;
+      color: black;
+    }
+
+    .customBtn {
+      padding-top: 0;
+      font-size: 14px;
+      background: white;
+      border: none;
+      color: black;
+    }
+  }
+}

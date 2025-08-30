@@ -7,7 +7,10 @@
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "eslint": "^8.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^2.7.0",
     "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.5.4",
     "handlebars": "^4.7.8",
     "prettier": "^3.6.2",
     "sass-embedded": "^1.89.2",
@@ -22,12 +25,17 @@
   "scripts": {
     "dev": "vite",
     "start": "npm run build && vite preview",
-    "build": "npm run format && npm run lint && npm run lint:scss && vite build",
-    "lint": "eslint src",
+    "prebild": "npm run format && npm run tsc && npm run lint && npm run lint:scss",
+    "build": "npm run prebild && vite build",
+    "lint": "eslint --ext .ts src --max-warnings=0",
     "lint:scss": "stylelint src/**/*.scss",
-    "format": "prettier --write \"src\""
+    "tsc": "tsc --noEmit",
+    "format": "prettier --write src"
   },
   "engines": {
     "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "uuid": "^11.1.0"
   }
 }
