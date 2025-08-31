@@ -1,7 +1,11 @@
+@use 'src/styles/main';
+
 .nav > ul {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 25px;
+  padding: 25px 0;
   list-style-type: none;
+  margin: 0;
+  height: main.$navHeight;
 }

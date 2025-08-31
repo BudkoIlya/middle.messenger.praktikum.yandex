@@ -3,7 +3,7 @@ export default `
     {{#if path}}data-path='{{path}}'{{/if}}
     {{#if id}}data-id='{{id}}'{{/if}}
     type='{{#if type}}{{type}}{{else}}button{{/if}}'
-    class='btn {{className}}' name='{{name}}'>
+    class='btn {{styles.btn}} {{className}}' name='{{name}}'>
   {{{text}}}
 </button>`
 ;

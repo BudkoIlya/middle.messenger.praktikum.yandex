@@ -3,26 +3,26 @@ $grey: #afadad;
 $red: #f44336;
 $shadowColor: rgb(0 0 0 / 35%);
 
-@mixin form($className) {
-  .#{$className} {
-    height: 97%;
-    width: 30%;
-    box-shadow: 0 0 10px $shadowColor;
-    padding: 20px 40px;
-    border-radius: 10px;
-    margin: auto;
+@mixin form() {
+  height: 97%;
+  width: 30%;
+  box-shadow: 0 0 10px $shadowColor;
+  padding: 20px 40px;
+  border-radius: 10px;
+  margin: auto;
 
-    .form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
 
-      .title {
-        text-align: center;
-      }
+    .title {
+      text-align: center;
+    }
 
+    :global {
       .label {
         display: flex;
         gap: 5px;

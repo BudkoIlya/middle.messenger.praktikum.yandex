@@ -1,10 +1,8 @@
 export default `
-<div class="message {{class}}">
-  <span class="message__text">{{text}}</span>
-  <div class="message__status">
-    <span class="message__time">{{time}}</span>
-    {{#if needStatus}}
-      {{> img class="message__check-img" alt="check_all" src="../../../assets/check_all.svg" }}
-    {{/if}}
+<div class="{{styles.message}} {{class}}">
+  <span class="{{styles.message__text}}">{{text}}</span>
+  <div class="{{styles.message__status}}">
+    <span class="{{styles.message__time}}">{{time}}</span>
+    {{#if needStatus}}{{{img}}}{{/if}}
   </div>
 </div>`;

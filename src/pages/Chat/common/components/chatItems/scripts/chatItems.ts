@@ -10,6 +10,8 @@ import { getContext } from '../../../scripts';
 import { ChatItem } from '../chatItem';
 import { default as chatItemsTemplate } from '../chatItems.hbs';
 
+import styles from '../styles/chatItems.module.scss';
+
 export class ButtonText extends Block {
   constructor() {
     super('span', {});
@@ -24,26 +26,26 @@ export class ChatItems extends Block {
   constructor({ active }: { active: boolean }) {
     const chatItems = getContext(active).chatItems.map((item) => new ChatItem(item));
 
-    super('aside', {
+    super('', {
       chatItems,
       link: new Link({
-        className: 'chat__user-link',
+        className: styles['chat__user-link'],
         id: Paths.profile.view.id,
         path: Paths.profile.view.path,
         text: 'Имя Фамилия',
       }),
-      input: new Input({ name: 'search', placeholder: 'Поиск', class: 'chat__search' }),
+      input: new Input({
+        name: 'search',
+        placeholder: 'Поиск',
+        class: styles['chat__search'],
+      }),
       button: new Button({
         name: 'add',
         text: [new Img({ src: '/assets/add_btn.svg', alt: 'Добавить' }), new ButtonText()],
-        className: 'add_btn',
+        className: styles['add_btn'],
       }),
+      styles,
     });
-
-    const aside = this.getContent();
-    if (aside) {
-      aside.classList.add('chat__sidebar');
-    }
   }
 
   componentDidMount(): void {

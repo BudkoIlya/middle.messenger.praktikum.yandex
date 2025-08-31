@@ -8,32 +8,30 @@ import { checkValidationByFields } from '@utils';
 import { ChatItems } from '../../common/components/chatItems';
 import { ActivePageComp } from '../templates';
 
+import styles from '../styles/styles.module.scss';
+
 export class ActiveChatPage extends Block {
   constructor() {
-    super('div', {
+    super('', {
       chatItems: new ChatItems({ active: true }),
       messages: [
-        new Message({ text: 'Привет', time: '12:00', class: 'chat__received_message' }),
-        new Message({ text: 'Привет', time: '12:01', needStatus: true, class: 'chat__answer_message' }),
+        new Message({ text: 'Привет', time: '12:00', class: styles['chat__received_message'] }),
+        new Message({ text: 'Привет', time: '12:01', needStatus: true, class: styles['chat__answer_message'] }),
       ],
-      img: new Img({ alt: 'Добавить', src: '/assets/add_btn.svg', class: 'chat__add-file-btn' }),
-      input: new Input({
-        name: 'message',
-        placeholder: 'Сообщение',
-        class: 'form__input chat__message',
-      }),
+      img: new Img({ alt: 'Добавить', src: '/assets/add_btn.svg', className: styles['chat__add-file-btn'] }),
+      input: new Input({ name: 'message', placeholder: 'Сообщение', class: styles['form__input'] }),
       button: new Button({
         type: 'submit',
-        className: 'form__send-message',
+        className: styles['form__send-message'],
         name: 'message',
-        text: new Img({ alt: 'Отправить', src: '/assets/arrow.svg', class: 'chat__add-file-btn' }),
+        text: new Img({
+          alt: 'Отправить',
+          src: '/assets/arrow.svg',
+          className: styles['chat__send-message'],
+        }),
       }),
+      styles,
     });
-
-    const div = this.getContent();
-    if (div) {
-      div.className = 'activeChat';
-    }
   }
 
   componentDidMount(): void {

@@ -8,6 +8,8 @@ import type { IButton, IInput } from '@components';
 
 import { LoginPageCom } from '../templates';
 
+import styles from '../styles/styles.module.scss';
+
 interface IContext {
   inputs: IInput[];
   button: IButton;
@@ -15,23 +17,18 @@ interface IContext {
 
 const CONTEXT: IContext = {
   inputs: [
-    { title: 'Логин', name: 'login' },
-    { title: 'Пароль', name: 'password', type: 'password' },
+    { label: 'Логин', name: 'login' },
+    { label: 'Пароль', name: 'password', type: 'password' },
   ],
-  button: { type: 'submit', name: 'sign_in', text: 'Войти', className: 'signInBtn' },
+  button: { type: 'submit', name: 'sign_in', text: 'Войти', className: styles.signInBtn },
 };
 
 export class LoginPage extends Block {
   constructor() {
     const inputs = CONTEXT.inputs.map((el) => new Input(el));
-    const link = new Link({ ...Paths[Links.register], className: 'registerLink', text: 'Регистрация' });
+    const link = new Link({ ...Paths[Links.register], className: styles.registerButton, text: 'Регистрация' });
 
-    super('div', { inputs, button: new Button(CONTEXT.button), link });
-
-    const div = this.getContent();
-    if (div) {
-      div.className = 'formLoginContainer';
-    }
+    super('', { inputs, button: new Button(CONTEXT.button), link, styles });
   }
 
   componentDidMount(): void {

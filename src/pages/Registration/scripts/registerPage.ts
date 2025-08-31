@@ -8,6 +8,8 @@ import type { IButton, IInput } from '@components';
 
 import { RegisterPageComp } from '../templates';
 
+import styles from '../styles/styles.module.scss';
+
 interface IContext {
   inputs: IInput[];
   button: IButton;
@@ -15,27 +17,22 @@ interface IContext {
 
 const CONTEXT: IContext = {
   inputs: [
-    { title: 'Почта', name: 'email' },
-    { title: 'Логин', name: 'login' },
-    { title: 'Имя', name: 'first_name' },
-    { title: 'Фамилия', name: 'second_name' },
-    { title: 'Пароль', name: 'password', type: 'password' },
-    { title: 'Подтверждение пароля', name: 'confirm_password', type: 'password' },
+    { label: 'Почта', name: 'email' },
+    { label: 'Логин', name: 'login' },
+    { label: 'Имя', name: 'first_name' },
+    { label: 'Фамилия', name: 'second_name' },
+    { label: 'Пароль', name: 'password', type: 'password' },
+    { label: 'Подтверждение пароля', name: 'confirm_password', type: 'password' },
   ],
-  button: { type: 'submit', name: 'register', text: 'Зарегистрироваться', className: 'registerButton' },
+  button: { type: 'submit', name: 'register', text: 'Зарегистрироваться', className: styles.registerButton },
 };
 
 export class RegisterPage extends Block {
   constructor() {
     const inputs = CONTEXT.inputs.map((el) => new Input(el));
-    const link = new Link({ ...Paths[Links.login], className: 'registerLink', text: 'Вход' });
+    const link = new Link({ ...Paths[Links.login], className: styles.loginLink, text: 'Вход' });
 
-    super('div', { inputs, button: new Button(CONTEXT.button), link });
-
-    const div = this.getContent();
-    if (div) {
-      div.className = 'formRegisterContainer';
-    }
+    super('', { inputs, button: new Button(CONTEXT.button), link, styles });
   }
 
   componentDidMount(): void {

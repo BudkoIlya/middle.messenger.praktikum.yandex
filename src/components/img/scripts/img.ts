@@ -4,8 +4,8 @@ import { img } from '../template';
 import type { IImg } from '../types';
 
 export class Img extends Block {
-  constructor({ class: className, alt, src }: IImg) {
-    super('', {});
+  constructor({ alt, src, className }: IImg) {
+    super('', { className });
 
     const imgEl = this.getContent();
 
@@ -17,9 +17,6 @@ export class Img extends Block {
           imgEl.setAttribute(key, value);
         }
       });
-
-      imgEl.className = 'img';
-      if (className) imgEl.classList.add(className);
     }
   }
 

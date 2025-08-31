@@ -1,0 +1,5 @@
+@use '../../../styles/common.module';
+
+.chat__sidebar {
+  @include common.chatItems;
+}

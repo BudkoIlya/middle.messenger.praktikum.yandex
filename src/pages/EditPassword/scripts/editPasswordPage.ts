@@ -1,11 +1,14 @@
 import { Block } from '@common';
 import { Button } from '@components/button';
 import { Links, Paths } from '@components/header/scripts/contants';
+import { Img } from '@components/img';
 import { Input } from '@components/input';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
 import type { IButton, IInput } from '@components';
 
 import { EditPasswordComp } from '../templates';
+
+import styles from '../styles/styles.module.scss';
 
 interface IContext {
   inputs: IInput[];
@@ -15,35 +18,56 @@ interface IContext {
 
 const CONTEXT: IContext = {
   inputs: [
-    { title: 'Старый пароль', name: 'old_password', type: 'password' },
-    { title: 'Новый пароль', name: 'new_password', type: 'password' },
-    { title: 'Повторите пароль', name: 'confirm_password', type: 'password' },
+    { label: 'Старый пароль', name: 'old_password', type: 'password' },
+    { label: 'Новый пароль', name: 'new_password', type: 'password' },
+    { label: 'Повторите пароль', name: 'confirm_password', type: 'password' },
   ],
-  saveBtn: { text: 'Сохранить', name: 'save_password', className: 'saveBtn' },
+  saveBtn: { text: 'Сохранить', name: 'save_password', className: styles.saveBtn },
   cancelBtn: {
     text: 'Отменить',
     type: 'submit',
-    className: 'cancelBtn',
+    className: styles.cancelBtn,
     id: Links.profile,
     path: Paths.profile.view.path,
   },
 };
+
+class EditAvatarImg extends Block {
+  constructor({ className }: { className?: string }) {
+    super('', {
+      img: new Img({ alt: 'Редактировать', src: '/assets/edit.svg', className: styles.editAvatarImg }),
+      className,
+    });
+  }
+
+  render() {
+    return `
+      <span class="{{className}}">
+        {{{img}}}
+        <span>Изменить</span>
+      </span>
+    `;
+  }
+}
 
 export class EditPasswordPage extends Block {
   constructor() {
     const { inputs: inputsData, saveBtn, cancelBtn } = CONTEXT;
 
     const inputs = inputsData.map((el) => new Input(el));
-    super('div', {
+    super('', {
+      avatarImg: new Img({ src: '', alt: 'Аватар', className: styles.avatar }),
+      imgInput: new Input({
+        label: new EditAvatarImg({ className: styles.editProfileTitle }),
+        name: 'avatar',
+        accept: 'image/jpeg',
+        type: 'file',
+      }),
       inputs,
       saveBtn: new Button(saveBtn),
       cancelBtn: new Button(cancelBtn),
+      styles,
     });
-
-    const div = this.getContent();
-    if (div) {
-      div.className = 'formProfilePasswordPage';
-    }
   }
 
   componentDidMount(): void {

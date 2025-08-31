@@ -1,38 +1,17 @@
 import { HandlebarsRegister } from '@common';
 import { Links } from '@components/header/scripts/contants';
-import type { ElementsKeys, IItem } from '@common/HandlebarsRegistration/types';
+import type { IItem } from '@common/HandlebarsRegistration/types';
 
-import { COMPONENT_STYLES, COMPONENTS_BY_KEY, PAGE_BY_LINK, PAGE_STYLES } from './constants';
+import { COMPONENTS_BY_KEY, PAGE_BY_LINK } from './constants';
 import type { Components, Pages } from './types';
 
 export class HandlePages extends HandlebarsRegister {
   private _page: Pages | null = null;
 
-  private _loadedComponentStyles = new Set<ElementsKeys>();
-
-  private _loadedPageStyles = new Set<Links>();
-
   constructor() {
     super();
     const currentPath = window.location.pathname.replace('/', '') as Links;
     this.setLink(currentPath || Links.homepage); // Открытие страницы по умолчанию
-  }
-
-  private async _loadStyles(link: Links, components?: Components[] | null): Promise<void> {
-    if (!this._loadedPageStyles.has(link)) {
-      await PAGE_STYLES[link]();
-    }
-
-    if (components) {
-      await Promise.all(
-        components.map(async (key) => {
-          if (!!COMPONENT_STYLES[key] && !this._loadedComponentStyles.has(key)) {
-            await COMPONENT_STYLES[key]();
-            this._loadedComponentStyles.add(key);
-          }
-        }),
-      );
-    }
   }
 
   private _registerComponents(components: Components[]) {
@@ -46,8 +25,6 @@ export class HandlePages extends HandlebarsRegister {
     }
 
     const { createPage, components } = PAGE_BY_LINK[link]?.() || {};
-
-    await this._loadStyles(link, components);
 
     if (components) {
       this._registerComponents(components);

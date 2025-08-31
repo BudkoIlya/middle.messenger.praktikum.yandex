@@ -1,16 +1,13 @@
 import { Block } from '@common/Block';
 
+import styles from './styles.module.scss';
+
 export class HomePage extends Block {
   constructor() {
-    super('h1', { props: { id: '' } });
-
-    const div = this.getContent();
-    if (div) {
-      div.className = 'mainPageTitle';
-    }
+    super('', { styles });
   }
 
   render(): string {
-    return 'Добро пожаловать';
+    return `<h1 class="{{styles.title}}">Добро пожаловать</h1>`;
   }
 }

@@ -2,12 +2,11 @@ import { Block } from '@common';
 
 import { ErrorComp } from '../template';
 
+import styles from '../styles/styles.module.scss';
+
 export class ErrorPage extends Block {
   constructor(props: { text: string }) {
-    super('div', props);
-
-    const div = this.getContent();
-    if (div) div.className = 'errorPage';
+    super('', { ...props, styles });
   }
 
   protected render(): string {

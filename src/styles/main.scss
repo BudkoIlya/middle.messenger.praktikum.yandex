@@ -3,20 +3,28 @@
 $mainPadding: 20px;
 $mainMargin: 15px;
 $mainColorShadow: rgb(0 0 0 / 35%);
-$navHeight: 59px;
+$navHeight: 68px;
+$shadowColor: rgb(0 0 0 / 35%);
+$boxShadowSize: 10px;
 
 * {
   box-sizing: border-box;
 }
 
 #app {
+  display: grid;
+  grid-template-rows: min-content 1fr;
   margin: $mainMargin;
-  padding: $mainPadding;
   height: calc(100vh - #{$mainMargin} * 2);
   border-radius: 10px;
-  box-shadow: 0 0 10px $mainColorShadow;
+  box-shadow: 0 0 $boxShadowSize $mainColorShadow;
 }
 
-#main {
-  height: calc(100% - #{$navHeight});
+@mixin formWrapper {
+  height: 97%;
+  width: 30%;
+  box-shadow: 0 0 10px $shadowColor;
+  padding: 20px 40px;
+  border-radius: 10px;
+  margin: auto;
 }

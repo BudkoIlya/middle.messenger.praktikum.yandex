@@ -1,5 +1,5 @@
 export default `
-<nav class='nav'>
+<nav class="{{styles.nav}}">
   <ul>
     {{#each links}}
       <li><a data-id="{{this.id}}" href='{{this.path}}{{#if this.query}}?{{this.query}}{{/if}}'>{{this.text}}</a></li>

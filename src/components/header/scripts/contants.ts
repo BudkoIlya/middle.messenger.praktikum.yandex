@@ -1,5 +1,7 @@
 import type { INavigation } from '../template';
 
+import styles from '../styles/navigation.module.scss';
+
 export enum Links {
   register = 'register',
   homepage = 'homepage',
@@ -40,7 +42,7 @@ export const Paths: IPageVariantsByLink = {
   [Links.error500]: { id: Links.error500, path: `/${Links.error500}` },
 };
 
-export const NAVIGATION_CONTEXT: { links: INavigation[] } = {
+export const NAVIGATION_CONTEXT: { links: INavigation[]; styles: CSSModuleClasses } = {
   links: [
     { ...Paths[Links.homepage], text: 'Главная' },
     { ...Paths[Links.register], text: 'Регистрация' },
@@ -52,4 +54,5 @@ export const NAVIGATION_CONTEXT: { links: INavigation[] } = {
     { ...Paths[Links.error404], text: '404' },
     { ...Paths[Links.error500], text: '500' },
   ],
+  styles,
 };

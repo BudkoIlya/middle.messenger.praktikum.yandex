@@ -3,5 +3,6 @@ export interface IMessage {
   text: string;
   time: string;
   needStatus?: boolean;
+  styles?: CSSModuleClasses;
   [key: string]: unknown;
 }

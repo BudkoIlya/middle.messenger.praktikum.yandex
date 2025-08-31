@@ -1,5 +1,5 @@
 export interface IImg {
   src: string;
-  class?: string;
+  className?: string;
   alt?: string;
 }

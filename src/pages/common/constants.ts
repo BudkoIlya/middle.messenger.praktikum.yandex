@@ -31,25 +31,6 @@ export const COMPONENTS_BY_KEY: Record<Components, Template<unknown>> = {
   [chatItems]: chatItemsComp,
 };
 
-export const PAGE_STYLES: Record<Links, () => Promise<unknown>> = {
-  [register]: () => import('../Registration/styles/styles.scss'),
-  [homepage]: () => import('../Home/styles.scss'),
-  [login]: () => import('../Login/styles/styles.scss'),
-  [profile]: () => import('../Profile/styles/styles.scss'),
-  [editPassword]: () => import('../EditPassword/styles/styles.scss'),
-  [chat]: () => import('../Chat/NotActive/styles/styles.scss'),
-  [activeChat]: () => import('../Chat/Active/styles/styles.scss'),
-  [error404]: () => import('../Error/styles/styles.scss'),
-  [error500]: () => import('../Error/styles/styles.scss'),
-};
-
-export const COMPONENT_STYLES: Partial<Record<ElementsKeys, () => Promise<unknown>>> = {
-  [input]: () => import('../../components/input/styles/input.scss'),
-  [button]: () => import('../../components/button/styles/button.scss'),
-  [chatItem]: () => import('../../pages/Chat/common/components/chatItems/chatItem/styles/chatItem.scss'),
-  [message]: () => import('../../pages/Chat/common/components/message/styles/styles.scss'),
-};
-
 export const PAGE_BY_LINK: IPageByLink = {
   [register]: () => ({ components: [button, input], createPage: () => new RegisterPage() }),
   [homepage]: () => ({ createPage: () => new HomePage() }),

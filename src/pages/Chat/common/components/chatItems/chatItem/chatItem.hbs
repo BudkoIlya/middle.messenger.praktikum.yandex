@@ -1,11 +1,13 @@
 export default `
-<img src='' alt='avatar' class='avatar' />
-<div class='chatInfo'>
-  <div class='userName'>{{userName}}</div>
-  <div class='lastMessage'>{{lastMessage}}</div>
-</div>
-<div class='messageInfo'>
-  <div class='time'>{{time}}</div>
-  {{#if unreadCount}}
-    <div class='unreadCount'>{{unreadCount}}</div>{{/if}}
+<div class="{{styles.chatItem}}">
+  <img src='' alt='avatar' class='{{styles.avatar}}' />
+  <div class='{{styles.chatInfo}}'>
+    <div class='{{styles.userName}}'>{{userName}}</div>
+    <div class='{{styles.lastMessage}}'>{{lastMessage}}</div>
+  </div>
+  <div class='{{styles.messageInfo}}'>
+    <div class='{{styles.time}}'>{{time}}</div>
+    {{#if unreadCount}}
+      <div class='{{styles.unreadCount}}'>{{unreadCount}}</div>{{/if}}
+  </div>
 </div>`;

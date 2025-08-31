@@ -10,7 +10,7 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
 const nodeBuiltins = builtinModules.join('|');
 
 export default [
-  { ignores: ['**/dist/**', '**/node_modules/**', '*.config.js', 'netlify.toml', '.prettierignore', '.prettierrc'] },
+  { ignores: ['**/dist/**', '**/node_modules/**', '*.config.js', 'netlify.toml', '.prettierignore', '.prettierrc', '**/*.module.scss.d.ts'] },
   {
     files: ['**/*.{js,ts,mjs,mts}'],
     languageOptions: {
@@ -22,10 +22,7 @@ export default [
     },
 
     settings: {
-      'import/resolver': {
-        typescript: { project: './tsconfig.json' },
-        node: { extensions: ['.ts', '.mts', '.mjs'] },
-      },
+      'import/resolver': { typescript: { project: './tsconfig.json' }, node: { extensions: ['.ts', '.mts'] } },
       'import/parsers': { '@typescript-eslint/parser': ['.js', '.ts', '.mts', '.mjs'] },
       'import/internal-regex': '^(@common|@components|@utils|@src|@pages)(/|$)',
     },

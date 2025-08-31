@@ -1,22 +1,21 @@
 export default `
-{{> img alt='Аватар' src='' class='avatar' }}
-<form class="editAvatar">
-  {{> input class='editProfileInput' title="<span class='editProfileTitle'>
-      <img alt='Редатировать' src='/assets/edit.svg' class='editAvatarImg'/>
-      <span>Изменить</span>
-    </span>" type='file' name='avatar' accept="image/jpeg"}}
-</form>
-<form class="form form_profile">
-  {{{inputs}}}
-</form>
-<div class="buttons">
-  {{#if isViewMode}}
-    {{{buttons.editBtn}}}
-    {{{buttons.editPasswordBtn}}}
-    {{{buttons.deleteBtn}}}
-  {{else}}
-    {{{buttons.saveBtn}}}
-    {{{buttons.cancelBtn}}}
-  {{/if}}
+<div class="{{styles.container}}">
+  {{{avatar}}}
+  <form class="{{styles.editAvatar}}">
+    {{{imgInput}}}
+  </form>
+  <form class="{{styles.form}} {{styles.form_profile}}">
+    {{{inputs}}}
+  </form>
+  <div class="{{styles.buttons}}">
+    {{#if isViewMode}}
+      {{{buttons.editBtn}}}
+      {{{buttons.editPasswordBtn}}}
+      {{{buttons.deleteBtn}}}
+    {{else}}
+      {{{buttons.saveBtn}}}
+      {{{buttons.cancelBtn}}}
+    {{/if}}
+  </div>
 </div>
 `;

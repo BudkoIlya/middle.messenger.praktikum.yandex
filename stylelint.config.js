@@ -9,5 +9,6 @@ export default {
     'at-rule-no-unknown': null,
     'scss/at-rule-no-unknown': true,
     '@stylistic/string-quotes': null,
+    'selector-pseudo-class-no-unknown': [true, { ignorePseudoClasses: ['global', 'local'] }],
   },
 };
