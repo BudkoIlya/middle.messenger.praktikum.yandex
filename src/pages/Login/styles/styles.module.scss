@@ -4,7 +4,7 @@
   @include common.form;
 
   .registerButton {
-    margin-top: 10px;
+    @include common.hoverText($link: true);
   }
 
   .signInBtn {

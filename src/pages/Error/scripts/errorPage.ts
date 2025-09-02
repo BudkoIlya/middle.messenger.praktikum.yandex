@@ -1,15 +1,17 @@
 import { Block } from '@common';
+import { LinksPages } from '@common/Router/PathConfig';
 
 import { ErrorComp } from '../template';
 
 import styles from '../styles/styles.module.scss';
 
 export class ErrorPage extends Block {
-  constructor(props: { text: string }) {
-    super('', { ...props, styles });
+  constructor() {
+    //TODO: здесь надо как-то прокидывать ошибку
+    super('', { styles }, [{ key: LinksPages.error, template: ErrorComp }]);
   }
 
-  protected render(): string {
+  render(): string {
     return ErrorComp;
   }
 }

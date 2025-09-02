@@ -1,6 +1,6 @@
 import { Block } from '@common';
+import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
-import { Links, Paths } from '@components/header/scripts/contants';
 import { Img } from '@components/img';
 import { Input } from '@components/input';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
@@ -27,8 +27,8 @@ const CONTEXT: IContext = {
     text: 'Отменить',
     type: 'submit',
     className: styles.cancelBtn,
-    id: Links.profile,
-    path: Paths.profile.view.path,
+    path: PathConfig[LinksPages.profile].view,
+    theme: null,
   },
 };
 

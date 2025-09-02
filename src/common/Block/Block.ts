@@ -1,6 +1,9 @@
 import Handlebars from 'handlebars';
 import { v4 } from 'uuid';
 
+import { HandlebarsRegister } from '@src/common/HandlebarsRegistration';
+import type { IItem } from '@common/HandlebarsRegistration/types';
+
 import { EventBus } from '../EvenBus';
 import { createProxy } from '../Proxy';
 import type { Props } from './types';
@@ -40,14 +43,17 @@ export abstract class Block {
 
   private _onRender = this._render.bind(this);
 
+  handlebarsRegister = new HandlebarsRegister();
+
   props: Props;
 
-  protected constructor(tagName: string = '', props: Props) {
+  protected constructor(tagName: string = '', props: Props, registerItems?: IItem[]) {
     const eventBus = new EventBus();
     this._eventBus = eventBus;
     this._rootless = !tagName;
     this._meta = { tagName, props };
     this.props = this._makePropsProxy(props, this._setIsUpdated.bind(this));
+    this.handlebarsRegister.register(registerItems);
 
     this._registerEvents(eventBus);
     eventBus.emit(Block.EVENTS.INIT);
@@ -107,6 +113,11 @@ export abstract class Block {
       this._isUpdated = false;
     }
   };
+
+  forceUpdate(props?: Props) {
+    if (props) this.setProps(props);
+    else this._eventBus.emit(Block.EVENTS.FLOW_CDU);
+  }
 
   private _setIsUpdated(isUpdated: boolean) {
     this._isUpdated = isUpdated;
@@ -252,11 +263,19 @@ export abstract class Block {
 
   unmount(): void {
     this._removeAllEvents();
-    this._destroy();
+    this._cleanupChildren();
   }
 
-  private _cleanupChildren() {
-    this._forEachChild(this.props, (child) => child.unmount());
+  destroy(): void {
+    this._destroy();
+    this.handlebarsRegister.unRegister();
+  }
+
+  private _cleanupChildren(destroy = false) {
+    this._forEachChild(this.props, (child) => {
+      if (destroy) child.destroy();
+      else child.unmount();
+    });
   }
 
   private _destroy(): void {
@@ -264,10 +283,7 @@ export abstract class Block {
     this._isDestroyed = true;
 
     this._removeAllEvents?.();
-
     this._cleanupChildren();
-
-    this._element?.remove();
 
     this._eventBus.off(Block.EVENTS.INIT, this._onInit);
     this._eventBus.off(Block.EVENTS.FLOW_CDM, this._onCDM);

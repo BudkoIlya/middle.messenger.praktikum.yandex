@@ -8,6 +8,6 @@
   }
 
   .loginLink {
-    margin-top: 10px;
+    @include common.hoverText($link: true);
   }
 }

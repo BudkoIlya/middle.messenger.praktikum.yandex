@@ -1,54 +1,38 @@
-import Handlebars from 'handlebars';
-
-import { HandlebarsRegister } from '@common';
+import { Block } from '@common';
 import { ElementsKeys } from '@common/HandlebarsRegistration/types';
-import { HandlePages } from '@pages/common';
+import { Router } from '@common/Router';
+import type { BlockConstructor } from '@common/Router/Router';
 
-import { navigation } from '../template';
-import { NAVIGATION_CONTEXT } from './contants';
-import type { Links } from './contants';
+import navigation from '../template/navigation.hbs';
+import { NAVIGATION_CONTEXT, Routers } from './contants';
 
-export class Navigation extends HandlebarsRegister {
-  private _pages: HandlePages | null = null;
+export class Navigation extends Block {
+  private _router = new Router();
 
   constructor() {
-    super([{ key: ElementsKeys.header, template: navigation }]);
-    this._pages = new HandlePages();
+    super('', NAVIGATION_CONTEXT, [{ key: ElementsKeys.header, template: navigation }]);
   }
 
-  private _setLink(link: Links) {
-    this._pages?.setLink(link);
-  }
+  dispatchComponentDidMount() {
+    const createInnerRoutes = (routes: { path: string; component: BlockConstructor }[]) => {
+      routes.forEach(({ path, component }) => {
+        this._router.use(path, component);
+      });
+    };
 
-  private _setupRoutListener(element: HTMLElement) {
-    window.addEventListener('popstate', () => {
-      const currentPath = window.location.pathname;
-      const activeLink = element.querySelector(`a[href^="${currentPath}"], button[data-path^="${currentPath}"]`);
-
-      if (activeLink) {
-        const id = activeLink.getAttribute('data-id') as Links;
-        this._setLink(id);
+    Object.values(Routers).forEach((route) => {
+      if (Array.isArray(route)) {
+        createInnerRoutes(route);
+      } else {
+        this._router.use(route.path, route.component);
       }
     });
+
+    super.dispatchComponentDidMount();
+    this._router.start();
   }
 
-  mount = () => {
-    const header = document.getElementById('header');
-    const navCompTemplate = this.items.get(ElementsKeys.header);
-
-    const navComp = Handlebars.compile(navCompTemplate)(NAVIGATION_CONTEXT);
-    if (header && navComp) {
-      header.innerHTML = navComp;
-      this._setupRoutListener(header);
-
-      header.querySelectorAll('a[data-id]').forEach((link) => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const path = link.getAttribute('href') || '/';
-          history.pushState({ page: path }, path, path);
-          window.dispatchEvent(new PopStateEvent('popstate', { state: { page: path } }));
-        });
-      });
-    }
-  };
+  render(): string {
+    return navigation;
+  }
 }

@@ -3,7 +3,6 @@ import { Button } from '@components/button';
 import { Img } from '@components/img';
 import { Input } from '@components/input';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
-import type { IButton } from '@components';
 
 import { ProfileComp } from '../templates';
 import { getContext } from './context';
@@ -17,7 +16,7 @@ const defineMode = () => {
     document.title = mode === 'view' ? 'Профиль' : 'Редактирование профиля';
   }
 
-  return getContext(mode === 'view', styles);
+  return { context: getContext(mode === 'view', styles), mode: mode || 'view' };
 };
 
 class EditAvatarImg extends Block {
@@ -40,12 +39,9 @@ class EditAvatarImg extends Block {
 
 export class ProfilePage extends Block {
   constructor() {
-    const context = defineMode();
+    const { context } = defineMode();
 
-    const inputs = context.inputs.map((el) => new Input(el));
-    const buttons = Object.fromEntries(
-      Object.entries(context.buttons).map(([key, cfg]) => [key, new Button(cfg as IButton)]),
-    );
+    const buttons = Object.fromEntries(Object.entries(context.buttons).map(([key, props]) => [key, new Button(props)]));
 
     super('', {
       avatar: new Img({ src: '', alt: 'Аватар', className: styles.avatar }),
@@ -55,11 +51,24 @@ export class ProfilePage extends Block {
         accept: 'image/jpeg',
         type: 'file',
       }),
-      inputs,
       buttons,
-      isViewMode: context.isViewMode,
       styles,
     });
+  }
+
+  get propsByMode() {
+    const { context, mode } = defineMode();
+    const inputs = context.inputs.map((el) => new Input(el));
+    return { ...this.props, isViewMode: mode === 'view', inputs };
+  }
+
+  forceUpdate() {
+    super.forceUpdate(this.propsByMode);
+  }
+
+  dispatchComponentDidMount() {
+    this.setProps(this.propsByMode);
+    super.dispatchComponentDidMount();
   }
 
   componentDidMount(): void {

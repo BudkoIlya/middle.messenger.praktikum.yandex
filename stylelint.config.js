@@ -10,5 +10,6 @@ export default {
     'scss/at-rule-no-unknown': true,
     '@stylistic/string-quotes': null,
     'selector-pseudo-class-no-unknown': [true, { ignorePseudoClasses: ['global', 'local'] }],
+    'nesting-selector-no-missing-scoping-root': null,
   },
 };

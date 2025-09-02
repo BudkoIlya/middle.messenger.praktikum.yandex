@@ -1,5 +1,5 @@
 import { Navigation } from '@components';
 
 document.addEventListener('DOMContentLoaded', () => {
-  new Navigation().mount();
+  new Navigation().mount('header');
 });

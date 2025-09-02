@@ -1,4 +1,4 @@
-import { Links, Paths } from '@components/header/scripts/contants';
+import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import type { IButton, IInput } from '@components';
 
 interface IContext {
@@ -35,26 +35,25 @@ export const getContext = (isViewMode: boolean, styles: CSSModuleClasses): ICont
         text: 'Редактировать',
         name: 'edit_profile',
         className: styles.editProfileBtn,
-        id: Links.profile,
-        path: Paths.profile.edit.path,
+        path: PathConfig[LinksPages.profile].edit,
       },
       editPasswordBtn: {
         text: 'Изменить пароль',
         name: 'edit_password',
-        id: Links.editPassword,
-        path: Paths.editPassword.path,
+        path: PathConfig[LinksPages.editPassword],
       },
       deleteBtn: {
         text: 'Удалить',
         name: 'delete_profile',
         className: `${styles.deleteBtn} ${styles.customBtn}`,
+        theme: null,
       },
       cancelBtn: {
         text: 'Отменить',
         name: 'cancel',
         className: `${styles.cancelBtn} ${styles.customBtn}`,
-        id: Links.profile,
-        path: Paths.profile.view.path,
+        path: PathConfig[LinksPages.profile].view,
+        theme: null,
       },
     },
   };

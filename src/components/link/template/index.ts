@@ -1,1 +1,1 @@
-export { default as LinkComp } from './template.hbs';
+export { default as link } from './template.hbs';

@@ -1,6 +1,6 @@
 import { Block } from '@common';
+import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
-import { Links, Paths } from '@components/header/scripts/contants';
 import { Input } from '@components/input';
 import { Link } from '@components/link';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
@@ -26,7 +26,11 @@ const CONTEXT: IContext = {
 export class LoginPage extends Block {
   constructor() {
     const inputs = CONTEXT.inputs.map((el) => new Input(el));
-    const link = new Link({ ...Paths[Links.register], className: styles.registerButton, text: 'Регистрация' });
+    const link = new Link({
+      path: PathConfig[LinksPages.register],
+      className: styles.registerButton,
+      text: 'Регистрация',
+    });
 
     super('', { inputs, button: new Button(CONTEXT.button), link, styles });
   }

@@ -1,3 +1,4 @@
+import { Router } from '@common/Router';
 import type { Button, Link } from '@components';
 
 interface IAddRoutChangeListener {
@@ -8,8 +9,7 @@ interface IAddRoutChangeListener {
 const listenerFn = (path: string) => (e: Event) => {
   e.preventDefault();
 
-  history.pushState({ page: path }, path, path);
-  window.dispatchEvent(new PopStateEvent('popstate', { state: { page: path } }));
+  new Router().push(path);
 };
 
 export const addRoutChangeListener = ({ element }: IAddRoutChangeListener) => {

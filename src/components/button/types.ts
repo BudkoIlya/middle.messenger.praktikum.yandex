@@ -5,10 +5,10 @@ export interface IButton {
   text: string | Block | Block[];
   type?: HTMLButtonElement['type'];
   className?: string;
-  id?: string;
   path?: string;
   name?: string;
   events?: Events;
   styles?: CSSModuleClasses;
+  theme?: 'default' | null;
   [key: string]: unknown;
 }

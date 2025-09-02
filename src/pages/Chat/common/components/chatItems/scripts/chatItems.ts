@@ -1,6 +1,7 @@
 import { Block } from '@common';
+import { ElementsKeys } from '@common/HandlebarsRegistration/types';
+import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
-import { Paths } from '@components/header/scripts/contants';
 import { Img } from '@components/img';
 import { Input } from '@components/input';
 import { Link } from '@components/link';
@@ -26,26 +27,30 @@ export class ChatItems extends Block {
   constructor({ active }: { active: boolean }) {
     const chatItems = getContext(active).chatItems.map((item) => new ChatItem(item));
 
-    super('', {
-      chatItems,
-      link: new Link({
-        className: styles['chat__user-link'],
-        id: Paths.profile.view.id,
-        path: Paths.profile.view.path,
-        text: 'Имя Фамилия',
-      }),
-      input: new Input({
-        name: 'search',
-        placeholder: 'Поиск',
-        class: styles['chat__search'],
-      }),
-      button: new Button({
-        name: 'add',
-        text: [new Img({ src: '/assets/add_btn.svg', alt: 'Добавить' }), new ButtonText()],
-        className: styles['add_btn'],
-      }),
-      styles,
-    });
+    super(
+      '',
+      {
+        chatItems,
+        link: new Link({
+          className: styles['chat__user-link'],
+          path: PathConfig[LinksPages.profile].view,
+          text: 'Имя Фамилия',
+        }),
+        input: new Input({
+          name: 'search',
+          placeholder: 'Поиск',
+          class: styles['chat__search'],
+        }),
+        button: new Button({
+          name: 'add',
+          text: [new Img({ src: '/assets/add_btn.svg', alt: 'Добавить' }), new ButtonText()],
+          className: styles['add_btn'],
+          theme: null,
+        }),
+        styles,
+      },
+      [{ key: ElementsKeys.chatItems, template: chatItemsTemplate }],
+    );
   }
 
   componentDidMount(): void {

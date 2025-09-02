@@ -1,21 +1,24 @@
 $blue: #4585fd;
+$violet: #6d4af9;
 $grey: #afadad;
+$lightGrey: #faf8f8;
 $red: #f44336;
-$shadowColor: rgb(0 0 0 / 35%);
+$darkRed: #f50202;
+$shadowColor: rgb(87 87 87 / 35%);
 
 @mixin form() {
   height: 97%;
   width: 30%;
-  box-shadow: 0 0 10px $shadowColor;
+  box-shadow: 0 3px 10px $shadowColor;
   padding: 20px 40px;
   border-radius: 10px;
-  margin: auto;
+  margin: 10px auto auto;
 
   .form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     width: 100%;
 
     .title {
@@ -35,5 +38,19 @@ $shadowColor: rgb(0 0 0 / 35%);
         }
       }
     }
+  }
+}
+
+@mixin hoverText($color: $blue, $hoverColor: $violet, $link: false) {
+  @if $link {
+    text-decoration: none;
+  }
+
+  color: $color;
+  transition: color 0.25s;
+
+  &:hover {
+    color: $hoverColor;
+    transition: color 0.5s;
   }
 }

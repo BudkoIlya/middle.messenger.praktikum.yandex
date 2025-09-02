@@ -12,12 +12,14 @@
 }
 
 @mixin chatItems {
+  border-top: 1px solid #edecec;
   overflow: hidden;
   width: 500px;
-  background-color: #faf8f8;
+  background-color: white;
   padding: 20px;
   border-radius: 0 0 0 10px;
   height: 100%;
+  box-shadow: 8px 2px 16px -10px rgb(0 0 0 / 25%);
 
   .chat__sidebar-header {
     display: flex;
@@ -26,16 +28,26 @@
 
     .add_btn {
       background: transparent;
-      color: common.$blue;
       font-size: 14px;
       width: 100px;
       display: flex;
       align-items: center;
       justify-content: end;
       cursor: pointer;
+      border: none;
+
+      @include common.hoverText;
+
+      &:hover {
+        :global(.img) {
+          transform: scale(0.9);
+        }
+      }
     }
 
     :global(.img) {
+      transition: transform 0.25s;
+      margin-top: -2px;
       transform: scale(0.8);
     }
   }
@@ -46,24 +58,25 @@
 
   .chat__user-link {
     display: block;
-    color: common.$blue;
     font-size: 20px;
     font-weight: normal;
     margin-bottom: 10px;
     text-decoration: none;
+
+    @include common.hoverText;
   }
 
   .chat__search {
     width: 100%;
-    background: #edecec;
-    border: none;
+    background: common.$lightGrey;
+    border: 1px solid transparent;
 
     &::placeholder {
-      color: #dad9dd;
+      color: common.$grey;
     }
 
     &:focus {
-      outline: none;
+      border: 1px solid common.$grey;
     }
   }
 }

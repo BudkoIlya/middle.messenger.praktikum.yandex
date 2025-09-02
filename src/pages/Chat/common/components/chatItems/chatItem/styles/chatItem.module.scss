@@ -8,6 +8,7 @@
   padding: 10px 15px;
   border-bottom: 1px solid common.$grey;
   cursor: pointer;
+  transition: background-color 0.35s ease-in-out;
 
   &:hover {
     background-color: #edecec;
