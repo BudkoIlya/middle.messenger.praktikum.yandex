@@ -3,7 +3,9 @@ import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
 import { Input } from '@components/input';
 import { Link } from '@components/link';
+import { LoginController } from '@src/controllers';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
+import type { Props } from '@common/Block/types';
 import type { IButton, IInput } from '@components';
 
 import { LoginPageCom } from '../templates';
@@ -23,7 +25,14 @@ const CONTEXT: IContext = {
   button: { type: 'submit', name: 'sign_in', text: 'Войти', className: styles.signInBtn },
 };
 
-export class LoginPage extends Block {
+interface LoginPageProps extends Props {
+  styles: CSSModuleClasses;
+  inputs: Input[];
+  link: Link;
+  button: Button;
+}
+
+export class LoginPage extends Block<LoginPageProps> {
   constructor() {
     const inputs = CONTEXT.inputs.map((el) => new Input(el));
     const link = new Link({
@@ -39,10 +48,10 @@ export class LoginPage extends Block {
     const element = this.getContent();
     if (!element) return;
 
-    const inputs = this.props.inputs as Input[];
-    const button = this.props.button as Button;
-    const link = this.props.link as Link;
-    checkValidationByFields(element, inputs, button);
+    const inputs = this.props.inputs;
+    const button = this.props.button;
+    const link = this.props.link;
+    checkValidationByFields({ root: element, inputs, button, controller: new LoginController() });
     addRoutChangeListener({ element: link });
   }
 

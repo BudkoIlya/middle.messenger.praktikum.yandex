@@ -5,13 +5,23 @@ import { Img } from '@components/img';
 import { Input } from '@components/input';
 import { Message } from '@components/message';
 import { checkValidationByFields } from '@utils';
+import type { Props } from '@common/Block/types';
 
 import { ChatItems } from '../../common/components/chatItems';
 import { ActivePageComp } from '../templates';
 
 import styles from '../styles/styles.module.scss';
 
-export class ActiveChatPage extends Block {
+interface ActiveChatPageProps extends Props {
+  chatItems: ChatItems;
+  messages: Message[];
+  img: Img;
+  input: Input;
+  button: Button;
+  styles: CSSModuleClasses;
+}
+
+export class ActiveChatPage extends Block<ActiveChatPageProps> {
   constructor() {
     super(
       '',
@@ -43,9 +53,9 @@ export class ActiveChatPage extends Block {
     const element = this.getContent();
     if (!element) return;
 
-    const input = this.props.input as Input;
-    const button = this.props.button as Button;
-    checkValidationByFields(element, [input], button);
+    const input = this.props.input;
+    const button = this.props.button;
+    checkValidationByFields({ root: element, inputs: [input], button: button });
   }
 
   render(): string {

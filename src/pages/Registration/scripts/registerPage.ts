@@ -3,46 +3,42 @@ import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
 import { Input } from '@components/input';
 import { Link } from '@components/link';
+import { CONTEXT } from '@pages/Registration/scripts/context';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
-import type { IButton, IInput } from '@components';
+import type { Props } from '@common/Block/types';
 
 import { RegisterPageComp } from '../templates';
 
 import styles from '../styles/styles.module.scss';
 
-interface IContext {
-  inputs: IInput[];
-  button: IButton;
+interface RegisterPageProps extends Props {
+  styles: CSSModuleClasses;
+  inputs: Input[];
+  link: Link;
+  button: Button;
 }
 
-const CONTEXT: IContext = {
-  inputs: [
-    { label: 'Почта', name: 'email' },
-    { label: 'Логин', name: 'login' },
-    { label: 'Имя', name: 'first_name' },
-    { label: 'Фамилия', name: 'second_name' },
-    { label: 'Пароль', name: 'password', type: 'password' },
-    { label: 'Подтверждение пароля', name: 'confirm_password', type: 'password' },
-  ],
-  button: { type: 'submit', name: 'register', text: 'Зарегистрироваться', className: styles.registerButton },
-};
-
-export class RegisterPage extends Block {
+export class RegisterPage extends Block<RegisterPageProps> {
   constructor() {
     const inputs = CONTEXT.inputs.map((el) => new Input(el));
     const link = new Link({ path: PathConfig[LinksPages.login], className: styles.loginLink, text: 'Вход' });
 
-    super('', { inputs, button: new Button(CONTEXT.button), link, styles });
+    super('', {
+      inputs,
+      button: new Button(CONTEXT.button),
+      link,
+      styles,
+    });
   }
 
   componentDidMount(): void {
     const element = this.getContent();
     if (!element) return;
 
-    const inputs = this.props.inputs as Input[];
-    const button = this.props.button as Button;
-    const link = this.props.link as Link;
-    checkValidationByFields(element, inputs, button);
+    const inputs = this.props.inputs;
+    const button = this.props.button;
+    const link = this.props.link;
+    checkValidationByFields({ root: element, inputs, button });
     addRoutChangeListener({ element: link });
   }
 

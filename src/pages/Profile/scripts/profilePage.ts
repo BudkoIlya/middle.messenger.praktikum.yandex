@@ -3,21 +3,12 @@ import { Button } from '@components/button';
 import { Img } from '@components/img';
 import { Input } from '@components/input';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
+import type { ProfilePageProps } from '@pages/Profile/scripts/types';
 
 import { ProfileComp } from '../templates';
 import { getContext } from './context';
 
 import styles from '../styles/styles.module.scss';
-
-const defineMode = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const mode = urlParams.get('mode');
-  if (mode) {
-    document.title = mode === 'view' ? 'Профиль' : 'Редактирование профиля';
-  }
-
-  return { context: getContext(mode === 'view', styles), mode: mode || 'view' };
-};
 
 class EditAvatarImg extends Block {
   constructor({ className }: { className?: string }) {
@@ -29,7 +20,7 @@ class EditAvatarImg extends Block {
 
   render() {
     return `
-      <span class="{{className}}">
+      <span class="{{className}}"> 
         {{{img}}}
         <span>Изменить</span>
       </span>
@@ -37,11 +28,29 @@ class EditAvatarImg extends Block {
   }
 }
 
-export class ProfilePage extends Block {
-  constructor() {
-    const { context } = defineMode();
+const defineMode = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode');
+  if (mode) {
+    document.title = mode === 'view' ? 'Профиль' : 'Редактирование профиля';
+  }
 
-    const buttons = Object.fromEntries(Object.entries(context.buttons).map(([key, props]) => [key, new Button(props)]));
+  return { context: getContext(mode === 'view', styles), mode: mode || 'view' };
+};
+
+export class ProfilePage extends Block<ProfilePageProps> {
+  constructor() {
+    const { context, mode } = defineMode();
+
+    const buttons = {
+      editBtn: new Button(context.buttons.editBtn),
+      editPasswordBtn: new Button(context.buttons.editPasswordBtn),
+      deleteBtn: new Button(context.buttons.deleteBtn),
+      cancelBtn: new Button(context.buttons.cancelBtn),
+      saveBtn: new Button(context.buttons.saveBtn),
+    } satisfies ProfilePageProps['buttons'];
+
+    const inputs = context.inputs.map((el) => new Input(el));
 
     super('', {
       avatar: new Img({ src: '', alt: 'Аватар', className: styles.avatar }),
@@ -53,21 +62,23 @@ export class ProfilePage extends Block {
       }),
       buttons,
       styles,
+      isViewMode: mode === 'view',
+      inputs,
     });
   }
 
-  get propsByMode() {
+  private get _propsByMode() {
     const { context, mode } = defineMode();
     const inputs = context.inputs.map((el) => new Input(el));
     return { ...this.props, isViewMode: mode === 'view', inputs };
   }
 
-  forceUpdate() {
-    super.forceUpdate(this.propsByMode);
-  }
+  forceUpdate = () => {
+    super.forceUpdate(this._propsByMode);
+  };
 
   dispatchComponentDidMount() {
-    this.setProps(this.propsByMode);
+    this.setProps(this._propsByMode);
     super.dispatchComponentDidMount();
   }
 
@@ -75,12 +86,10 @@ export class ProfilePage extends Block {
     const element = this.getContent();
     if (!element) return;
 
-    const inputs = this.props.inputs as Input[];
-    const saveBtn = (this.props.buttons as Record<string, unknown>).saveBtn as Button;
-    const editBtn = (this.props.buttons as Record<string, unknown>).editBtn as Button;
-    const editPasswordBtn = (this.props.buttons as Record<string, unknown>).editPasswordBtn as Button;
-    const cancelBtn = (this.props.buttons as Record<string, unknown>).cancelBtn as Button;
-    checkValidationByFields(element, inputs, saveBtn);
+    const { inputs, buttons } = this.props;
+    const { saveBtn, editBtn, editPasswordBtn, cancelBtn } = buttons;
+
+    checkValidationByFields({ root: element, inputs: inputs, button: saveBtn });
     addRoutChangeListener({ element: editBtn });
     addRoutChangeListener({ element: cancelBtn });
     addRoutChangeListener({ element: editPasswordBtn });

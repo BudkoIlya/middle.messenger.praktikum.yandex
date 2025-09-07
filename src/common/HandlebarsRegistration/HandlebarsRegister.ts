@@ -5,8 +5,6 @@ import type { IItem, IMountBlock } from './types';
 Handlebars.registerHelper('eq', (a, b) => a === b);
 
 export class HandlebarsRegister {
-  private static __instance: HandlebarsRegister;
-
   items: IMountBlock = new Map();
 
   private _setItems(items?: IItem[]) {
@@ -16,11 +14,12 @@ export class HandlebarsRegister {
     });
   }
 
+  private static __instance: HandlebarsRegister;
+
   constructor(items?: IItem[]) {
     if (HandlebarsRegister.__instance) return HandlebarsRegister.__instance;
-    HandlebarsRegister.__instance = this;
-
     this._setItems(items);
+    HandlebarsRegister.__instance = this;
   }
 
   register = (items?: IItem[]) => {

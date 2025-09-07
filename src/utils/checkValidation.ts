@@ -1,4 +1,5 @@
 import type { Button, Input } from '@components';
+import type { BaseController } from '@src/controllers/BaseController';
 
 import { REG_EXP_BY_INPUT_NAME } from './constants';
 import type { InputsName } from './constants';
@@ -31,7 +32,17 @@ const validateInput = (input: Input, root: HTMLElement): boolean => {
   return isValid;
 };
 
-export const checkValidationByFields = (root: HTMLElement, inputs: Input[], button?: Button): (() => void) | void => {
+export const checkValidationByFields = <T extends BaseController<unknown>>({
+  root,
+  inputs,
+  button,
+  controller,
+}: {
+  root: HTMLElement;
+  inputs: Input[];
+  button?: Button;
+  controller?: T;
+}): (() => void) | void => {
   inputs.forEach((input) => {
     const prevEvents = input.props.events || {};
 
@@ -116,6 +127,7 @@ export const checkValidationByFields = (root: HTMLElement, inputs: Input[], butt
         return acc;
       }, {});
       console.table({ values });
+      controller?.onSubmit?.(values);
 
       if (results.some(({ isValid }) => !isValid)) return;
     };

@@ -2,15 +2,15 @@ import Handlebars from 'handlebars';
 import { v4 } from 'uuid';
 
 import { HandlebarsRegister } from '@src/common/HandlebarsRegistration';
+import type { Props } from '@common/Block/types';
 import type { IItem } from '@common/HandlebarsRegistration/types';
 
 import { EventBus } from '../EvenBus';
 import { createProxy } from '../Proxy';
-import type { Props } from './types';
 
 type EventsMap = Record<string, EventListener>;
 
-export abstract class Block {
+export abstract class Block<P extends Props = Props> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -22,7 +22,7 @@ export abstract class Block {
 
   private _element: HTMLElement | null = null;
 
-  private _meta: { tagName?: string; props: Props };
+  private _meta: { tagName?: string; props: P };
 
   private _eventBus: EventBus;
 
@@ -45,9 +45,9 @@ export abstract class Block {
 
   handlebarsRegister = new HandlebarsRegister();
 
-  props: Props;
+  props: P;
 
-  protected constructor(tagName: string = '', props: Props, registerItems?: IItem[]) {
+  protected constructor(tagName: string = '', props: P, registerItems?: IItem[]) {
     const eventBus = new EventBus();
     this._eventBus = eventBus;
     this._rootless = !tagName;
@@ -95,16 +95,16 @@ export abstract class Block {
     this._eventBus.emit(Block.EVENTS.FLOW_CDM);
   }
 
-  private _componentDidUpdate(oldProps: Props, newProps: Props) {
+  private _componentDidUpdate(oldProps: P, newProps: P) {
     const shouldUpdate = this.componentDidUpdate(oldProps, newProps);
     if (shouldUpdate) this._eventBus.emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  protected componentDidUpdate(_oldProps: Props, _newProps: Props) {
+  protected componentDidUpdate(_oldProps: P, _newProps: P) {
     return true;
   }
 
-  setProps = (nextProps: Props) => {
+  setProps = (nextProps: Partial<P> | P) => {
     if (!nextProps) return;
     const oldValue = { ...this.props };
     Object.assign(this.props, nextProps);
@@ -114,7 +114,7 @@ export abstract class Block {
     }
   };
 
-  forceUpdate(props?: Props) {
+  forceUpdate(props?: P) {
     if (props) this.setProps(props);
     else this._eventBus.emit(Block.EVENTS.FLOW_CDU);
   }
@@ -171,7 +171,7 @@ export abstract class Block {
     return value;
   }
 
-  private _prepareContext(props: Props): Record<string, unknown> {
+  private _prepareContext(props: P): Record<string, unknown> {
     const context: Record<string, unknown> = {};
     Object.entries(props).forEach(([key, value]) => {
       context[key] = this._unwrap(value);
@@ -179,7 +179,7 @@ export abstract class Block {
     return context;
   }
 
-  private _forEachChild(value: unknown, cb: (child: Block) => void): void {
+  private _forEachChild(value: unknown, cb: (child: Block<P>) => void): void {
     if (Array.isArray(value)) {
       value.forEach((item) => this._forEachChild(item, cb));
     } else if (value instanceof Block) {
@@ -292,10 +292,9 @@ export abstract class Block {
 
     this._eventBus = null as unknown as EventBus;
     this._element = null;
-    this._meta = {} as unknown as { tagName: string; props: Props };
-    this.props = {} as unknown as Props;
+    this._meta = {} as unknown as { tagName: string; props: P };
+    this.props = {} as unknown as P;
   }
 
-  private _makePropsProxy = (props: Props, setIsUpdated: (value: boolean) => void): Props =>
-    createProxy(props, setIsUpdated);
+  private _makePropsProxy = (props: P, setIsUpdated: (value: boolean) => void): P => createProxy(props, setIsUpdated);
 }

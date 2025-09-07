@@ -31,12 +31,16 @@ export default defineConfig(() => ({
       input: { main: resolve(__dirname, 'src/index.html') },
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules')) return 'node_modules';
+          if (id.includes('handlebars')) return 'handlebars_module';
+          if (id.includes('uuid')) return 'uuid_module';
         },
       },
     },
   },
   resolve: { alias: { src: resolve(__dirname, './src') } },
-  server: { open: true, port: 3000 },
+  server: {
+    open: true,
+    port: 3000,
+  },
   preview: { port: 3000 },
 }));

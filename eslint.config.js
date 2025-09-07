@@ -10,7 +10,17 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
 const nodeBuiltins = builtinModules.join('|');
 
 export default [
-  { ignores: ['**/dist/**', '**/node_modules/**', '*.config.js', 'netlify.toml', '.prettierignore', '.prettierrc', '**/*.module.scss.d.ts'] },
+  {
+    ignores: [
+      '**/dist/**',
+      '**/node_modules/**',
+      '*.config.js',
+      'netlify.toml',
+      '.prettierignore',
+      '.prettierrc',
+      '**/*.module.scss.d.ts',
+    ],
+  },
   {
     files: ['**/*.{js,ts,mjs,mts}'],
     languageOptions: {
@@ -18,13 +28,13 @@ export default [
       ecmaVersion: 2023,
       sourceType: 'module',
       globals: { ...globals.browser, ...globals.node },
-      parserOptions: { project: './tsconfig.json', createDefaultProgram: true },
+      parserOptions: { project: './tsconfig.json' },
     },
 
     settings: {
       'import/resolver': { typescript: { project: './tsconfig.json' }, node: { extensions: ['.ts', '.mts'] } },
       'import/parsers': { '@typescript-eslint/parser': ['.js', '.ts', '.mts', '.mjs'] },
-      'import/internal-regex': '^(@common|@components|@utils|@src|@pages)(/|$)',
+      'import/internal-regex': '^(@common|@components|@utils|@src|@pages|@api|@store)(/|$)',
     },
 
     plugins: {
@@ -52,12 +62,12 @@ export default [
             [
               '^vite',
               '^Handlebars+',
-              '^@?(?!(common|components|utils|src|pages)\\b)\\w',
-              '^@?(?!(common|components|utils|src|pages)\\b)\\w(.+)?\\u0000$',
+              '^@?(?!(common|components|utils|src|pages|api|store)\\b)\\w',
+              '^@?(?!(common|components|utils|src|pages|api|store)\\b)\\w(.+)?\\u0000$',
             ],
             [
-              '^(@common|@components|@utils|@src|@pages)(/|$|/.+)?',
-              '^(@common|@components|@utils|@src|@pages)(/|$|/.+)?\\u0000$',
+              '^(@common|@components|@utils|@src|@pages|@api|@store)(/|$|/.+)?',
+              '^(@common|@components|@utils|@src|@pages|@api|@store)(/|$|/.+)?\\u0000$',
             ],
             ['^\\.\\./', '^\\./', '^\\.\\./(.+)?\\u0000$', '^\\./(.+)?\\u0000$'],
             ['^.+\\.scss$'],
@@ -85,11 +95,15 @@ export default [
       'no-shadow': 'off',
       'no-unused-vars': 'off',
 
-      '@typescript-eslint/no-use-before-define': 'warn',
+      '@typescript-eslint/no-empty-object-type': 'error',
+      'no-object-constructor': 'error',
+      '@typescript-eslint/no-wrapper-object-types': 'error',
+      '@typescript-eslint/no-explicit-any': ['error', { fixToUnknown: true, ignoreRestArgs: true }],
       '@typescript-eslint/no-shadow': 'error',
       '@typescript-eslint/no-useless-constructor': 'error',
       '@typescript-eslint/no-var-requires': 'off',
       '@typescript-eslint/no-unused-expressions': 'warn',
+      '@typescript-eslint/no-use-before-define': ['error', { functions: false, classes: true, variables: true }],
       '@typescript-eslint/naming-convention': [
         'warn',
         { selector: 'variable', format: ['camelCase', 'PascalCase', 'UPPER_CASE'], leadingUnderscore: 'allow' },

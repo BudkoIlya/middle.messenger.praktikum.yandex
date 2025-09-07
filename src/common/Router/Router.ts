@@ -31,7 +31,8 @@ class Route {
 
     if (isSameRoute && this._lastQuery !== queryPart) {
       this._lastQuery = queryPart;
-      this._view?.forceUpdate(this._view?.props);
+      const view = this._view;
+      if (view) view.forceUpdate(view.props);
     }
   }
 

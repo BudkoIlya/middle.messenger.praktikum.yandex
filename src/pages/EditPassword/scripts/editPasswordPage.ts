@@ -4,6 +4,7 @@ import { Button } from '@components/button';
 import { Img } from '@components/img';
 import { Input } from '@components/input';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
+import type { Props } from '@common/Block/types';
 import type { IButton, IInput } from '@components';
 
 import { EditPasswordComp } from '../templates';
@@ -14,6 +15,15 @@ interface IContext {
   inputs: IInput[];
   saveBtn: IButton;
   cancelBtn: IButton;
+}
+
+export interface EditPasswordPageProps extends Props {
+  avatarImg: Img;
+  imgInput: Input;
+  styles: CSSModuleClasses;
+  inputs: Input[];
+  saveBtn: Button;
+  cancelBtn: Button;
 }
 
 const CONTEXT: IContext = {
@@ -50,7 +60,7 @@ class EditAvatarImg extends Block {
   }
 }
 
-export class EditPasswordPage extends Block {
+export class EditPasswordPage extends Block<EditPasswordPageProps> {
   constructor() {
     const { inputs: inputsData, saveBtn, cancelBtn } = CONTEXT;
 
@@ -74,10 +84,10 @@ export class EditPasswordPage extends Block {
     const element = this.getContent();
     if (!element) return;
 
-    const inputs = this.props.inputs as Input[];
-    const saveBtn = this.props.saveBtn as Button;
-    const cancelBtn = this.props.cancelBtn as Button;
-    checkValidationByFields(element, inputs, saveBtn);
+    const inputs = this.props.inputs;
+    const saveBtn = this.props.saveBtn;
+    const cancelBtn = this.props.cancelBtn;
+    checkValidationByFields({ root: element, inputs: inputs, button: saveBtn });
     addRoutChangeListener({ element: cancelBtn });
   }
 
