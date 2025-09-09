@@ -3,7 +3,7 @@ import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
 import { Input } from '@components/input';
 import { Link } from '@components/link';
-import { LoginController } from '@src/controllers';
+import { LoginController } from '@controllers';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
 import type { Props } from '@common/Block/types';
 import type { IButton, IInput } from '@components';
@@ -25,7 +25,7 @@ const CONTEXT: IContext = {
   button: { type: 'submit', name: 'sign_in', text: 'Войти', className: styles.signInBtn },
 };
 
-interface LoginPageProps extends Props {
+export interface LoginPageProps extends Props {
   styles: CSSModuleClasses;
   inputs: Input[];
   link: Link;

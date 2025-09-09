@@ -27,9 +27,9 @@ export const makeLazyComponent = function (loader: ComponentLoader, opts: MakeLa
       this.setProps = (next) => {
         const page = this.page;
         if (page) {
-          page.setProps(next as never);
+          page.setProps(next);
         } else {
-          this.pendingProps = { ...(this.pendingProps ?? {}), ...(next as AnyObject) };
+          this.pendingProps = { ...(this.pendingProps ?? {}), ...next };
         }
       };
 

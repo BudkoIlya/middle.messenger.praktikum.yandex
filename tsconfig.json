@@ -4,6 +4,7 @@
     "paths": {
       "@src/*": ["src/*"],
       "@utils": ["src/utils"],
+      "@utils/*": ["src/utils/*"],
       "@common/*": ["src/common/*"],
       "@common": ["src/common"],
       "@components": ["src/components"],
@@ -13,7 +14,9 @@
       "@api/*": ["src/api/*"],
       "@api": ["src/api"],
       "@store/*": ["src/store/*"],
-      "@store": ["src/store"]
+      "@store": ["src/store"],
+      "@controllers/*": ["src/controllers/*"],
+      "@controllers": ["src/controllers"]
     },
     "experimentalDecorators": true,
     "useDefineForClassFields": true,

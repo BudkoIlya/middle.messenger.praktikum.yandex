@@ -1,14 +1,10 @@
 import { Router } from '@common/Router';
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { LoaderOverlay, Navigation } from '@components';
-import { LoginController } from '@src/controllers';
-import { connect } from '@store';
-import type { IStore } from '@store/types';
+import { LoginController } from '@controllers';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const mapUserToProps = (store: IStore) => ({ user: store.user });
-  const ConnectedNavigation = connect(Navigation, mapUserToProps);
-  new ConnectedNavigation().mount('header');
+  new Navigation().mount('header');
 
   const overlay = new LoaderOverlay();
   overlay.mount('#overlay-root');
@@ -16,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
   (async () => {
     try {
       await new LoginController().getUser();
+
+      if (window.location.pathname === '/') {
+        new Router().push(PathConfig[LinksPages.chat].notActive);
+      }
     } catch (e) {
       new Router().push(PathConfig[LinksPages.login]);
     }

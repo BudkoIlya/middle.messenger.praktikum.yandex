@@ -34,7 +34,7 @@ export default [
     settings: {
       'import/resolver': { typescript: { project: './tsconfig.json' }, node: { extensions: ['.ts', '.mts'] } },
       'import/parsers': { '@typescript-eslint/parser': ['.js', '.ts', '.mts', '.mjs'] },
-      'import/internal-regex': '^(@common|@components|@utils|@src|@pages|@api|@store)(/|$)',
+      'import/internal-regex': '^(@common|@components|@utils|@src|@pages|@api|@store|@controllers)(/|$)',
     },
 
     plugins: {
@@ -62,12 +62,12 @@ export default [
             [
               '^vite',
               '^Handlebars+',
-              '^@?(?!(common|components|utils|src|pages|api|store)\\b)\\w',
-              '^@?(?!(common|components|utils|src|pages|api|store)\\b)\\w(.+)?\\u0000$',
+              '^@?(?!(common|components|utils|src|pages|api|store|controllers)\\b)\\w',
+              '^@?(?!(common|components|utils|src|pages|api|store|controllers)\\b)\\w(.+)?\\u0000$',
             ],
             [
-              '^(@common|@components|@utils|@src|@pages|@api|@store)(/|$|/.+)?',
-              '^(@common|@components|@utils|@src|@pages|@api|@store)(/|$|/.+)?\\u0000$',
+              '^(@common|@components|@utils|@src|@pages|@api|@store|@controllers)(/|$|/.+)?',
+              '^(@common|@components|@utils|@src|@pages|@api|@store|@controllers)(/|$|/.+)?\\u0000$',
             ],
             ['^\\.\\./', '^\\./', '^\\.\\./(.+)?\\u0000$', '^\\./(.+)?\\u0000$'],
             ['^.+\\.scss$'],
@@ -106,7 +106,7 @@ export default [
       '@typescript-eslint/no-use-before-define': ['error', { functions: false, classes: true, variables: true }],
       '@typescript-eslint/naming-convention': [
         'warn',
-        { selector: 'variable', format: ['camelCase', 'PascalCase', 'UPPER_CASE'], leadingUnderscore: 'allow' },
+        { selector: 'variable', format: null, leadingUnderscore: 'allow' },
         { selector: 'typeLike', format: ['PascalCase'] },
         { selector: 'enumMember', format: ['camelCase', 'PascalCase'] },
       ],

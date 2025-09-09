@@ -5,8 +5,9 @@ import { EventStore } from 'src/store/EventStore';
 
 class Store extends EventStore<IStore> {
   /** сюда добавляются все сторы */
-  store = {
-    user: userStore.store,
+
+  protected _store = {
+    user: userStore.state,
   };
 }
 

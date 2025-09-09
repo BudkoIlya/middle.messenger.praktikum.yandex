@@ -1,28 +1,32 @@
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import type { IUser } from '@api/LoginApi';
 import type { IButton, IInput } from '@components';
 
 interface IContext {
   inputs: IInput[];
   isViewMode?: boolean;
+  user: IUser;
   buttons: {
     editBtn: IButton;
     editPasswordBtn: IButton;
-    deleteBtn: IButton;
+    exitBtn: IButton;
     cancelBtn: IButton;
     saveBtn: IButton;
   };
 }
 
-export const getContext = (isViewMode: boolean, styles: CSSModuleClasses): IContext => {
+export const getContext = (isViewMode: boolean, styles: CSSModuleClasses, user: IUser): IContext => {
   const disabled = (isViewMode ? 'disabled' : '') as string;
+  const { email, login, first_name, second_name, phone, display_name } = user || {};
   return {
+    user,
     inputs: [
-      { label: 'Почта', name: 'email', disabled, value: 'example@yandex.ru' },
-      { label: 'Логин', name: 'login', disabled, value: 'Login' },
-      { label: 'Имя', name: 'first_name', disabled, value: 'Имя' },
-      { label: 'Фамилия', name: 'second_name', disabled, value: 'Фамилия' },
-      { label: 'Телефон', name: 'phone', disabled, value: '89201009090' },
-      { label: 'Отображаемое имя', name: 'display_name', disabled, value: 'Display_Name' },
+      { label: 'Почта', name: 'email', disabled, value: email },
+      { label: 'Логин', name: 'login', disabled, value: login },
+      { label: 'Имя', name: 'first_name', disabled, value: first_name },
+      { label: 'Фамилия', name: 'second_name', disabled, value: second_name },
+      { label: 'Телефон', name: 'phone', disabled, value: phone },
+      { label: 'Отображаемое имя', name: 'display_name', disabled, value: display_name },
     ],
     isViewMode,
     buttons: {
@@ -42,10 +46,10 @@ export const getContext = (isViewMode: boolean, styles: CSSModuleClasses): ICont
         name: 'edit_password',
         path: PathConfig[LinksPages.editPassword],
       },
-      deleteBtn: {
-        text: 'Удалить',
-        name: 'delete_profile',
-        className: `${styles.deleteBtn} ${styles.customBtn}`,
+      exitBtn: {
+        text: 'Выйти',
+        name: 'exit_profile',
+        className: `${styles.exitBtn} ${styles.customBtn}`,
         theme: null,
       },
       cancelBtn: {

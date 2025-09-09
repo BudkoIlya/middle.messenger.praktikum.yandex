@@ -1,7 +1,8 @@
 import { matchesPath } from '@common/Router/utils';
 import type { Block } from '@common';
+import type { Props } from '@common/Block/types';
 
-export type BlockConstructor<T extends Block = Block> = new () => T;
+export type BlockConstructor<P extends Props = Props> = new () => Block<P>;
 
 class Route {
   private readonly _view?: Block;

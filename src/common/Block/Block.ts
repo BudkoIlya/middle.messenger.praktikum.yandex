@@ -2,6 +2,7 @@ import Handlebars from 'handlebars';
 import { v4 } from 'uuid';
 
 import { HandlebarsRegister } from '@src/common/HandlebarsRegistration';
+import { isEqual } from '@utils/isEqual';
 import type { Props } from '@common/Block/types';
 import type { IItem } from '@common/HandlebarsRegistration/types';
 
@@ -11,7 +12,7 @@ import { createProxy } from '../Proxy';
 type EventsMap = Record<string, EventListener>;
 
 export abstract class Block<P extends Props = Props> {
-  static EVENTS = {
+  private static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
@@ -101,10 +102,10 @@ export abstract class Block<P extends Props = Props> {
   }
 
   protected componentDidUpdate(_oldProps: P, _newProps: P) {
-    return true;
+    return !isEqual(_oldProps, _newProps);
   }
 
-  setProps = (nextProps: Partial<P> | P) => {
+  setProps = (nextProps: P) => {
     if (!nextProps) return;
     const oldValue = { ...this.props };
     Object.assign(this.props, nextProps);

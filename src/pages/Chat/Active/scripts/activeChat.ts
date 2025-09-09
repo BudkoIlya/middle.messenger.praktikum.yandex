@@ -12,7 +12,7 @@ import { ActivePageComp } from '../templates';
 
 import styles from '../styles/styles.module.scss';
 
-interface ActiveChatPageProps extends Props {
+export interface ActiveChatPageProps extends Props {
   chatItems: ChatItems;
   messages: Message[];
   img: Img;

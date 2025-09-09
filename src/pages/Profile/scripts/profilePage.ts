@@ -1,76 +1,21 @@
 import { Block } from '@common';
-import { Button } from '@components/button';
-import { Img } from '@components/img';
-import { Input } from '@components/input';
+import { ProfileController } from '@controllers';
+import { connect } from '@store';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
-import type { ProfilePageProps } from '@pages/Profile/scripts/types';
 
 import { ProfileComp } from '../templates';
-import { getContext } from './context';
+import { getProps } from './helpers';
+import type { ProfilePageProps } from './types';
 
-import styles from '../styles/styles.module.scss';
+class ProfilePageCtr extends Block<ProfilePageProps> {
+  private _controller = new ProfileController();
 
-class EditAvatarImg extends Block {
-  constructor({ className }: { className?: string }) {
-    super('', {
-      img: new Img({ alt: 'Редактировать', src: '/assets/edit.svg', className: styles.editAvatarImg }),
-      className,
-    });
-  }
-
-  render() {
-    return `
-      <span class="{{className}}"> 
-        {{{img}}}
-        <span>Изменить</span>
-      </span>
-    `;
-  }
-}
-
-const defineMode = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const mode = urlParams.get('mode');
-  if (mode) {
-    document.title = mode === 'view' ? 'Профиль' : 'Редактирование профиля';
-  }
-
-  return { context: getContext(mode === 'view', styles), mode: mode || 'view' };
-};
-
-export class ProfilePage extends Block<ProfilePageProps> {
   constructor() {
-    const { context, mode } = defineMode();
-
-    const buttons = {
-      editBtn: new Button(context.buttons.editBtn),
-      editPasswordBtn: new Button(context.buttons.editPasswordBtn),
-      deleteBtn: new Button(context.buttons.deleteBtn),
-      cancelBtn: new Button(context.buttons.cancelBtn),
-      saveBtn: new Button(context.buttons.saveBtn),
-    } satisfies ProfilePageProps['buttons'];
-
-    const inputs = context.inputs.map((el) => new Input(el));
-
-    super('', {
-      avatar: new Img({ src: '', alt: 'Аватар', className: styles.avatar }),
-      imgInput: new Input({
-        label: new EditAvatarImg({ className: styles.editProfileTitle }),
-        name: 'avatar',
-        accept: 'image/jpeg',
-        type: 'file',
-      }),
-      buttons,
-      styles,
-      isViewMode: mode === 'view',
-      inputs,
-    });
+    super('', getProps(null));
   }
 
   private get _propsByMode() {
-    const { context, mode } = defineMode();
-    const inputs = context.inputs.map((el) => new Input(el));
-    return { ...this.props, isViewMode: mode === 'view', inputs };
+    return getProps(this.props.user);
   }
 
   forceUpdate = () => {
@@ -87,7 +32,15 @@ export class ProfilePage extends Block<ProfilePageProps> {
     if (!element) return;
 
     const { inputs, buttons } = this.props;
-    const { saveBtn, editBtn, editPasswordBtn, cancelBtn } = buttons;
+    const { saveBtn, editBtn, editPasswordBtn, cancelBtn, exitBtn } = buttons;
+
+    exitBtn.setProps({
+      events: {
+        click: async () => {
+          await this._controller.logOut();
+        },
+      },
+    });
 
     checkValidationByFields({ root: element, inputs: inputs, button: saveBtn });
     addRoutChangeListener({ element: editBtn });
@@ -99,3 +52,5 @@ export class ProfilePage extends Block<ProfilePageProps> {
     return ProfileComp;
   }
 }
+
+export const ProfilePage = connect(ProfilePageCtr, (store) => getProps(store.user));

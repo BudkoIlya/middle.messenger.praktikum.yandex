@@ -1,3 +1,3 @@
 export abstract class BaseController<T> {
-  abstract onSubmit?(values: T): void;
+  onSubmit?(values: T): void;
 }

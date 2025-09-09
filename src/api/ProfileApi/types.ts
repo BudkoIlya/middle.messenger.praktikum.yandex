@@ -3,7 +3,7 @@ export interface SignInRequest {
   password: string;
 }
 
-export type IUser = {
+export interface IUser {
   id: number;
   first_name: string;
   second_name: string;
@@ -12,4 +12,4 @@ export type IUser = {
   login: string;
   avatar: string;
   email: string;
-} | null;
+}

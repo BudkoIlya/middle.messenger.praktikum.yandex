@@ -91,7 +91,7 @@ $bgColorBtn: white;
     gap: 10px;
     align-items: center;
 
-    .deleteBtn {
+    .exitBtn {
       color: common.$red;
       background: $bgColorBtn;
       width: $widthBtn;
@@ -100,7 +100,7 @@ $bgColorBtn: white;
     }
 
     .cancelBtn,
-    .deleteBtn {
+    .exitBtn {
       cursor: pointer;
     }
   }

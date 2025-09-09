@@ -1,12 +1,12 @@
 import { Block } from '@common';
 import { ElementsKeys } from '@common/HandlebarsRegistration/types';
 import { Router } from '@common/Router';
-import { isEqual, makeLazyComponent } from '@utils';
-import type { IUser } from '@api/LoginApi';
+import { connect } from '@store';
+import type { BlockConstructor } from '@common/Router/Router';
 
 import navigation from '../template/navigation.hbs';
-import { getNavigationContext, Routers } from './contants';
-import type { ComponentLoader, NavigationProps } from './types';
+import { getNavigationProps, Routers } from './contants';
+import type { NavigationProps } from './types';
 
 // Необходимо чтобы не срабатывала дефолтная перезагрузка страницы при клике на ссылку
 export function enableNavigation(router: Router, rootSelector = 'header') {
@@ -33,24 +33,24 @@ export function enableNavigation(router: Router, rootSelector = 'header') {
   });
 }
 
-export class Navigation extends Block<NavigationProps> {
+class NavigationCrt extends Block<NavigationProps> {
   private _router = new Router();
 
   constructor() {
-    super('', getNavigationContext(null), [{ key: ElementsKeys.header, template: navigation }]);
+    super('', getNavigationProps(null), [{ key: ElementsKeys.header, template: navigation }]);
   }
 
   dispatchComponentDidMount() {
-    const regArr = (routes: { path: string; component: ComponentLoader }[]) => {
+    const regArr = (routes: { path: string; component: BlockConstructor }[]) => {
       routes.forEach(({ path, component }) => {
-        this._router.use(path, makeLazyComponent(component));
+        this._router.use(path, component);
       });
     };
 
     Object.values(Routers).forEach((route) => {
       if (Array.isArray(route)) regArr(route);
       else {
-        this._router.use(route.path, makeLazyComponent(route.component));
+        this._router.use(route.path, route.component);
       }
     });
 
@@ -59,14 +59,14 @@ export class Navigation extends Block<NavigationProps> {
     super.dispatchComponentDidMount();
   }
 
-  componentDidUpdate(oldProps: NavigationProps, newProps: NavigationProps): boolean {
-    if (!isEqual<IUser | null>(oldProps.user, newProps.user)) {
-      this.setProps(getNavigationContext(newProps.user) as Partial<NavigationProps>);
-    }
-    return true;
-  }
+  // componentDidUpdate(old, next) {
+  //   console.log({ old, next });
+  //   return true;
+  // }
 
   render(): string {
     return navigation;
   }
 }
+
+export const Navigation = connect(NavigationCrt, (store) => getNavigationProps(store.user));

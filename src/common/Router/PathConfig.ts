@@ -1,6 +1,5 @@
 export enum LinksPages {
   register = 'register',
-  homepage = 'homepage',
   login = 'login',
   profile = 'profile',
   editPassword = 'editPassword',
@@ -9,7 +8,6 @@ export enum LinksPages {
 }
 
 export const PathConfig = {
-  [LinksPages.homepage]: '/',
   [LinksPages.login]: `/${LinksPages.login}`,
   [LinksPages.register]: `/${LinksPages.register}`,
   [LinksPages.profile]: { view: `/${LinksPages.profile}?mode=view`, edit: `/${LinksPages.profile}?mode=edit` },

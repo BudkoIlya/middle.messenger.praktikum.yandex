@@ -11,7 +11,7 @@ import { RegisterPageComp } from '../templates';
 
 import styles from '../styles/styles.module.scss';
 
-interface RegisterPageProps extends Props {
+export interface RegisterPageProps extends Props {
   styles: CSSModuleClasses;
   inputs: Input[];
   link: Link;

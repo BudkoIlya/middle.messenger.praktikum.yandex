@@ -7,7 +7,7 @@ export type ComponentLoader = () => Promise<{ default: BlockConstructor }>;
 
 export interface Page {
   path: string;
-  component: ComponentLoader;
+  component: BlockConstructor;
 }
 
 type PageVariants2 = {
@@ -20,7 +20,7 @@ export type IPageVariantsByLink = {
 };
 
 export interface NavigationProps extends Props {
-  user: IUser | null;
+  user: IUser;
   links: unknown;
   styles: CSSModuleClasses;
 }

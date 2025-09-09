@@ -5,18 +5,14 @@ import { BASE_URL } from '../constants';
 import type { IUser, SignInRequest } from './types';
 
 enum Paths {
-  signIn = `${BASE_URL}/auth/signin`,
-  logout = `${BASE_URL}/auth/logout`,
+  sign = `${BASE_URL}/auth/signin`,
   user = `${BASE_URL}/auth/user`,
 }
 
-export class LoginApi extends HTTPTransport {
-  signIn(data: SignInRequest) {
-    return this.fetch(Method.POST, Paths.signIn, { data });
-  }
-
-  logout() {
-    return this.fetch(Method.POST, Paths.logout);
+export class ProfileApi extends HTTPTransport {
+  sign(data: SignInRequest) {
+    // console.log({ data });
+    return this.fetch(Method.POST, Paths.sign, { data });
   }
 
   getUser() {

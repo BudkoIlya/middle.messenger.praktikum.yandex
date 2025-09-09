@@ -16,13 +16,15 @@ export class LoginController extends BaseController<SignInRequest> {
   }
 
   async getUser() {
-    const user = await this._api?.getUser();
-    store.set('user', user);
+    if (!store.state.user?.id) {
+      const user = await this._api?.getUser();
+      store.set('user', user);
+    }
   }
 
   private async _sign(data: SignInRequest): Promise<void> {
     await withTryCatch(async () => {
-      await this._api?.sign(data);
+      await this._api?.signIn(data);
       await this.getUser();
 
       new Router().push(PathConfig[LinksPages.chat].notActive);

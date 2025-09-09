@@ -3,8 +3,6 @@ import { isPlainObject } from './isPlainObject';
 import type { PlainObject } from './types';
 
 export function isEqualObject(lhs: PlainObject, rhs: PlainObject): boolean {
-  if (lhs === rhs) return true;
-
   const keysA = Object.keys(lhs);
   const keysB = Object.keys(rhs);
   if (keysA.length !== keysB.length) return false;
@@ -29,7 +27,6 @@ export function isEqualObject(lhs: PlainObject, rhs: PlainObject): boolean {
 }
 
 export function isEqualArray(a: unknown[], b: unknown[]): boolean {
-  if (a === b) return true;
   if (a.length !== b.length) return false;
 
   for (let i = 0; i < a.length; i++) {

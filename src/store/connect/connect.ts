@@ -46,7 +46,7 @@ export function connect<
       if (typeof off === 'function') this._off = off;
     }
 
-    destroy(): void {
+    override destroy(): void {
       this._off?.();
       super.destroy();
     }

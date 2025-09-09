@@ -1,2 +1,2 @@
-export { LoginApi } from './LoginApi';
 export { ProfileApi } from './ProfileApi';
+export * from './types';
