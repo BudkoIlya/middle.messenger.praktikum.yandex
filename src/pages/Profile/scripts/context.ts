@@ -30,11 +30,7 @@ export const getContext = (isViewMode: boolean, styles: CSSModuleClasses, user: 
     ],
     isViewMode,
     buttons: {
-      saveBtn: {
-        text: 'Сохранить',
-        name: 'save_profile',
-        className: styles.saveProfileBtn,
-      },
+      saveBtn: { text: 'Сохранить', name: 'save_profile' },
       editBtn: {
         text: 'Редактировать',
         name: 'edit_profile',

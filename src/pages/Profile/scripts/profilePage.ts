@@ -27,7 +27,7 @@ class ProfilePageCtr extends Block<ProfilePageProps> {
     super.dispatchComponentDidMount();
   }
 
-  componentDidMount(): void {
+  private _setEvents() {
     const element = this.getContent();
     if (!element) return;
 
@@ -41,14 +41,15 @@ class ProfilePageCtr extends Block<ProfilePageProps> {
         },
       },
     });
-
-    checkValidationByFields({ root: element, inputs: inputs, button: saveBtn });
+    checkValidationByFields({ root: element, inputs, button: saveBtn });
     addRoutChangeListener({ element: editBtn });
     addRoutChangeListener({ element: cancelBtn });
     addRoutChangeListener({ element: editPasswordBtn });
   }
 
   render(): string {
+    this._setEvents();
+
     return ProfileComp;
   }
 }

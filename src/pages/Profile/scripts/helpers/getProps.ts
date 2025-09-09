@@ -62,6 +62,6 @@ export const getProps = (user: IUser): ProfilePageProps => {
     inputs: inputs.map((el) => new Input(el)),
     styles,
     isViewMode: mode === 'view',
-    user: null,
+    user,
   };
 };
