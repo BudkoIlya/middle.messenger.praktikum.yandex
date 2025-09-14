@@ -3,7 +3,7 @@ import { Button } from '@components/button';
 import { Img } from '@components/img';
 import { Input } from '@components/input';
 import { getContext } from '@pages/Profile/scripts/context';
-import type { IUser } from '@api/LoginApi';
+import type { IUser } from '@api/AuthApi';
 import type { ProfilePageProps } from '@pages/Profile/scripts/types';
 
 import styles from '../../styles/styles.module.scss';

@@ -1,5 +1,5 @@
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
-import type { IUser } from '@api/LoginApi';
+import type { IUser } from '@api/AuthApi';
 import type { IButton, IInput } from '@components';
 
 interface IContext {

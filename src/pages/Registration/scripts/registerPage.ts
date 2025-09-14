@@ -3,6 +3,7 @@ import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
 import { Input } from '@components/input';
 import { Link } from '@components/link';
+import { RegisterController } from '@controllers/RegisterController';
 import { CONTEXT } from '@pages/Registration/scripts/context';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
 import type { Props } from '@common/Block/types';
@@ -31,18 +32,17 @@ export class RegisterPage extends Block<RegisterPageProps> {
     });
   }
 
-  componentDidMount(): void {
+  render(): string {
+    return RegisterPageComp;
+  }
+
+  protected afterRender() {
     const element = this.getContent();
     if (!element) return;
 
-    const inputs = this.props.inputs;
-    const button = this.props.button;
-    const link = this.props.link;
-    checkValidationByFields({ root: element, inputs, button });
-    addRoutChangeListener({ element: link });
-  }
+    const { inputs, button, link } = this.props;
 
-  render(): string {
-    return RegisterPageComp;
+    checkValidationByFields({ root: element, inputs, button, onSubmit: RegisterController.onSubmit });
+    addRoutChangeListener({ element: link });
   }
 }

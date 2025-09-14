@@ -1,15 +1,16 @@
 import { HTTPTransport } from '@api/HTTPTransport/HTTPTransport';
 import { Method } from '@api/HTTPTransport/types';
 
-import type { IUser, SignInRequest } from './types';
+import type { IUser, SignInRequest, SignUpRequest } from './types';
 
 enum Paths {
-  signIn = '/auth/signin',
-  logout = '/auth/logout',
-  user = '/auth/user',
+  signIn = 'auth/signin',
+  signUp = 'auth/signup',
+  logout = 'auth/logout',
+  user = 'auth/user',
 }
 
-class LoginApiCrt extends HTTPTransport {
+class AuthApiCrt extends HTTPTransport {
   signIn(data: SignInRequest) {
     return this.fetch(Method.POST, Paths.signIn, { data });
   }
@@ -21,6 +22,10 @@ class LoginApiCrt extends HTTPTransport {
   getUser() {
     return this.fetch<IUser>(Method.GET, Paths.user);
   }
+
+  signUp(data: SignUpRequest) {
+    return this.fetch<{ id: number }>(Method.POST, Paths.signUp, { data });
+  }
 }
 
-export const LoginApi = new LoginApiCrt();
+export const AuthApi = new AuthApiCrt();

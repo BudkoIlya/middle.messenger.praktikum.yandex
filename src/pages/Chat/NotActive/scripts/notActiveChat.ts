@@ -2,7 +2,7 @@ import { Block } from '@common';
 import { LinksPages } from '@common/Router/PathConfig';
 import { ChatController } from '@controllers/ChatController';
 import { connect } from '@store';
-import type { IUser } from '@api/LoginApi';
+import type { IUser } from '@api/AuthApi';
 import type { Props } from '@common/Block/types';
 import type { ChatItemsCrt } from '@pages/Chat/common/components/chatItems/scripts';
 

@@ -1,11 +1,11 @@
 import { HTTPTransport } from '@api/HTTPTransport/HTTPTransport';
 import { Method } from '@api/HTTPTransport/types';
 
-import type { IUser, SignInRequest } from '../LoginApi';
+import type { IUser, SignInRequest } from '../AuthApi';
 
 enum Paths {
-  sign = '/auth/signin',
-  user = '/auth/user',
+  sign = 'auth/signin',
+  user = 'auth/user',
 }
 
 class ProfileApiCrt extends HTTPTransport {

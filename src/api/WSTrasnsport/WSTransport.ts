@@ -53,8 +53,7 @@ export class WSTransport<T extends BaseWsMessage = BaseWsMessage> extends EventB
       throw new Error('The socket is already connected');
     }
 
-    const path = this.url + url;
-    this.socket = new WebSocket(path);
+    this.socket = new WebSocket(`${this.url}/${url}`);
 
     this.subscribe(this.socket);
     this.setupPing();

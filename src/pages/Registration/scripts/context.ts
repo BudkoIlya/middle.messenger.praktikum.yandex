@@ -13,6 +13,7 @@ export const CONTEXT: IContext = {
     { label: 'Логин', name: 'login' },
     { label: 'Имя', name: 'first_name' },
     { label: 'Фамилия', name: 'second_name' },
+    { label: 'Телефон', name: 'phone' },
     { label: 'Пароль', name: 'password', type: 'password' },
     { label: 'Подтверждение пароля', name: 'confirm_password', type: 'password' },
   ],

@@ -1,5 +1,5 @@
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
-import type { IUser } from '@api/LoginApi';
+import type { IUser } from '@api/AuthApi';
 import type { BlockConstructor } from '@common/Router/Router';
 
 import type { IPageVariantsByLink, NavigationProps } from './types';

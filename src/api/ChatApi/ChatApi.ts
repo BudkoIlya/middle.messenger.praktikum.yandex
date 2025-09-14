@@ -4,8 +4,8 @@ import { Method } from '@api/HTTPTransport/types';
 import type { ChatList, ITokens } from './types';
 
 enum Paths {
-  chats = '/chats',
-  chatToken = '/chats/token/',
+  chats = 'chats',
+  chatToken = 'chats/token/',
 }
 
 class ChatApiCr extends HTTPTransport {
