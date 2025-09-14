@@ -51,17 +51,16 @@ export const Routers: IPageVariantsByLink = {
   },
 };
 
-export const getNavigationProps = (user: IUser): NavigationProps => {
+export const getNavigationProps = (user?: IUser): NavigationProps => {
   const hiddenPage = Object.values(user ?? {}).every((v) => !v) ? 'hidden' : undefined;
   const hiddenAuthPath = hiddenPage ? undefined : 'hidden';
   return {
     user,
     links: [
-      // { path: PathConfig[homepage], text: 'Главная' },
       { path: PathConfig[register], text: 'Регистрация', hidden: hiddenAuthPath },
       { path: PathConfig[login], text: 'Вход', hidden: hiddenAuthPath },
       { path: PathConfig[profile].view, text: 'Профиль', hidden: hiddenPage },
-      { path: PathConfig[editPassword], text: 'Изменить пароль', hidden: hiddenPage },
+      { path: PathConfig[editPassword], text: 'Изменить пароль', hidden: 'hidden' },
       { path: PathConfig[chat].notActive, text: 'Чат', hidden: hiddenPage },
       { path: PathConfig[error], text: 'Ошибка', hidden: 'hidden' },
     ],

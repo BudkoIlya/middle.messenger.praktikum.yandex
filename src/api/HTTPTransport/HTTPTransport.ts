@@ -10,8 +10,6 @@ export class HttpError<TBody = unknown> extends Error {
 
   readonly statusText: string;
 
-  readonly code?: string;
-
   readonly headers: Record<string, string>;
 
   readonly body?: TBody | string;

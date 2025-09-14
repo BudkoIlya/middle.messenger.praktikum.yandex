@@ -10,7 +10,6 @@ enum Paths {
 
 class ProfileApiCrt extends HTTPTransport {
   sign(data: SignInRequest) {
-    // console.log({ data });
     return this.fetch(Method.POST, Paths.sign, { data });
   }
 

@@ -1,2 +1,2 @@
-export { store } from './store';
+export { store, chatStore, userStore } from './store';
 export { connect } from './connect';

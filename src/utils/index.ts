@@ -5,6 +5,7 @@ export { withLoader } from './withLoader';
 export { isArray } from './isArray';
 export { isPlainObject } from './isPlainObject';
 export { makeLazyComponent } from './makeLazyComponent';
+export { formatDate } from './formatDate';
 export * from './updateObj';
 export * from './types';
 export * from './isEqual';

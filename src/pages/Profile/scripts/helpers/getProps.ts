@@ -35,13 +35,13 @@ export const defineMode = () => {
   return mode;
 };
 
-const contextByMode = (user: IUser) => {
+const contextByMode = (user?: IUser) => {
   const mode = defineMode();
   const defaultMode = mode || 'view';
   return { context: getContext(defaultMode === 'view', styles, user), mode: defaultMode };
 };
 
-export const getProps = (user: IUser): ProfilePageProps => {
+export const getProps = (user?: IUser): ProfilePageProps => {
   const {
     context: { inputs, buttons: btns },
     mode,

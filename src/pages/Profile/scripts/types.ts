@@ -5,7 +5,7 @@ import type { Button, Img, Input } from '@components';
 type ButtonKey = 'editBtn' | 'editPasswordBtn' | 'exitBtn' | 'cancelBtn' | 'saveBtn';
 
 export interface ProfilePageProps extends Props {
-  user: IUser;
+  user?: IUser;
   avatar: Img;
   imgInput: Input;
   isViewMode: boolean;

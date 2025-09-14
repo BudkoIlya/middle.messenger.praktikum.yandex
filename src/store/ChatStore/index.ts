@@ -1,1 +1,1 @@
-export { chatStore } from './chatStore';
+export { ChatStore } from './chatStore';

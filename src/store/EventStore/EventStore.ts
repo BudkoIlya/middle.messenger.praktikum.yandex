@@ -6,32 +6,39 @@ export enum StoreEvents {
   Updated = 'Updated',
 }
 
-export abstract class EventStore<TState = null> extends EventBus {
-  protected _store: TState | null = null;
+export abstract class EventStore<TState extends object = object> extends EventBus {
+  protected _store: TState;
+
+  protected constructor(initial: TState) {
+    super();
+    this._store = initial;
+  }
 
   private _emitUpdate = () => this.emit(StoreEvents.Updated);
 
   get state(): TState {
-    return this._store ?? ({} as TState);
+    return this._store;
   }
 
-  set(path: string, value: unknown): void {
-    const next = set(this.state as AnyObject, path, value);
-    this._store = next as TState;
+  set(path: string, value: unknown) {
+    this._store = set(this._store as AnyObject, path, value) as TState;
     this._emitUpdate();
   }
 
-  merge(patch: Partial<TState> | TState): void {
-    const { merged } = merge(this.state as AnyObject, patch as AnyObject);
-    this._store = merged as TState;
+  merge(patch: Partial<TState>) {
+    this._store = merge(this._store as AnyObject, patch as AnyObject) as TState;
     this._emitUpdate();
   }
 
-  clear(storeName?: string): void {
-    if (this._store && storeName) {
-      (this._store as AnyObject)[storeName] = null;
+  updateStore() {
+    this._emitUpdate();
+  }
+
+  clear(storeName?: keyof TState & string): void {
+    if (storeName) {
+      this._store = set(this._store as AnyObject, storeName, null) as TState;
     } else {
-      this._store = null;
+      this._store = {} as TState;
     }
     this._emitUpdate();
   }

@@ -18,12 +18,23 @@ export type ChatList = {
   };
 }[];
 
-export type ITokens = {
+export type IToken = {
   token: string;
-}[];
+};
+
+export type ChatMessage = {
+  id: string;
+  user_id: string;
+  content: string;
+  time: string;
+  is_read: boolean;
+};
 
 export type IChat = {
-  tokens?: string;
+  activeChat?: {
+    chatId: number;
+    messages?: ChatMessage[];
+  };
   chatList?: ChatList;
   activeChatId?: number;
-} | null;
+};

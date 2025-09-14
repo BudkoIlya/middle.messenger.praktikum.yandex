@@ -37,7 +37,7 @@ class NavigationCrt extends Block<NavigationProps> {
   private _router = new Router();
 
   constructor() {
-    super('', getNavigationProps(null), [{ key: ElementsKeys.header, template: navigation }]);
+    super('', getNavigationProps(), [{ key: ElementsKeys.header, template: navigation }]);
   }
 
   dispatchComponentDidMount() {
@@ -64,4 +64,4 @@ class NavigationCrt extends Block<NavigationProps> {
   }
 }
 
-export const Navigation = connect(NavigationCrt, (store) => getNavigationProps(store.user));
+export const Navigation = connect(NavigationCrt, ({ user }) => getNavigationProps(user));

@@ -20,7 +20,7 @@ export type IPageVariantsByLink = {
 };
 
 export interface NavigationProps extends Props {
-  user: IUser;
+  user?: IUser;
   links: unknown;
   styles: CSSModuleClasses;
 }

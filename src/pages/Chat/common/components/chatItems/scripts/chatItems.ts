@@ -145,4 +145,4 @@ export class ChatItemsCrt extends Block<IChatItems> {
   }
 }
 
-export const ChatItems = connect(ChatItemsCrt, ({ chat, user }) => getContext({ active: false, chat, user }));
+export const ChatItems = connect(ChatItemsCrt, ({ chat, user }) => getContext({ chat, user }));

@@ -2,8 +2,8 @@ import type { IUser } from '@api/AuthApi';
 
 import { EventStore } from 'src/store/EventStore';
 
-class UserStore extends EventStore<IUser> {
-  protected _store: IUser = null;
+export class UserStore extends EventStore<IUser> {
+  constructor() {
+    super({} as IUser);
+  }
 }
-
-export const userStore = new UserStore();

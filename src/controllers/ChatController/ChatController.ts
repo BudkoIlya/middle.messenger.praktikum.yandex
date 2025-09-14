@@ -1,18 +1,33 @@
 import { ChatApi } from '@api/ChatApi';
 import { WSTransport } from '@api/WSTrasnsport';
-import { store } from '@store';
+import { WSTransportEvents } from '@api/WSTrasnsport/WSTransport';
+import { Router } from '@common/Router';
+import { LinksPages } from '@common/Router/PathConfig';
+import { isArray } from '@utils';
 import { withTryCatch } from '@utils/withTryCatch';
+import type { ChatMessage } from '@api/ChatApi';
 import type { BaseWsMessage } from '@api/WSTrasnsport/WSTransport';
+
+type WSChatMessage = ChatMessage & { type: string };
+
+import { chatStore, store } from '@store';
 
 import { BaseController } from '../BaseController';
 
-class ChatControllerCrt extends BaseController {
-  private readonly _websocket = new WSTransport<BaseWsMessage<{ message: string }>>();
+class ChatControllerCrt extends BaseController<{ message: string }> {
+  private readonly _websocket: WSTransport<BaseWsMessage<WSChatMessage>>;
+
+  isConnected = false;
+
+  constructor() {
+    super();
+    this._websocket = new WSTransport<BaseWsMessage<WSChatMessage>>();
+  }
 
   async getChats() {
     await withTryCatch(async () => {
       const data = await ChatApi.getChats();
-      store.set('chat.chatList', data);
+      chatStore.set('chatList', data);
     });
   }
 
@@ -23,25 +38,69 @@ class ChatControllerCrt extends BaseController {
     });
   }
 
-  async connectToChat(chatId: string) {
+  private _onMsg = (msg: WSChatMessage | WSChatMessage[]) => {
+    const prev = store.state?.chat.activeChat?.messages ?? [];
+    const msgs = (() => {
+      if (isArray(msg)) {
+        return msg.map(({ type: _t, ...rest }) => rest);
+      }
+      const { type: _t, ...m } = msg;
+      return [m];
+    })();
+
+    // Почему-то приходят не отсортированные по дате
+    chatStore.set(
+      'activeChat.messages',
+      [...prev, ...msgs].sort((a, b) => Date.parse(a.time) - Date.parse(b.time)),
+    );
+  };
+
+  private _onOpen = () => {
+    this._websocket.send({ type: 'get old', content: '0' });
+  };
+
+  async connectToChat(chatId: number, redirect = true) {
     await withTryCatch(async () => {
       this.disconnectChat();
 
-      const tokens = await ChatApi.connectChat(chatId);
-
-      const token = tokens?.[0]?.token;
+      const data = await ChatApi.getChatTokens(chatId);
+      const token = data?.token;
       const userId = store.state.user?.id;
+      if (!token || !userId) return;
 
-      if (!!token && !!userId) {
-        await this._websocket.connect(`chats/${userId}/${chatId}/${token}`);
-        store.set('chat.token', token);
+      this._websocket.on(WSTransportEvents.Connected, this._onOpen);
+      this._websocket.on(WSTransportEvents.Message, this._onMsg);
+
+      await this._websocket.connect(`chats/${userId}/${chatId}/${token}`);
+      this.isConnected = true;
+
+      chatStore.set('activeChat.chatId', chatId);
+
+      if (redirect) {
+        new Router().push(`/${LinksPages.chat}/${chatId}`);
       }
     });
   }
 
-  disconnectChat() {
-    this._websocket.close();
+  // TODO: Добавление должно происходить в открытом чате
+  async searchUser(loginPart?: string) {
+    if (!loginPart) return;
+
+    return await withTryCatch(async () => await ChatApi.searchUser(loginPart));
   }
+
+  disconnectChat() {
+    this._websocket.off(WSTransportEvents.Message, this._onMsg);
+    this._websocket.off(WSTransportEvents.Connected, this._onOpen);
+    this._websocket.close();
+    this.isConnected = false;
+
+    chatStore.set('activeChat.messages', []);
+  }
+
+  onSubmit = ({ message }: { message: string }) => {
+    this._websocket.send({ type: 'message', content: message });
+  };
 }
 
 export const ChatController = new ChatControllerCrt();

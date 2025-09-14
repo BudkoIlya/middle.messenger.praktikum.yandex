@@ -9,7 +9,7 @@ import type { ProfilePageProps } from './types';
 
 class ProfilePageCtr extends Block<ProfilePageProps> {
   constructor() {
-    super('', getProps(null));
+    super('', getProps());
   }
 
   private get _propsByMode() {

@@ -7,16 +7,18 @@
 
   .chat__dialog {
     display: grid;
-    grid-template-rows: 40px 1fr 80px;
+    grid-template-rows: 55px 1fr 80px;
+    height: calc(100dvh - 98px);
 
     .chat__header {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid common.$grey;
       width: 100%;
       padding: 10px 20px;
 
-      .chat_user-title {
+      .chat-title {
         margin: 0;
       }
 
@@ -33,6 +35,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow: scroll;
 
     .chat__received_message {
       border-radius: 0 8px 8px;

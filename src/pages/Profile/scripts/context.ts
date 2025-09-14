@@ -5,7 +5,7 @@ import type { IButton, IInput } from '@components';
 interface IContext {
   inputs: IInput[];
   isViewMode?: boolean;
-  user: IUser;
+  user?: IUser;
   buttons: {
     editBtn: IButton;
     editPasswordBtn: IButton;
@@ -15,7 +15,7 @@ interface IContext {
   };
 }
 
-export const getContext = (isViewMode: boolean, styles: CSSModuleClasses, user: IUser): IContext => {
+export const getContext = (isViewMode: boolean, styles: CSSModuleClasses, user?: IUser): IContext => {
   const disabled = (isViewMode ? 'disabled' : '') as string;
   const { email, login, first_name, second_name, phone, display_name } = user || {};
   return {

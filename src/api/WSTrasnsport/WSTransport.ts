@@ -3,9 +3,11 @@ import type { AnyObject } from '@utils';
 
 import { BASE_URL_WS } from '../constants';
 
-export type BaseWsMessage<T extends AnyObject | unknown = AnyObject> = { type?: string; [k: string]: T | unknown };
+type Message<T> = { type: string } & { [K in keyof T]: T[K] };
 
-const enum WSTransportEvents {
+export type BaseWsMessage<T extends AnyObject = AnyObject> = Message<T>;
+
+export const enum WSTransportEvents {
   Connected = 'Connected',
   Close = 'Close',
   Error = 'Error',
@@ -16,7 +18,7 @@ type WSMessages<T extends BaseWsMessage = BaseWsMessage> = {
   [WSTransportEvents.Connected]: [void];
   [WSTransportEvents.Close]: [void];
   [WSTransportEvents.Error]: [Event];
-  [WSTransportEvents.Message]: [T];
+  [WSTransportEvents.Message]: [T | T[]];
 };
 
 export class WSTransport<T extends BaseWsMessage = BaseWsMessage> extends EventBus<WSMessages<T>> {
@@ -33,7 +35,7 @@ export class WSTransport<T extends BaseWsMessage = BaseWsMessage> extends EventB
     this.url = BASE_URL_WS;
   }
 
-  public send(data: string | number | object | ArrayBuffer | Blob): void {
+  send(data: string | number | BaseWsMessage | ArrayBuffer | Blob): void {
     if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
       throw new Error('Socket is not connected');
     }
@@ -47,7 +49,7 @@ export class WSTransport<T extends BaseWsMessage = BaseWsMessage> extends EventB
     }
   }
 
-  public connect(url: string): Promise<void> {
+  connect(url: string): Promise<void> {
     // TODO: При обновлении страницы надо переподключить заново к чату
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       throw new Error('The socket is already connected');
@@ -70,7 +72,7 @@ export class WSTransport<T extends BaseWsMessage = BaseWsMessage> extends EventB
     });
   }
 
-  public close(): void {
+  close(): void {
     this.socket?.close();
     if (this.pingInterval) {
       clearInterval(this.pingInterval);
@@ -78,8 +80,7 @@ export class WSTransport<T extends BaseWsMessage = BaseWsMessage> extends EventB
     }
   }
 
-  private setupPing(): void {
-    // Отправляем пинг периодически
+  setupPing(): void {
     this.pingInterval = setInterval(() => {
       try {
         this.send({ type: 'ping' });
@@ -97,7 +98,7 @@ export class WSTransport<T extends BaseWsMessage = BaseWsMessage> extends EventB
     });
   }
 
-  private subscribe(socket: WebSocket): void {
+  subscribe(socket: WebSocket): void {
     socket.addEventListener('open', () => {
       this.emit(WSTransportEvents.Connected);
     });
@@ -111,20 +112,23 @@ export class WSTransport<T extends BaseWsMessage = BaseWsMessage> extends EventB
     });
 
     socket.addEventListener('message', (message: MessageEvent<unknown>) => {
-      try {
-        const raw = message.data;
-        const parsed: unknown = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      const raw = message.data;
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
 
-        const data = parsed as T;
+      const isIgnorable = (t?: string) => t === 'pong' || t === 'user connected' || t === 'Wrong message type';
 
-        // Фильтр служебных сообщений (опционально)
-        const type = (data as BaseWsMessage | undefined)?.type;
-        if (type && (type === 'pong' || type === 'user connected')) return;
+      if (Array.isArray(parsed)) {
+        // один emit на все сообщения, если это массив
+        const payload = parsed.filter((item) => !isIgnorable(item?.type));
 
-        this.emit(WSTransportEvents.Message, data);
-      } catch {
-        // Игнорируем ошибки парсинга JSON, как на скриншоте
+        if (payload.length > 0) this.emit(WSTransportEvents.Message, payload);
+        return;
       }
+
+      // одиночное сообщение
+      const data = parsed as T;
+      const t = (data as AnyObject)?.type as string | undefined;
+      if (!isIgnorable(t)) this.emit(WSTransportEvents.Message, data);
     });
   }
 }

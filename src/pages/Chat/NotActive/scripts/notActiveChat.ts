@@ -1,7 +1,7 @@
 import { Block } from '@common';
 import { LinksPages } from '@common/Router/PathConfig';
 import { ChatController } from '@controllers/ChatController';
-import { connect } from '@store';
+import { store } from '@store';
 import type { IUser } from '@api/AuthApi';
 import type { Props } from '@common/Block/types';
 import type { ChatItemsCrt } from '@pages/Chat/common/components/chatItems/scripts';
@@ -17,13 +17,13 @@ interface INotActiveChatPageCrt extends Props {
   user?: IUser;
 }
 
-class NotActiveChatPageCrt extends Block<INotActiveChatPageCrt> {
+export class NotActiveChatPage extends Block<INotActiveChatPageCrt> {
   constructor() {
     super('', { chatItems: new ChatItems(), styles }, [{ key: LinksPages.chat, template: NotActivePageComp }]);
   }
 
   async dispatchComponentDidMount() {
-    await ChatController.getChats();
+    if (!store.state?.chat.chatList) await ChatController.getChats();
     super.dispatchComponentDidMount();
   }
 
@@ -31,5 +31,3 @@ class NotActiveChatPageCrt extends Block<INotActiveChatPageCrt> {
     return NotActivePageComp;
   }
 }
-
-export const NotActiveChatPage = connect(NotActiveChatPageCrt, ({ user }) => ({ user }));

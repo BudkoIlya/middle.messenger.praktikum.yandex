@@ -1,8 +1,8 @@
 export default `
-<div class="{{styles.chatItem}}">
+<div class="{{styles.chatItem}}{{#if class}} {{class}}{{/if}}">
   <img src='' alt='avatar' class='{{styles.avatar}}' />
   <div class='{{styles.chatInfo}}'>
-    <div class='{{styles.userName}}'>{{userName}}</div>
+    <div class='{{styles.title}}'>{{title}}</div>
     <div class='{{styles.lastMessage}}'>{{lastMessage}}</div>
   </div>
   <div class='{{styles.messageInfo}}'>

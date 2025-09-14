@@ -21,4 +21,4 @@ export type IUser = {
   login: string;
   avatar: string;
   email: string;
-} | null;
+};

@@ -16,5 +16,5 @@ export const PathConfig = {
     notActive: `/${LinksPages.chat}`,
     active: `/${LinksPages.chat}/:id`,
   },
-  [LinksPages.error]: `/${LinksPages.error}?type`,
+  [LinksPages.error]: `/${LinksPages.error}/:code`,
 };
