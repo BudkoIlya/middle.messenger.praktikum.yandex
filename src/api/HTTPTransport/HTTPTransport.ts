@@ -1,5 +1,6 @@
 import { isObject, typedObjectEntries, withLoader } from '@utils';
 
+import { BASE_URL } from '../constants';
 import { DEFAULT_HEADER } from './constants';
 import { Method } from './types';
 import type { BadRequest, FetchWithRetryOptions, FullRequestOptions, RequestOptions } from './types';
@@ -162,7 +163,7 @@ export abstract class HTTPTransport {
     options: RequestOptions<TBody> = {},
   ): Promise<TResp> {
     const { showLoader = true, ...httpOptions } = options;
-    const run = () => this.request<TResp, TBody>(url, { ...httpOptions, method });
+    const run = () => this.request<TResp, TBody>(`${BASE_URL}/${url}`, { ...httpOptions, method });
     return showLoader ? withLoader(run) : run();
   }
 
@@ -185,7 +186,7 @@ export abstract class HTTPTransport {
     const executeRequest = async (): Promise<TResp> => {
       attempts++;
       try {
-        return await this.fetch<TResp, TBody>(method, url, { ...httpOptions, showLoader: false });
+        return await this.fetch<TResp, TBody>(method, `${BASE_URL}/${url}`, { ...httpOptions, showLoader: false });
       } catch (error) {
         if (attempts <= retries && HTTPTransport.isRetryableError(error)) {
           await new Promise((r) => setTimeout(r, retryDelay));

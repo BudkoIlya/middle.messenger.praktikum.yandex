@@ -122,7 +122,7 @@ export default [
 
       'import/prefer-default-export': 'off',
       'import/named': 'error',
-      'no-console': ['warn', { allow: ['warn', 'error', 'info', 'table'] }],
+      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
     },
   },
 ];

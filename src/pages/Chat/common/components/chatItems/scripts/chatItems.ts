@@ -57,11 +57,44 @@ class ChatNameInput extends Block<IChatNameInput> {
     });
   }
 
-  protected render(): string {
+  render(): string {
     return `<form class="{{className}} {{showClassName}}">
         {{{input}}}
       <div class="{{createChatButtons}}">{{{applyBtn}}}{{{cancelBtn}}}</div>
     </form>`;
+  }
+
+  afterRender() {
+    const element = this.getContent();
+    if (!element) return;
+
+    const { applyBtn, cancelBtn, input } = this.props;
+
+    const closeCreateChat = () => {
+      input.setProps({ ...this.props.input.props, value: undefined, error: false });
+      this.setProps({ ...this.props, showClassName: '' });
+    };
+
+    checkValidationByFields<{ title: string }>({
+      root: element,
+      inputs: [input],
+      button: applyBtn,
+      customValidate: (_name, value) => COMMON_REG_EXP.textWithNumber.test(value),
+      async onSubmit(values) {
+        try {
+          await ChatController.createChat(values.title);
+          closeCreateChat();
+        } catch (e) {}
+      },
+    });
+
+    cancelBtn.setProps({
+      events: {
+        click: () => {
+          closeCreateChat();
+        },
+      },
+    });
   }
 }
 
@@ -92,50 +125,18 @@ export class ChatItemsCrt extends Block<IChatItems> {
     return chatItemsTemplate;
   }
 
-  protected afterRender() {
+  afterRender() {
     const element = this.getContent();
     if (!element) return;
 
     const { link, button, chatNameInput } = this.props;
 
     const { props: chatTitleProps, setProps: chatTitlePropsSetProps } = chatNameInput;
-    const { applyBtn, cancelBtn, input } = chatTitleProps;
-
-    const closeCreateChat = (submit?: boolean) => {
-      if (!submit) {
-        const el = input.getContent();
-        el?.querySelector('input')?.classList.remove('error');
-      }
-      chatTitlePropsSetProps({ ...chatTitleProps, showClassName: '' });
-    };
-
-    checkValidationByFields<{ title: string }>({
-      root: element,
-      inputs: [input],
-      button: applyBtn,
-      customValidate: (_name, value) => COMMON_REG_EXP.textWithNumber.test(value),
-      async onSubmit(values) {
-        try {
-          await ChatController.createChat(values.title);
-          closeCreateChat(true);
-        } catch (e) {}
-      },
-    });
 
     button.setProps({
       events: {
         click: () => {
           chatTitlePropsSetProps({ ...chatTitleProps, showClassName: styles['show'] });
-        },
-      },
-    });
-
-    cancelBtn.setProps({
-      events: {
-        click: () => {
-          const el = input.getContent();
-          el?.querySelector('input')?.classList.remove('error');
-          closeCreateChat();
         },
       },
     });

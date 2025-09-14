@@ -7,29 +7,31 @@ type CustomValidate = (name: string, value: string) => boolean;
 
 const isUpdatingOnFocus = new WeakMap<Input, boolean>();
 
-const norm = (s: string) => s.replace(/\s+/g, ' ').trim();
-
 const getInput = (root: HTMLElement, input: Input) =>
   root.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
 
-const classFromProps = (input: Input) => norm(String(input.props.class ?? '').replace(/\berror\b/g, ''));
-
-const buildClass = (base: string, withError: boolean) => norm([base, withError ? 'error' : ''].join(' '));
-
 const validate = (name: InputsName, value: string): boolean => REG_EXP_BY_INPUT_NAME[name].test(value);
+
+// Сравнение, чтобы не вызывать лишние рирендеры
+const patchIfChanged = (input: Input, patch: Partial<Input['props']>) => {
+  const nextValue = patch.value ?? input.props.value;
+  const nextError = patch.error ?? input.props.error;
+  const sameValue = nextValue === input.props.value;
+  const sameError = nextError === input.props.error;
+  if (sameValue && sameError) return;
+  input.setProps({ ...input.props, ...patch });
+};
 
 const validateInput = (input: Input, root: HTMLElement, customValidate?: CustomValidate): boolean => {
   const el = getInput(root, input);
   if (!el) return true;
 
-  const { name, value } = el;
-  const isValid = customValidate ? customValidate(name, value) : validate(name as InputsName, value);
-  const base = classFromProps(input);
-  const nextClass = buildClass(base, !isValid);
+  const { value, name } = el;
+  const isValid = customValidate ? customValidate(name, value) : validate(name as InputsName, el.value);
 
-  if (input.props.value !== value || norm(String(input.props.class ?? '')) !== nextClass) {
-    input.setProps({ ...input.props, value, class: nextClass });
-  }
+  // Обновляем только если что-то реально поменялось
+  patchIfChanged(input, { value, error: !isValid });
+
   return isValid;
 };
 
@@ -49,7 +51,7 @@ export const checkValidationByFields = <T = unknown>({
   inputs.forEach((input) => {
     const prevEvents = input.props.events || {};
 
-    // Контролируем клик по label/контейнеру: предотвращаем нативный перевод фокуса, фокусим сами
+    // Клик по контейнеру/label — переносим фокус в инпут вручную
     const onMouseDown = (e: Event) => {
       const el = getInput(root, input);
       if (!el) return;
@@ -62,31 +64,28 @@ export const checkValidationByFields = <T = unknown>({
       el.focus();
     };
 
+    // Сброс ошибки на фокус (только если была)
     const onFocusIn = () => {
       if (isUpdatingOnFocus.get(input)) return;
+      const el = getInput(root, input);
+      if (!el) return;
 
-      const inputEl = getInput(root, input);
-      if (!inputEl) return;
-
-      const base = classFromProps(input);
-      const current = (input.props.class as string | undefined)?.trim() || '';
-      if (current === base) return; // не вызываем ререндер
+      if (input.props.error !== true) return; // ничего сбрасывать не нужно
 
       isUpdatingOnFocus.set(input, true);
-      input.setProps({ ...input.props, class: base });
+      patchIfChanged(input, { error: false });
 
       // Вернуть фокус после того, как DOM перерисуется
       requestAnimationFrame(() => {
         const nextEl = getInput(root, input);
         if (nextEl && document.activeElement !== nextEl) {
           nextEl.focus();
-          const len = nextEl.value.length;
-          nextEl.setSelectionRange(len, len);
         }
         isUpdatingOnFocus.set(input, false);
       });
     };
 
+    // Валидация на blur
     const onFocusOut = (e: Event) => {
       if (isUpdatingOnFocus.get(input)) return;
 
@@ -97,16 +96,7 @@ export const checkValidationByFields = <T = unknown>({
       const rel = (e as FocusEvent).relatedTarget as HTMLElement | null;
       if (rel && (rel === el || el.contains(rel))) return;
 
-      const { name, value } = el;
-      const isValid = customValidate ? customValidate(name, value) : validate(name as InputsName, value.trim());
-      const base = classFromProps(input);
-      const nextClass = isValid ? base : `${base} error`;
-
-      const sameClass = ((input.props.class as string | undefined)?.trim() || '') === nextClass;
-      const sameValue = input.props.value === value;
-      if (sameClass && sameValue) return;
-
-      input.setProps({ ...input.props, value, class: nextClass });
+      validateInput(input, root, customValidate);
     };
 
     input.setProps({
@@ -120,20 +110,22 @@ export const checkValidationByFields = <T = unknown>({
     const onSubmitClick = (e: Event) => {
       e.preventDefault();
 
-      const results = inputs.map((inp) => ({ input: inp, isValid: validateInput(inp, root, customValidate) }));
+      const results = inputs.map((inp) => ({
+        input: inp,
+        isValid: validateInput(inp, root, customValidate),
+      }));
 
       const values = results.reduce<Record<string, string>>((acc, { input }) => {
         const el = root.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
         if (el) acc[el.name] = el.value;
         return acc;
-      }, {});
-      console.table({ values });
+      }, {}) as T;
 
       const hasError = results.some(({ isValid }) => !isValid);
 
       if (hasError) return;
 
-      onSubmit?.(values as T);
+      onSubmit?.(values);
     };
 
     button.setProps({ ...button.props, events: { ...prev, click: onSubmitClick } });

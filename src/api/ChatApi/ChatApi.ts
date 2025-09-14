@@ -1,11 +1,11 @@
-import { BASE_URL } from '@api/constants';
 import { HTTPTransport } from '@api/HTTPTransport/HTTPTransport';
 import { Method } from '@api/HTTPTransport/types';
 
-import type { ChatList } from './types';
+import type { ChatList, ITokens } from './types';
 
 enum Paths {
-  chats = `${BASE_URL}/chats`,
+  chats = '/chats',
+  chatToken = '/chats/token/',
 }
 
 class ChatApiCr extends HTTPTransport {
@@ -15,6 +15,10 @@ class ChatApiCr extends HTTPTransport {
 
   createChat(title: string) {
     return this.fetch(Method.POST, Paths.chats, { data: { title } });
+  }
+
+  connectChat(chatId: string) {
+    return this.fetch<ITokens>(Method.POST, `${Paths.chatToken}/${chatId}`);
   }
 }
 

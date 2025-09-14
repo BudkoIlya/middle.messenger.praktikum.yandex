@@ -14,5 +14,6 @@ export interface IInput {
   styles?: CSSModuleClasses;
   label?: string | Block;
   helpTextClass?: string;
+  error?: boolean;
   [key: string]: unknown;
 }

@@ -1,15 +1,13 @@
 import Handlebars from 'handlebars';
 import { v4 } from 'uuid';
 
-import { HandlebarsRegister } from '@src/common/HandlebarsRegistration';
 import { isEqual } from '@utils/isEqual';
-import type { Props } from '@common/Block/types';
-import type { IItem } from '@common/HandlebarsRegistration/types';
 
 import { EventBus } from '../EvenBus';
+import { HandlebarsRegister } from '../HandlebarsRegistration';
 import { createProxy } from '../Proxy';
-
-type EventsMap = Record<string, EventListener>;
+import type { IItem } from '../HandlebarsRegistration/types';
+import type { BlockEvents, EventsMap, Props } from './types';
 
 export abstract class Block<P extends Props = Props> {
   private static EVENTS = {
@@ -26,9 +24,9 @@ export abstract class Block<P extends Props = Props> {
 
   private _meta: { tagName?: string; props: P };
 
-  private _eventBus: EventBus;
+  private _eventBus: EventBus<BlockEvents<P>>;
 
-  private _rootless = false;
+  private readonly _rootless: boolean = false;
 
   private _isUpdated = false;
 
@@ -37,22 +35,23 @@ export abstract class Block<P extends Props = Props> {
   // Храним функцию для снятия всех обработчиков, навешанных последним рендером
   private _removeEvents?: () => void;
 
-  private _onInit = this._init.bind(this);
+  // Для стрелочных функций не нужен bind
+  private _onInit = () => this._init();
 
-  private _onCDM = this._componentDidMount.bind(this);
+  private _onCDM = () => this._componentDidMount();
 
-  private _onCDU = this._componentDidUpdate.bind(this);
+  private _onCDU = (oldProps: P, newProps: P) => this._componentDidUpdate(oldProps, newProps);
 
-  private _onRender = this._render.bind(this);
+  private _onRender = () => this._render();
 
-  private _onAfterRender = this._afterRender.bind(this);
+  private _onAfterRender = () => this._afterRender();
 
   handlebarsRegister = new HandlebarsRegister();
 
   props: P;
 
   protected constructor(tagName: string = '', props: P, registerItems?: IItem[]) {
-    const eventBus = new EventBus();
+    const eventBus = new EventBus<BlockEvents<P>>();
     this._eventBus = eventBus;
     this._rootless = !tagName;
     this._meta = { tagName, props };
@@ -67,7 +66,7 @@ export abstract class Block<P extends Props = Props> {
     return this._id;
   }
 
-  private _registerEvents(eventBus: EventBus) {
+  private _registerEvents(eventBus: EventBus<BlockEvents<P>>) {
     eventBus.on(Block.EVENTS.INIT, this._onInit);
     eventBus.on(Block.EVENTS.FLOW_CDM, this._onCDM);
     eventBus.on(Block.EVENTS.FLOW_CDU, this._onCDU);
@@ -121,7 +120,7 @@ export abstract class Block<P extends Props = Props> {
 
   forceUpdate(props?: P) {
     if (props) this.setProps(props);
-    else this._eventBus.emit(Block.EVENTS.FLOW_CDU);
+    else this._eventBus.emit(Block.EVENTS.FLOW_CDU, this.props, this.props);
   }
 
   private _setIsUpdated(isUpdated: boolean) {
@@ -204,9 +203,8 @@ export abstract class Block<P extends Props = Props> {
     this._forEachChild(this.props, (child) => {
       const stub = fragment.querySelector(`[data-block-id="${child.id}"]`);
       const node = child.getContent();
-      if (stub && node) {
-        stub.replaceWith(node);
-      }
+
+      if (stub && node) stub.replaceWith(node);
     });
   }
 

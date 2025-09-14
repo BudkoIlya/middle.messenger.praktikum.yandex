@@ -18,7 +18,12 @@ export type ChatList = {
   };
 }[];
 
+export type ITokens = {
+  token: string;
+}[];
+
 export type IChat = {
+  tokens?: string;
   chatList?: ChatList;
   activeChatId?: number;
 } | null;

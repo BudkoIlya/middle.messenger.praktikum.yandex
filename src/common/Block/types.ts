@@ -1,5 +1,15 @@
 import type { Block } from './Block';
 
+export type EventsMap = Record<string, EventListener>;
+
+export type BlockEvents<P> = {
+  init: [];
+  'flow:component-did-mount': [];
+  'flow:component-did-update': [oldProps: P, newProps: P];
+  'flow:render': [];
+  'flow:rendered': [];
+};
+
 export type Events = Record<string, EventListener>;
 
 export type Props = {

@@ -3,18 +3,23 @@ export default `
   {{#if label}}<span class="{{styles.title}}">{{{label}}}</span>{{/if}}
   <input
     type="{{#if type}}{{type}}{{else}}text{{/if}}"
+
     {{#if value}}value="{{value}}"{{/if}}
 
-    {{#if class}}
-      class="input {{styles.input}} {{class}}"
-      {{else}}class="input {{styles.input}}"
-    {{/if}}
+    class="input {{styles.input}}{{#if class}} {{class}}{{/if}}{{#if error}} {{styles.error}}{{/if}}"
 
     {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}
+
     {{#if title}}title="{{title}}"{{/if}}
+
     name="{{name}}"
+
     {{disabled}}
+
     {{#if accept}}accept={{accept}}{{/if}}>
-  <span class="{{styles.helpText}} {{helperTextClass}}">Недопустимые символы</span>
+  <span
+    class="{{styles.helpText}}{{#if helperTextClass}} {{helperTextClass}}{{/if}}">
+    Недопустимые символы
+  </span>
 </label>
 `;
