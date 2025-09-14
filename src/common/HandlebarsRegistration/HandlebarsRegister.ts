@@ -7,13 +7,6 @@ Handlebars.registerHelper('eq', (a, b) => a === b);
 export class HandlebarsRegister {
   items: IMountBlock = new Map();
 
-  private _setItems(items?: IItem[]) {
-    items?.forEach(({ key, template }) => {
-      if (this.items.has(key)) return;
-      this.items.set(key, template);
-    });
-  }
-
   private static __instance: HandlebarsRegister;
 
   constructor(items?: IItem[]) {
@@ -22,10 +15,16 @@ export class HandlebarsRegister {
     HandlebarsRegister.__instance = this;
   }
 
+  private _setItems(items?: IItem[]) {
+    items?.forEach(({ key, template }) => {
+      if (this.items.has(key)) return;
+      this.items.set(key, template);
+    });
+  }
+
   register = (items?: IItem[]) => {
-    if (items) {
-      this._setItems(items);
-    }
+    if (items) this._setItems(items);
+
     this.items.forEach((template, key) => {
       if (!template) return;
       Handlebars.registerPartial(key, template);

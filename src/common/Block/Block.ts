@@ -17,6 +17,7 @@ export abstract class Block<P extends Props = Props> {
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
     FLOW_RENDER: 'flow:render',
+    FLOW_RENDERED: 'flow:rendered',
   } as const;
 
   private _id: string = v4();
@@ -44,6 +45,8 @@ export abstract class Block<P extends Props = Props> {
 
   private _onRender = this._render.bind(this);
 
+  private _onAfterRender = this._afterRender.bind(this);
+
   handlebarsRegister = new HandlebarsRegister();
 
   props: P;
@@ -69,6 +72,7 @@ export abstract class Block<P extends Props = Props> {
     eventBus.on(Block.EVENTS.FLOW_CDM, this._onCDM);
     eventBus.on(Block.EVENTS.FLOW_CDU, this._onCDU);
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._onRender);
+    eventBus.on(Block.EVENTS.FLOW_RENDERED, this._onAfterRender);
   }
 
   private _createResources() {
@@ -122,6 +126,12 @@ export abstract class Block<P extends Props = Props> {
 
   private _setIsUpdated(isUpdated: boolean) {
     this._isUpdated = isUpdated;
+  }
+
+  protected afterRender?(): void;
+
+  private _afterRender() {
+    this.afterRender?.();
   }
 
   private _addEvents() {
@@ -215,6 +225,7 @@ export abstract class Block<P extends Props = Props> {
 
       if (!newRoot) {
         this._addEvents();
+        this._eventBus.emit(Block.EVENTS.FLOW_RENDERED);
         return;
       }
 
@@ -237,6 +248,8 @@ export abstract class Block<P extends Props = Props> {
     this._forEachChild(props, (child) => child.dispatchComponentDidMount());
 
     this._addEvents();
+
+    this._eventBus.emit(Block.EVENTS.FLOW_RENDERED);
   }
 
   private _compile(template: string, context: Record<string, unknown>): DocumentFragment {

@@ -67,13 +67,6 @@ const tryParseJson = <T = unknown>(text: string): { ok: true; data: T } | { ok: 
 };
 
 export abstract class HTTPTransport {
-  private static __instance: HTTPTransport;
-
-  constructor() {
-    if (HTTPTransport.__instance) return HTTPTransport.__instance;
-    HTTPTransport.__instance = this;
-  }
-
   private async request<TResp = unknown, TBody = unknown>(
     url: string,
     options: FullRequestOptions<TBody>,

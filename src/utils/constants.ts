@@ -11,9 +11,10 @@ export type InputsName =
   | 'phone'
   | 'message';
 
-const COMMON_REG_EXP = {
+export const COMMON_REG_EXP = {
   password: /^(?=.*[A-ZА-ЯЁ])(?=.*\d)\S{8,40}$/,
   name: /^[A-ZА-ЯЁ][A-Za-zА-Яа-яЁё-]*$/,
+  textWithNumber: /^(?!\d+$)[A-Za-zА-Яа-яЁё0-9]+$/, // не могут быть только числа
 };
 
 export const REG_EXP_BY_INPUT_NAME: Record<InputsName, RegExp> = {

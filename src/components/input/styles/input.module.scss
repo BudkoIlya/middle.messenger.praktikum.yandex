@@ -8,7 +8,7 @@
     display: none;
   }
 
-  .input:global(.error) + .helpText {
+  & > :global(.error) + .helpText {
     display: inline-block;
     color: common.$red;
     font-size: 13px;

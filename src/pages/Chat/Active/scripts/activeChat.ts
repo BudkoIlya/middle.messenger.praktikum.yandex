@@ -6,6 +6,7 @@ import { Input } from '@components/input';
 import { Message } from '@components/message';
 import { checkValidationByFields } from '@utils';
 import type { Props } from '@common/Block/types';
+import type { ChatItemsCrt } from '@pages/Chat/common/components/chatItems/scripts';
 
 import { ChatItems } from '../../common/components/chatItems';
 import { ActivePageComp } from '../templates';
@@ -13,12 +14,11 @@ import { ActivePageComp } from '../templates';
 import styles from '../styles/styles.module.scss';
 
 export interface ActiveChatPageProps extends Props {
-  chatItems: ChatItems;
+  chatItems: ChatItemsCrt;
   messages: Message[];
   img: Img;
   input: Input;
   button: Button;
-  styles: CSSModuleClasses;
 }
 
 export class ActiveChatPage extends Block<ActiveChatPageProps> {
@@ -26,7 +26,7 @@ export class ActiveChatPage extends Block<ActiveChatPageProps> {
     super(
       '',
       {
-        chatItems: new ChatItems({ active: true }),
+        chatItems: new ChatItems(),
         messages: [
           new Message({ text: 'Привет', time: '12:00', class: styles['chat__received_message'] }),
           new Message({ text: 'Привет', time: '12:01', needStatus: true, class: styles['chat__answer_message'] }),

@@ -84,10 +84,9 @@ export class EditPasswordPage extends Block<EditPasswordPageProps> {
     const element = this.getContent();
     if (!element) return;
 
-    const inputs = this.props.inputs;
-    const saveBtn = this.props.saveBtn;
-    const cancelBtn = this.props.cancelBtn;
-    checkValidationByFields({ root: element, inputs: inputs, button: saveBtn });
+    const { inputs, saveBtn, cancelBtn } = this.props;
+
+    checkValidationByFields({ root: element, inputs, button: saveBtn });
     addRoutChangeListener({ element: cancelBtn });
   }
 

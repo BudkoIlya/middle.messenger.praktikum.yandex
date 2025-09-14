@@ -8,7 +8,6 @@ export interface ProfilePageProps extends Props {
   user: IUser;
   avatar: Img;
   imgInput: Input;
-  styles: CSSModuleClasses;
   isViewMode: boolean;
   inputs: Input[];
   buttons: { [K in ButtonKey]: Button };

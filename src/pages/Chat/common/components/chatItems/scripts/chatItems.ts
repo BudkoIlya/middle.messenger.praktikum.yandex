@@ -1,15 +1,18 @@
 import { Block } from '@common';
 import { ElementsKeys } from '@common/HandlebarsRegistration/types';
-import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
 import { Img } from '@components/img';
 import { Input } from '@components/input';
-import { Link } from '@components/link';
-import { addRoutChangeListener } from '@utils';
+import { ChatController } from '@controllers/ChatController';
+import { connect } from '@store';
+import { addRoutChangeListener, checkValidationByFields } from '@utils';
+import { COMMON_REG_EXP } from '@utils/constants';
+import type { Props } from '@common/Block/types';
+import type { Link } from '@components/link';
 
 import { getContext } from '../../../scripts';
-import { ChatItem } from '../chatItem';
 import { default as chatItemsTemplate } from '../chatItems.hbs';
+import type { ChatItem } from '../chatItem';
 
 import styles from '../styles/chatItems.module.scss';
 
@@ -22,25 +25,57 @@ export class ButtonText extends Block {
     return 'Добавить';
   }
 }
+interface IChatItems extends Props {
+  chatItems?: ChatItem[];
+  link?: Link;
+  input: Input;
+  button: Button;
+  chatNameInput: ChatNameInput;
+}
 
-export class ChatItems extends Block {
-  constructor({ active }: { active: boolean }) {
-    const chatItems = getContext(active).chatItems.map((item) => new ChatItem(item));
+interface IChatNameInput extends Props {
+  input: Input;
+  className: string;
+  showClassName?: string;
+  applyBtn: Button;
+  cancelBtn: Button;
+}
 
+class ChatNameInput extends Block<IChatNameInput> {
+  constructor() {
+    super('', {
+      input: new Input({
+        name: 'title',
+        placeholder: 'Название чата',
+        class: styles.chatTitleInput,
+        helperTextClass: styles.helperText,
+      }),
+      className: styles['chatTitleInputWrapper'],
+      applyBtn: new Button({ name: 'Create', text: 'Создать', type: 'submit', theme: null }),
+      cancelBtn: new Button({ name: 'cancel', text: 'Отменить', theme: null }),
+      createChatButtons: styles.createChatButtons,
+    });
+  }
+
+  protected render(): string {
+    return `<form class="{{className}} {{showClassName}}">
+        {{{input}}}
+      <div class="{{createChatButtons}}">{{{applyBtn}}}{{{cancelBtn}}}</div>
+    </form>`;
+  }
+}
+
+export class ChatItemsCrt extends Block<IChatItems> {
+  constructor() {
     super(
       '',
       {
-        chatItems,
-        link: new Link({
-          className: styles['chat__user-link'],
-          path: PathConfig[LinksPages.profile].view,
-          text: 'Имя Фамилия',
-        }),
         input: new Input({
           name: 'search',
           placeholder: 'Поиск',
           class: styles['chat__search'],
         }),
+        chatNameInput: new ChatNameInput(),
         button: new Button({
           name: 'add',
           text: [new Img({ src: '/assets/add_btn.svg', alt: 'Добавить' }), new ButtonText()],
@@ -53,15 +88,60 @@ export class ChatItems extends Block {
     );
   }
 
-  componentDidMount(): void {
-    const element = this.getContent();
-    if (!element) return;
-
-    const link = this.props.link as Link;
-    addRoutChangeListener({ element: link });
-  }
-
   render(): string {
     return chatItemsTemplate;
   }
+
+  protected afterRender() {
+    const element = this.getContent();
+    if (!element) return;
+
+    const { link, button, chatNameInput } = this.props;
+
+    const { props: chatTitleProps, setProps: chatTitlePropsSetProps } = chatNameInput;
+    const { applyBtn, cancelBtn, input } = chatTitleProps;
+
+    const closeCreateChat = (submit?: boolean) => {
+      if (!submit) {
+        const el = input.getContent();
+        el?.querySelector('input')?.classList.remove('error');
+      }
+      chatTitlePropsSetProps({ ...chatTitleProps, showClassName: '' });
+    };
+
+    checkValidationByFields<{ title: string }>({
+      root: element,
+      inputs: [input],
+      button: applyBtn,
+      customValidate: (_name, value) => COMMON_REG_EXP.textWithNumber.test(value),
+      async onSubmit(values) {
+        try {
+          await ChatController.createChat(values.title);
+          closeCreateChat(true);
+        } catch (e) {}
+      },
+    });
+
+    button.setProps({
+      events: {
+        click: () => {
+          chatTitlePropsSetProps({ ...chatTitleProps, showClassName: styles['show'] });
+        },
+      },
+    });
+
+    cancelBtn.setProps({
+      events: {
+        click: () => {
+          const el = input.getContent();
+          el?.querySelector('input')?.classList.remove('error');
+          closeCreateChat();
+        },
+      },
+    });
+
+    addRoutChangeListener({ element: link });
+  }
 }
+
+export const ChatItems = connect(ChatItemsCrt, ({ chat, user }) => getContext({ active: false, chat, user }));

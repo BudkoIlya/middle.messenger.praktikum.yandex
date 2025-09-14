@@ -6,22 +6,25 @@
     margin-bottom: 10px;
   }
 
-  height: 100%;
+  height: calc(100dvh - 98px);
   display: grid;
   grid-template-columns: 500px 1.5fr;
 }
 
 @mixin chatItems {
+  display: grid;
+  grid-template-rows: min-content min-content 1fr;
   border-top: 1px solid #edecec;
-  overflow: hidden;
   width: 500px;
   background-color: white;
   padding: 20px;
   border-radius: 0 0 0 10px;
-  height: 100%;
   box-shadow: 8px 2px 16px -10px rgb(0 0 0 / 25%);
+  overflow: hidden;
+  min-height: 0;
 
   .chat__sidebar-header {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -77,6 +80,43 @@
 
     &:focus {
       border: 1px solid common.$grey;
+    }
+  }
+
+  .chatTitleInputWrapper {
+    position: absolute;
+    right: -330px;
+    top: 0;
+    border-radius: 5px;
+    display: none;
+    padding: 10px;
+
+    &.show {
+      width: 300px;
+      box-shadow: 3px 3px 10px common.$shadowColor;
+      display: block;
+    }
+
+    .chatTitleInput {
+      width: 100%;
+    }
+
+    .helperText {
+      display: none;
+    }
+
+    .createChatButtons {
+      margin-top: 5px;
+      display: flex;
+      gap: 5px;
+
+      :global(.btn) {
+        background-color: transparent;
+        cursor: pointer;
+        border: none;
+
+        @include common.hoverText;
+      }
     }
   }
 }

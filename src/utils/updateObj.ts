@@ -48,15 +48,15 @@ export const set = <T extends AnyObject = AnyObject>(object: T, path: string, va
   for (let i = 0; i < keys.length - 1; i++) {
     const k = keys[i]!;
     const next = target[k];
-    if (!isObject(next)) {
-      target[k] = {};
-    }
+    // создаём промежуточный объект, если его нет или он не объект
+    target[k] = isObject(next) ? next : {};
     target = target[k] as AnyObject;
   }
+
   const lastKey = keys[keys.length - 1]!;
-  if (target[lastKey] !== value) {
-    target[lastKey] = value;
-  }
+  // всегда перезаписываем
+  target[lastKey] = value;
+
   return object;
 };
 

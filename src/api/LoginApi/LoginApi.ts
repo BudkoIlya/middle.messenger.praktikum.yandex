@@ -10,7 +10,7 @@ enum Paths {
   user = `${BASE_URL}/auth/user`,
 }
 
-export class LoginApi extends HTTPTransport {
+class LoginApiCrt extends HTTPTransport {
   signIn(data: SignInRequest) {
     return this.fetch(Method.POST, Paths.signIn, { data });
   }
@@ -23,3 +23,5 @@ export class LoginApi extends HTTPTransport {
     return this.fetch<IUser>(Method.GET, Paths.user);
   }
 }
+
+export const LoginApi = new LoginApiCrt();

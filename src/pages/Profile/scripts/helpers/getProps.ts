@@ -26,21 +26,26 @@ class EditAvatarImg extends Block {
   }
 }
 
-const defineMode = (user: IUser) => {
+export const defineMode = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const mode = urlParams.get('mode');
   if (mode) {
     document.title = mode === 'view' ? 'Профиль' : 'Редактирование профиля';
   }
+  return mode;
+};
 
-  return { context: getContext(mode === 'view', styles, user), mode: mode || 'view' };
+const contextByMode = (user: IUser) => {
+  const mode = defineMode();
+  const defaultMode = mode || 'view';
+  return { context: getContext(defaultMode === 'view', styles, user), mode: defaultMode };
 };
 
 export const getProps = (user: IUser): ProfilePageProps => {
   const {
     context: { inputs, buttons: btns },
     mode,
-  } = defineMode(user);
+  } = contextByMode(user);
 
   const buttons = {
     editBtn: new Button(btns.editBtn),

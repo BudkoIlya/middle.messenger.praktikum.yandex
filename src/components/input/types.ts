@@ -13,5 +13,6 @@ export interface IInput {
   events?: Events;
   styles?: CSSModuleClasses;
   label?: string | Block;
+  helpTextClass?: string;
   [key: string]: unknown;
 }

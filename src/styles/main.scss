@@ -52,11 +52,33 @@ $boxShadowSize: 10px;
   box-sizing: border-box;
 }
 
+::-webkit-scrollbar,
+::-webkit-scrollbar:horizontal {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c3d0dd;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 #app {
   display: grid;
   grid-template-rows: min-content 1fr;
   margin: $mainMargin;
-  height: calc(100vh - #{$mainMargin} * 2);
+  height: 100%;
+  min-height: calc(100vh - #{$mainMargin} * 2);
   border-radius: 10px;
   box-shadow: 0 0 $boxShadowSize $mainColorShadow;
 }

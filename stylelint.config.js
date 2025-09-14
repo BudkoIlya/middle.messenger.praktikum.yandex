@@ -1,6 +1,6 @@
 export default {
   plugins: ['@stylistic/stylelint-plugin'],
-  extends: ['stylelint-config-standard', 'stylelint-config-standard-scss', '@stylistic/stylelint-config'],
+  extends: [ 'stylelint-config-standard-scss', '@stylistic/stylelint-config'],
   rules: {
     'selector-class-pattern': null,
     'scss/at-mixin-pattern': null,

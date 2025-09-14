@@ -1,8 +1,9 @@
 import type { Button, Input } from '@components';
-import type { BaseController } from '@src/controllers/BaseController';
 
 import { REG_EXP_BY_INPUT_NAME } from './constants';
 import type { InputsName } from './constants';
+
+type CustomValidate = (name: string, value: string) => boolean;
 
 const isUpdatingOnFocus = new WeakMap<Input, boolean>();
 
@@ -17,12 +18,12 @@ const buildClass = (base: string, withError: boolean) => norm([base, withError ?
 
 const validate = (name: InputsName, value: string): boolean => REG_EXP_BY_INPUT_NAME[name].test(value);
 
-const validateInput = (input: Input, root: HTMLElement): boolean => {
+const validateInput = (input: Input, root: HTMLElement, customValidate?: CustomValidate): boolean => {
   const el = getInput(root, input);
   if (!el) return true;
 
   const { name, value } = el;
-  const isValid = validate(name as InputsName, value.trim());
+  const isValid = customValidate ? customValidate(name, value) : validate(name as InputsName, value);
   const base = classFromProps(input);
   const nextClass = buildClass(base, !isValid);
 
@@ -32,16 +33,18 @@ const validateInput = (input: Input, root: HTMLElement): boolean => {
   return isValid;
 };
 
-export const checkValidationByFields = <T extends BaseController<unknown>>({
+export const checkValidationByFields = <T = unknown>({
   root,
   inputs,
   button,
-  controller,
+  onSubmit,
+  customValidate,
 }: {
   root: HTMLElement;
   inputs: Input[];
   button?: Button;
-  controller?: T;
+  onSubmit?(values: T): void;
+  customValidate?: CustomValidate;
 }): (() => void) | void => {
   inputs.forEach((input) => {
     const prevEvents = input.props.events || {};
@@ -57,8 +60,6 @@ export const checkValidationByFields = <T extends BaseController<unknown>>({
       e.preventDefault();
 
       el.focus();
-      const len = el.value.length;
-      el.setSelectionRange(len, len);
     };
 
     const onFocusIn = () => {
@@ -97,7 +98,7 @@ export const checkValidationByFields = <T extends BaseController<unknown>>({
       if (rel && (rel === el || el.contains(rel))) return;
 
       const { name, value } = el;
-      const isValid = validate(name as InputsName, value.trim());
+      const isValid = customValidate ? customValidate(name, value) : validate(name as InputsName, value.trim());
       const base = classFromProps(input);
       const nextClass = isValid ? base : `${base} error`;
 
@@ -119,7 +120,7 @@ export const checkValidationByFields = <T extends BaseController<unknown>>({
     const onSubmitClick = (e: Event) => {
       e.preventDefault();
 
-      const results = inputs.map((inp) => ({ input: inp, isValid: validateInput(inp, root) }));
+      const results = inputs.map((inp) => ({ input: inp, isValid: validateInput(inp, root, customValidate) }));
 
       const values = results.reduce<Record<string, string>>((acc, { input }) => {
         const el = root.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
@@ -127,9 +128,12 @@ export const checkValidationByFields = <T extends BaseController<unknown>>({
         return acc;
       }, {});
       console.table({ values });
-      controller?.onSubmit?.(values);
 
-      if (results.some(({ isValid }) => !isValid)) return;
+      const hasError = results.some(({ isValid }) => !isValid);
+
+      if (hasError) return;
+
+      onSubmit?.(values as T);
     };
 
     button.setProps({ ...button.props, events: { ...prev, click: onSubmitClick } });

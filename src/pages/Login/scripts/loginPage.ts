@@ -26,7 +26,6 @@ const CONTEXT: IContext = {
 };
 
 export interface LoginPageProps extends Props {
-  styles: CSSModuleClasses;
   inputs: Input[];
   link: Link;
   button: Button;
@@ -51,7 +50,7 @@ export class LoginPage extends Block<LoginPageProps> {
     const inputs = this.props.inputs;
     const button = this.props.button;
     const link = this.props.link;
-    checkValidationByFields({ root: element, inputs, button, controller: new LoginController() });
+    checkValidationByFields({ root: element, inputs, button, onSubmit: LoginController.onSubmit });
     addRoutChangeListener({ element: link });
   }
 

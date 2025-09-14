@@ -8,8 +8,6 @@ import { getProps } from './helpers';
 import type { ProfilePageProps } from './types';
 
 class ProfilePageCtr extends Block<ProfilePageProps> {
-  private _controller = new ProfileController();
-
   constructor() {
     super('', getProps(null));
   }
@@ -22,11 +20,6 @@ class ProfilePageCtr extends Block<ProfilePageProps> {
     super.forceUpdate(this._propsByMode);
   };
 
-  dispatchComponentDidMount() {
-    this.setProps(this._propsByMode);
-    super.dispatchComponentDidMount();
-  }
-
   private _setEvents() {
     const element = this.getContent();
     if (!element) return;
@@ -37,7 +30,7 @@ class ProfilePageCtr extends Block<ProfilePageProps> {
     exitBtn.setProps({
       events: {
         click: async () => {
-          await this._controller.logOut();
+          await ProfileController.logOut();
         },
       },
     });
@@ -48,10 +41,12 @@ class ProfilePageCtr extends Block<ProfilePageProps> {
   }
 
   render(): string {
-    this._setEvents();
-
     return ProfileComp;
+  }
+
+  async afterRender() {
+    this._setEvents();
   }
 }
 
-export const ProfilePage = connect(ProfilePageCtr, (store) => getProps(store.user));
+export const ProfilePage = connect(ProfilePageCtr, ({ user }) => getProps(user));

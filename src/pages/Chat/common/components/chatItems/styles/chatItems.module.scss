@@ -1,5 +1,9 @@
 @use '../../../styles/common.module';
 
 .chat__sidebar {
+  > div:last-child {
+    overflow-y: scroll;
+  }
+
   @include common.chatItems;
 }

@@ -1,3 +1,4 @@
+import { chatStore } from './ChatStore';
 import { userStore } from './UserStore';
 import type { IStore } from './types';
 
@@ -8,6 +9,7 @@ class Store extends EventStore<IStore> {
 
   protected _store = {
     user: userStore.state,
+    chat: chatStore.state,
   };
 }
 

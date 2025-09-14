@@ -1,3 +1,4 @@
+import { HttpError } from '@api/HTTPTransport/HTTPTransport';
 import { Router } from '@common/Router';
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { LoaderOverlay, Navigation } from '@components';
@@ -11,13 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   (async () => {
     try {
-      await new LoginController().getUser();
+      await LoginController.getUser();
 
       if (window.location.pathname === '/') {
         new Router().push(PathConfig[LinksPages.chat].notActive);
       }
     } catch (e) {
-      new Router().push(PathConfig[LinksPages.login]);
+      if (e instanceof HttpError) {
+        new Router().push(PathConfig[LinksPages.login]);
+      }
     }
   })();
 });

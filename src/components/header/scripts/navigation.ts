@@ -2,11 +2,11 @@ import { Block } from '@common';
 import { ElementsKeys } from '@common/HandlebarsRegistration/types';
 import { Router } from '@common/Router';
 import { connect } from '@store';
-import type { BlockConstructor } from '@common/Router/Router';
+import { makeLazyComponent } from '@utils';
 
 import navigation from '../template/navigation.hbs';
 import { getNavigationProps, Routers } from './contants';
-import type { NavigationProps } from './types';
+import type { ComponentLoader, NavigationProps } from './types';
 
 // Необходимо чтобы не срабатывала дефолтная перезагрузка страницы при клике на ссылку
 export function enableNavigation(router: Router, rootSelector = 'header') {
@@ -41,16 +41,16 @@ class NavigationCrt extends Block<NavigationProps> {
   }
 
   dispatchComponentDidMount() {
-    const regArr = (routes: { path: string; component: BlockConstructor }[]) => {
+    const regArr = (routes: { path: string; component: ComponentLoader }[]) => {
       routes.forEach(({ path, component }) => {
-        this._router.use(path, component);
+        this._router.use(path, makeLazyComponent(component));
       });
     };
 
     Object.values(Routers).forEach((route) => {
       if (Array.isArray(route)) regArr(route);
       else {
-        this._router.use(route.path, route.component);
+        this._router.use(route.path, makeLazyComponent(route.component));
       }
     });
 
@@ -58,11 +58,6 @@ class NavigationCrt extends Block<NavigationProps> {
     enableNavigation(this._router);
     super.dispatchComponentDidMount();
   }
-
-  // componentDidUpdate(old, next) {
-  //   console.log({ old, next });
-  //   return true;
-  // }
 
   render(): string {
     return navigation;

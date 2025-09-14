@@ -7,24 +7,15 @@ import type { SignInRequest } from '@api/LoginApi';
 
 import { BaseController } from '../BaseController';
 
-export class LoginController extends BaseController<SignInRequest> {
-  private _api?: LoginApi;
-
-  constructor() {
-    super();
-    this._api = new LoginApi();
-  }
-
+class LoginControllerCrt extends BaseController<SignInRequest> {
   async getUser() {
-    if (!store.state.user?.id) {
-      const user = await this._api?.getUser();
-      store.set('user', user);
-    }
+    const user = await LoginApi.getUser();
+    store.set('user', user);
   }
 
   private async _sign(data: SignInRequest): Promise<void> {
     await withTryCatch(async () => {
-      await this._api?.signIn(data);
+      await LoginApi.signIn(data);
       await this.getUser();
 
       new Router().push(PathConfig[LinksPages.chat].notActive);
@@ -35,3 +26,5 @@ export class LoginController extends BaseController<SignInRequest> {
     this._sign(values);
   }
 }
+
+export const LoginController = new LoginControllerCrt();

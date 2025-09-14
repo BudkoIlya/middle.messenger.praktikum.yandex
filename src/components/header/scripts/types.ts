@@ -7,7 +7,7 @@ export type ComponentLoader = () => Promise<{ default: BlockConstructor }>;
 
 export interface Page {
   path: string;
-  component: BlockConstructor;
+  component: ComponentLoader;
 }
 
 type PageVariants2 = {
