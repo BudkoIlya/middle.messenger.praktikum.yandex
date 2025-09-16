@@ -85,6 +85,14 @@ export const makeLazyComponent = function (loader: ComponentLoader, opts: MakeLa
       page.dispatchComponentDidMount?.();
     }
 
+    unmount() {
+      if (this.page) {
+        this.page.unmount();
+        return;
+      }
+      super.unmount();
+    }
+
     render() {
       return `<div></div>`;
     }

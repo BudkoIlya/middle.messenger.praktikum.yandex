@@ -1,13 +1,17 @@
 import { HTTPTransport } from '@api/HTTPTransport/HTTPTransport';
 import { Method } from '@api/HTTPTransport/types';
-import type { IUser } from '@api/AuthApi';
+import type { ChatList } from '@store/ChatStore/types';
+import type { IUser } from '@store/UserStore/types';
 
-import type { ChatList, IToken } from './types';
+import type { IToken, RequestAddUsersToChat } from './types';
 
 enum Paths {
   chats = 'chats',
   chatToken = 'chats/token/',
-  searchUsers = 'chats/search/',
+  searchUsers = 'user/search',
+  chatUsers = 'chats/:id/users',
+  addUsers = 'chats/users',
+  deleteUsers = 'chats/delete',
 }
 
 class ChatApiCr extends HTTPTransport {
@@ -25,6 +29,18 @@ class ChatApiCr extends HTTPTransport {
 
   searchUser(loginPart: string) {
     return this.fetch<IUser[], { login: string }>(Method.POST, Paths.searchUsers, { data: { login: loginPart } });
+  }
+
+  addUsersToChat(data: RequestAddUsersToChat) {
+    return this.fetch<void, RequestAddUsersToChat>(Method.PUT, Paths.addUsers, { data });
+  }
+
+  deleteUsersFromChat(data: RequestAddUsersToChat) {
+    return this.fetch<void, RequestAddUsersToChat>(Method.DELETE, Paths.deleteUsers, { data });
+  }
+
+  getChatUsers(chatId: number) {
+    return this.fetch<IUser[], RequestAddUsersToChat>(Method.GET, Paths.chatUsers.replace(':id', chatId.toString()));
   }
 }
 

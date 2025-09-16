@@ -1,6 +1,6 @@
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
-import type { IUser } from '@api/AuthApi';
 import type { IButton, IInput } from '@components';
+import type { IUser } from '@store/UserStore/types';
 
 interface IContext {
   inputs: IInput[];

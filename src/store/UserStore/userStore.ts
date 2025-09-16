@@ -1,4 +1,4 @@
-import type { IUser } from '@api/AuthApi';
+import type { IUser } from './types';
 
 import { EventStore } from 'src/store/EventStore';
 

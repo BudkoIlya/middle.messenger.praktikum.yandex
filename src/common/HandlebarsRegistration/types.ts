@@ -10,6 +10,7 @@ export enum ElementsKeys {
   button = 'button',
   img = 'img',
   link = 'link',
+  select = 'select',
   // Компоненты чата
   chatItem = 'chatItem',
   chatItems = 'chatItems',

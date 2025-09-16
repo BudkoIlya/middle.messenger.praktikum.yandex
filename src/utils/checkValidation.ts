@@ -1,106 +1,126 @@
-import type { Button, Input } from '@components';
+import type { Button, Input, Select } from '@components';
 
 import { REG_EXP_BY_INPUT_NAME } from './constants';
 import type { InputsName } from './constants';
 
 type CustomValidate = (name: string, value: string) => boolean;
 
-const isUpdatingOnFocus = new WeakMap<Input, boolean>();
+type FieldLike = Input | Select;
 
-const getInput = (root: HTMLElement, input: Input) =>
-  root.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
+const isUpdatingOnFocus = new WeakMap<FieldLike, boolean>();
 
-const validate = (name: InputsName, value: string): boolean => REG_EXP_BY_INPUT_NAME[name].test(value);
-
-// Сравнение, чтобы не вызывать лишние рирендеры
-const patchIfChanged = (input: Input, patch: Partial<Input['props']>) => {
-  const nextValue = patch.value ?? input.props.value;
-  const nextError = patch.error ?? input.props.error;
-  const sameValue = nextValue === input.props.value;
-  const sameError = nextError === input.props.error;
-  if (sameValue && sameError) return;
-  input.setProps({ ...input.props, ...patch });
+const getFieldEl = (root: HTMLElement, field: FieldLike) => {
+  const name = field.props.name;
+  const input = root.querySelector(`input[name="${name}"]`) as HTMLInputElement | null;
+  if (input) return input;
+  return root.querySelector(`select[name="${name}"]`) as HTMLSelectElement | null;
 };
 
-const validateInput = (input: Input, root: HTMLElement, customValidate?: CustomValidate): boolean => {
-  const el = getInput(root, input);
+const validateByField = (name: string, value: string, opts?: { kind?: 'input' | 'select' }): boolean => {
+  if (opts?.kind === 'select') {
+    // Для select: просто проверяем, что есть выбранное значение (не пустая строка)
+    return value.trim() !== '';
+  }
+  // Для input: валидируем по словарю (если правила нет — считаем валидным)
+  const re = (REG_EXP_BY_INPUT_NAME as Record<string, RegExp>)[name as InputsName];
+  return re ? re.test(value) : true;
+};
+
+const patchIfChanged = (field: FieldLike, patch: Partial<FieldLike['props']>) => {
+  const nextValue = patch.value ?? field.props.value;
+  const nextError = patch.error ?? field.props.error;
+  const sameValue = nextValue === field.props.value;
+  const sameError = nextError === field.props.error;
+  if (sameValue && sameError) return;
+  field.setProps({ ...field.props, ...patch });
+};
+
+const validateField = (field: FieldLike, root: HTMLElement, customValidate?: CustomValidate): boolean => {
+  const el = getFieldEl(root, field);
   if (!el) return true;
 
-  const { value, name } = el;
-  const isValid = customValidate ? customValidate(name, value) : validate(name as InputsName, el.value);
+  const isSelect = el instanceof HTMLSelectElement;
+  const { name } = el;
+  const value = isSelect || el instanceof HTMLInputElement ? el.value : '';
 
-  // Обновляем только если что-то реально поменялось
-  patchIfChanged(input, { value, error: !isValid });
+  const isValid = customValidate
+    ? customValidate(name, value)
+    : validateByField(name, value, { kind: isSelect ? 'select' : 'input' });
 
+  patchIfChanged(field, { value, error: !isValid });
   return isValid;
+};
+type Params<T> = {
+  root: HTMLElement;
+  inputs?: Input[];
+  selects?: Select[];
+  button?: Button;
+  onSubmit?(values: T): void;
+  customValidate?: CustomValidate;
 };
 
 export const checkValidationByFields = <T = unknown>({
   root,
   inputs,
+  selects,
   button,
   onSubmit,
   customValidate,
-}: {
-  root: HTMLElement;
-  inputs: Input[];
-  button?: Button;
-  onSubmit?(values: T): void;
-  customValidate?: CustomValidate;
-}): (() => void) | void => {
-  inputs.forEach((input) => {
-    const prevEvents = input.props.events || {};
+}: Params<T>): (() => void) | void => {
+  const fields: FieldLike[] = [...(inputs ?? []), ...(selects ?? [])];
 
-    // Клик по контейнеру/label — переносим фокус в инпут вручную
+  // Если полей нет вовсе — делать нечего
+  if (fields.length === 0 && !button) return;
+
+  // Для каждого поля вешаем одинаковую логику
+  fields.forEach((field) => {
+    const prevEvents = field.props.events || {};
+
+    // Клик по контейнеру/label — переносим фокус в реальный элемент поля
     const onMouseDown = (e: Event) => {
-      const el = getInput(root, input);
+      const el = getFieldEl(root, field);
       if (!el) return;
 
       const tgt = e.target as HTMLElement | null;
-      if (tgt && (tgt === el || el.contains(tgt))) return; // клик прямо в инпут
+      if (tgt && (tgt === el || el.contains(tgt))) return; // прямой клик в контрол
 
       e.preventDefault();
-
       el.focus();
     };
 
-    // Сброс ошибки на фокус (только если была)
+    // Сброс ошибки на фокус
     const onFocusIn = () => {
-      if (isUpdatingOnFocus.get(input)) return;
-      const el = getInput(root, input);
+      if (isUpdatingOnFocus.get(field)) return;
+      const el = getFieldEl(root, field);
       if (!el) return;
 
-      if (input.props.error !== true) return; // ничего сбрасывать не нужно
+      if (field.props.error !== true) return;
 
-      isUpdatingOnFocus.set(input, true);
-      patchIfChanged(input, { error: false });
+      isUpdatingOnFocus.set(field, true);
+      patchIfChanged(field, { error: false });
 
-      // Вернуть фокус после того, как DOM перерисуется
       requestAnimationFrame(() => {
-        const nextEl = getInput(root, input);
-        if (nextEl && document.activeElement !== nextEl) {
-          nextEl.focus();
-        }
-        isUpdatingOnFocus.set(input, false);
+        const nextEl = getFieldEl(root, field);
+        if (nextEl && document.activeElement !== nextEl) nextEl.focus();
+        isUpdatingOnFocus.set(field, false);
       });
     };
 
     // Валидация на blur
     const onFocusOut = (e: Event) => {
-      if (isUpdatingOnFocus.get(input)) return;
-
-      const el = getInput(root, input);
+      if (isUpdatingOnFocus.get(field)) return;
+      const el = getFieldEl(root, field);
       if (!el) return;
 
       // Если уходим на элемент внутри того же поля — пропускаем
       const rel = (e as FocusEvent).relatedTarget as HTMLElement | null;
       if (rel && (rel === el || el.contains(rel))) return;
 
-      validateInput(input, root, customValidate);
+      validateField(field, root, customValidate);
     };
 
-    input.setProps({
-      ...input.props,
+    field.setProps({
+      ...field.props,
       events: { ...prevEvents, mousedown: onMouseDown, focusin: onFocusIn, focusout: onFocusOut },
     });
   });
@@ -110,20 +130,25 @@ export const checkValidationByFields = <T = unknown>({
     const onSubmitClick = (e: Event) => {
       e.preventDefault();
 
-      const results = inputs.map((inp) => ({
-        input: inp,
-        isValid: validateInput(inp, root, customValidate),
+      // Валидируем все имеющиеся поля
+      const results = fields.map((fld) => ({
+        field: fld,
+        isValid: validateField(fld, root, customValidate),
       }));
 
-      const values = results.reduce<Record<string, string>>((acc, { input }) => {
-        const el = root.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
-        if (el) acc[el.name] = el.value;
+      // Собираем значения из инпутов и селектов
+      const values = results.reduce<Record<string, string>>((acc, { field }) => {
+        const el = getFieldEl(root, field);
+        if (!el) {
+          return acc;
+        }
+        const name = (el as HTMLInputElement | HTMLSelectElement).name;
+        const value = (el as HTMLInputElement | HTMLSelectElement).value;
+        if (name) acc[name] = value;
         return acc;
       }, {}) as T;
 
-      const hasError = results.some(({ isValid }) => !isValid);
-
-      if (hasError) return;
+      if (results.some(({ isValid }) => !isValid)) return;
 
       onSubmit?.(values);
     };

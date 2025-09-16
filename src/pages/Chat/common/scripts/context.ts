@@ -2,8 +2,8 @@ import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Link } from '@components/link';
 import { ChatItem } from '@pages/Chat/common/components/chatItems/chatItem';
 import { formatDate } from '@utils';
-import type { IUser } from '@api/AuthApi';
-import type { IChat } from '@api/ChatApi';
+import type { IChat } from '@store/ChatStore/types';
+import type { IUser } from '@store/UserStore/types';
 
 import type { IChatItems } from '../components/chatItems';
 
@@ -12,7 +12,7 @@ import styles from '../components/chatItems/styles/chatItems.module.scss';
 type GetContext = (v: { chat?: IChat; user?: IUser }) => IChatItems;
 
 export const getContext: GetContext = ({ chat, user }) => {
-  const chatItems = chat?.chatList?.map<ChatItem>(({ last_message, title, id }) => {
+  const chatItems = chat?.chatList?.map<ChatItem>(({ last_message, title, id, unread_count }) => {
     const { time, content } = last_message || {};
 
     return new ChatItem({
@@ -21,6 +21,7 @@ export const getContext: GetContext = ({ chat, user }) => {
       time: formatDate(time),
       lastMessage: content,
       class: chat.activeChat?.chatId === id ? styles['chat__item--active'] : '',
+      unreadCount: unread_count,
     });
   });
 

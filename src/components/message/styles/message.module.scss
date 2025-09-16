@@ -1,6 +1,7 @@
 .message {
   padding: 10px 10px 5px;
-  background: #d9d9d9;
+  background: #cdcdcdff;
+  color: #555;
   width: fit-content;
 
   .message__text {
@@ -8,13 +9,15 @@
   }
 
   .message__status {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 16px;
     justify-content: end;
     align-items: center;
 
     .message__time {
+      text-align: end;
       font-weight: bold;
-      font-size: 12px;
+      font-size: 10px;
     }
 
     .message__check-img {

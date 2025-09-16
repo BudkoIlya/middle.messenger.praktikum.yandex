@@ -1,7 +1,7 @@
-import type { IUser } from '@api/AuthApi';
 import type { Props } from '@common/Block/types';
 import type { LinksPages } from '@common/Router/PathConfig';
 import type { BlockConstructor } from '@common/Router/Router';
+import type { IUser } from '@store/UserStore/types';
 
 export type ComponentLoader = () => Promise<{ default: BlockConstructor }>;
 

@@ -32,8 +32,8 @@ export default [
     },
 
     settings: {
-      'import/resolver': { typescript: { project: './tsconfig.json' }, node: { extensions: ['.ts', '.mts'] } },
-      'import/parsers': { '@typescript-eslint/parser': ['.js', '.ts', '.mts', '.mjs'] },
+      'import/resolver': { typescript: { project: './tsconfig.json' }, node: { extensions: ['.ts', '.mts', '.js'] } },
+      'import/parsers': { '@typescript-eslint/parser': ['.ts', '.mts', '.mjs'] },
       'import/internal-regex': '^(@common|@components|@utils|@src|@pages|@api|@store|@controllers)(/|$)',
     },
 
@@ -45,7 +45,6 @@ export default [
     },
 
     rules: {
-      'prettier/prettier': 'off',
       'import/extensions': 'off',
       'import/no-duplicates': ['error', { 'prefer-inline': false, considerQueryString: true }],
       'lines-between-class-members': ['warn', 'always', { exceptAfterSingleLine: false }],
@@ -76,19 +75,6 @@ export default [
       ],
       'import/no-cycle': 'error',
       'arrow-body-style': 'warn',
-      'max-len': [
-        'error',
-        {
-          code: 120,
-          tabWidth: 2,
-          ignoreComments: true,
-          ignoreTrailingComments: true,
-          ignoreUrls: true,
-          ignoreRegExpLiterals: true,
-          ignoreStrings: true,
-          ignoreTemplateLiterals: true,
-        },
-      ],
       'class-methods-use-this': 'off',
       'global-require': 'off',
       'no-use-before-define': 'off',

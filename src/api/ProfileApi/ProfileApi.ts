@@ -1,7 +1,8 @@
 import { HTTPTransport } from '@api/HTTPTransport/HTTPTransport';
 import { Method } from '@api/HTTPTransport/types';
+import type { IUser } from '@store/UserStore/types';
 
-import type { IUser, SignInRequest } from '../AuthApi';
+import type { SignInRequest } from '../AuthApi';
 
 enum Paths {
   sign = 'auth/signin',

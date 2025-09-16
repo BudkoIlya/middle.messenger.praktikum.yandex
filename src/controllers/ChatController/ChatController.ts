@@ -3,14 +3,14 @@ import { WSTransport } from '@api/WSTrasnsport';
 import { WSTransportEvents } from '@api/WSTrasnsport/WSTransport';
 import { Router } from '@common/Router';
 import { LinksPages } from '@common/Router/PathConfig';
+import { chatStore, store } from '@store';
 import { isArray } from '@utils';
 import { withTryCatch } from '@utils/withTryCatch';
-import type { ChatMessage } from '@api/ChatApi';
+import type { RequestAddUsersToChat, RequestDeleteUsersFromChat } from '@api/ChatApi';
 import type { BaseWsMessage } from '@api/WSTrasnsport/WSTransport';
+import type { ChatMessage } from '@store/ChatStore/types';
 
 type WSChatMessage = ChatMessage & { type: string };
-
-import { chatStore, store } from '@store';
 
 import { BaseController } from '../BaseController';
 
@@ -74,6 +74,9 @@ class ChatControllerCrt extends BaseController<{ message: string }> {
       await this._websocket.connect(`chats/${userId}/${chatId}/${token}`);
       this.isConnected = true;
 
+      const users = await ChatApi.getChatUsers(chatId);
+
+      chatStore.set('activeChat.chatUsers', users);
       chatStore.set('activeChat.chatId', chatId);
 
       if (redirect) {
@@ -82,11 +85,26 @@ class ChatControllerCrt extends BaseController<{ message: string }> {
     });
   }
 
-  // TODO: Добавление должно происходить в открытом чате
   async searchUser(loginPart?: string) {
     if (!loginPart) return;
 
     return await withTryCatch(async () => await ChatApi.searchUser(loginPart));
+  }
+
+  async addUsersToChat(data: RequestAddUsersToChat) {
+    await withTryCatch(async () => {
+      await ChatApi.addUsersToChat(data);
+      const users = await ChatApi.getChatUsers(data.chatId);
+      chatStore.set('activeChat.chatUsers', users);
+    });
+  }
+
+  async deleteUsersFromChat(data: RequestDeleteUsersFromChat) {
+    await withTryCatch(async () => {
+      await ChatApi.deleteUsersFromChat(data);
+      const users = await ChatApi.getChatUsers(data.chatId);
+      chatStore.set('activeChat.chatUsers', users);
+    });
   }
 
   disconnectChat() {

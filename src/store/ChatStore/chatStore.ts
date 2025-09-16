@@ -1,4 +1,4 @@
-import type { IChat } from '@api/ChatApi';
+import type { IChat } from './types';
 
 import { EventStore } from 'src/store/EventStore';
 

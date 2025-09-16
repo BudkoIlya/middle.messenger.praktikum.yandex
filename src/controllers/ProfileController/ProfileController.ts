@@ -12,7 +12,7 @@ class ProfileControllerCrt extends BaseController<SignInRequest> {
     await withTryCatch(async () => {
       await AuthApi?.logout();
       new Router().push(PathConfig[LinksPages.login]);
-      store.clear('user');
+      store.clear();
     });
   }
 }

@@ -1,0 +1,18 @@
+export default `
+<div class="{{styles.wrapper}}" {{#unless show}}title="Настройки"{{/unless}}>
+  {{{img}}}
+  <div class="{{styles.actions}}{{#if show}} {{styles.show}}{{/if}}">
+    <form class="{{styles.form}} {{styles.deleteUser}}">
+      <div class="{{styles.title}}">Добавить пользователя</div>
+      {{{addUser.select}}}
+      {{{addUser.apply}}}
+    </form>
+
+    <form class="{{styles.form}}">
+      <div class="{{styles.title}}">Удалить пользователя</div>
+      {{{deleteUser.select}}}
+      {{{deleteUser.apply}}}
+    </form>
+    {{{cancel}}}
+  </div>
+</div>`

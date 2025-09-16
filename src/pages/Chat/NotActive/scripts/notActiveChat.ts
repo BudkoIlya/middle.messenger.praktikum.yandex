@@ -2,9 +2,9 @@ import { Block } from '@common';
 import { LinksPages } from '@common/Router/PathConfig';
 import { ChatController } from '@controllers/ChatController';
 import { store } from '@store';
-import type { IUser } from '@api/AuthApi';
 import type { Props } from '@common/Block/types';
 import type { ChatItemsCrt } from '@pages/Chat/common/components/chatItems/scripts';
+import type { IUser } from '@store/UserStore/types';
 
 import { ChatItems } from '../../common/components/chatItems';
 import { NotActivePageComp } from '../templates';

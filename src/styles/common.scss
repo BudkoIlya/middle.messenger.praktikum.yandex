@@ -6,6 +6,9 @@ $red: #f44336;
 $darkRed: #f50202;
 $shadowColor: rgb(87 87 87 / 35%);
 
+// Form
+$placeholderColor: #afadad;
+
 @mixin form() {
   height: 97%;
   width: 30%;

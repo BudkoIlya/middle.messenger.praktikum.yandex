@@ -21,13 +21,6 @@
       .chat-title {
         margin: 0;
       }
-
-      .chat__edit {
-        font-size: 20px;
-        font-weight: bold;
-        transform: rotate(90deg);
-        cursor: pointer;
-      }
     }
   }
 
@@ -37,11 +30,20 @@
     gap: 10px;
     overflow: scroll;
 
+    .chat__received_message,
+    .chat__answer_message {
+      max-width: 48%;
+    }
+
     .chat__received_message {
+      background-color: common.$violet;
+      color: white;
       border-radius: 0 8px 8px;
     }
 
     .chat__answer_message {
+      background-color: common.$blue;
+      color: white;
       align-self: end;
       border-radius: 8px 8px 0;
 
@@ -81,10 +83,6 @@
       background: #edecec;
       border: none;
       border-radius: 15px;
-
-      &::placeholder {
-        color: #dad9dd;
-      }
 
       &:focus {
         outline: none;

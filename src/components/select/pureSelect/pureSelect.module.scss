@@ -17,16 +17,30 @@
     bottom: -18px;
   }
 
-  .input {
+  .select {
+    appearance: none;
+    outline: none;
     height: 36px;
     border-radius: 5px;
-    padding: 0 15px;
-    border: 1px solid common.$grey;
+    padding: 5px 15px;
+    width: 300px;
     transition: border-color 0.35s;
-    outline: none;
+    border: 1px solid common.$grey;
+    color: common.$placeholderColor;
 
-    &::placeholder {
-      color: common.$placeholderColor;
+    &.hasValue {
+      color: black;
+    }
+
+    option {
+      font-size: 12px;
+      overflow: hidden;
+      width: 190px;
+      color: black;
+
+      &:first-child {
+        color: common.$placeholderColor;
+      }
     }
 
     &.error {

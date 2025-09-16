@@ -1,5 +1,5 @@
-import type { IUser } from '@api/AuthApi';
-import type { IChat } from '@api/ChatApi';
+import type { IChat } from '@store/ChatStore/types';
+import type { IUser } from '@store/UserStore/types';
 
 export interface IStore {
   user: IUser;

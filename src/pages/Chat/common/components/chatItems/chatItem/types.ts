@@ -3,7 +3,7 @@ export interface IChatItem {
   title: string;
   lastMessage?: string;
   time?: string;
-  unreadCount?: string;
+  unreadCount?: number;
   id: number;
   [key: string]: unknown;
 }
