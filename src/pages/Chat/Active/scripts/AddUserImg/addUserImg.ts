@@ -33,11 +33,11 @@ export class AddUserImg extends Block<IAddUserImg> {
       }),
       addUser: {
         select: new Select({ name: 'addUser', search: true, class: styles.select }),
-        apply: new Button({ text: 'Добавить', theme: null }),
+        apply: new Button({ text: 'Добавить' }),
       },
       deleteUser: {
         select: new Select({ name: 'addUser', class: styles.select }),
-        apply: new Button({ text: 'Удалить', theme: null }),
+        apply: new Button({ text: 'Удалить', className: styles.deleteBtn }),
       },
       cancel: new Button({ text: 'Отменить', theme: null }),
       chatId,
@@ -54,9 +54,7 @@ export class AddUserImg extends Block<IAddUserImg> {
 
     return (
       arr?.reduce<IOption[]>((acc, u) => {
-        // условие удаления: например, игнорируем пользователей без логина
         if (u.id === store.state.user.id) return acc;
-
         acc.push({
           value: u.id,
           text: `Логин: ${u.login}, Имя: ${u.first_name}`,
@@ -89,8 +87,8 @@ export class AddUserImg extends Block<IAddUserImg> {
     addUser.select?.setProps({
       events: {
         change: async (e) => {
-          const value = (e.target as HTMLSelectElement)?.value;
-          selectedUser = users.find((u) => String(u.id) === value);
+          const userId = (e.target as HTMLSelectElement)?.value;
+          selectedUser = users.find((u) => String(u.id) === userId);
         },
       },
     });
@@ -100,7 +98,7 @@ export class AddUserImg extends Block<IAddUserImg> {
         click: async () => {
           if (!chatId || !selectedUser) return;
           await ChatController.addUsersToChat({ chatId, users: [selectedUser.id] });
-          this.setProps({ show: undefined });
+          this.setProps({ show: false });
         },
       },
     });
@@ -108,13 +106,22 @@ export class AddUserImg extends Block<IAddUserImg> {
 
   private _deleteUserEvents() {
     const { deleteUser, chatId } = this.props;
+
+    let selectedUserId: string;
     deleteUser.select.setProps({
       events: {
         change: async (e) => {
-          const value = (e.target as HTMLSelectElement)?.value;
-          console.error({ value, chatId });
-          // TODO: доделать удаление!
-          // selectedUser = users.find((u) => String(u.id) === value);
+          selectedUserId = (e.target as HTMLSelectElement)?.value;
+        },
+      },
+    });
+
+    deleteUser.apply.setProps({
+      events: {
+        click: async () => {
+          if (!chatId || !selectedUserId) return;
+          await ChatController.deleteUsersFromChat({ chatId, users: [Number(selectedUserId)] });
+          this.setProps({ show: false });
         },
       },
     });

@@ -20,7 +20,7 @@ export const getContext: GetContext = ({ chat, user }) => {
       title,
       time: formatDate(time),
       lastMessage: content,
-      class: chat.activeChat?.chatId === id ? styles['chat__item--active'] : '',
+      selected: chat.activeChat?.chatId === id,
       unreadCount: unread_count,
     });
   });

@@ -1,17 +1,23 @@
 @use 'src/styles/common';
 
+$borderColor: #edecec;
+
 .chatItem {
   display: grid;
-  grid-template-columns: 60px 1fr 0.5fr;
+  grid-template-columns: 60px 1fr 0.5fr 30px;
   justify-content: space-between;
   align-items: start;
   padding: 10px 15px;
-  border-bottom: 1px solid common.$grey;
+  border-bottom: 1px solid $borderColor;
   cursor: pointer;
   transition: background-color 0.35s ease-in-out;
 
-  &:hover {
-    background-color: #edecec;
+  &:not(.selected):hover {
+    background-color: $borderColor;
+  }
+
+  &.confirmOpen:not(.selected):hover {
+    background-color: transparent;
   }
 
   .avatar {
@@ -49,28 +55,89 @@
     }
   }
 
+  .deleteConfirm {
+    align-self: center;
+    place-items: center end;
+
+    & > button {
+      display: flex;
+      place-content: center;
+      place-items: center;
+      cursor: pointer;
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      transition: all 0.35s ease-in-out;
+      height: 20px;
+      width: 20px;
+      border-radius: 25%;
+
+      &:hover {
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 3px common.$shadowColor;
+      }
+    }
+  }
+
   .messageInfo {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: end;
-    align-content: space-around;
-    gap: 14px;
+    align-items: flex-end;
+    justify-content: space-between;
 
     .time {
       font-weight: bold;
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .unreadCount {
       color: white;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      height: 20px;
-      width: 20px;
+      place-content: center center;
+      text-align: center;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 4px;
+      aspect-ratio: 1 / 1;
       background-color: common.$blue;
       border-radius: 50%;
+    }
+  }
+
+  &.selected {
+    background-color: common.$blue;
+    border: none;
+
+    .avatar {
+      &[src='']::before {
+        color: common.$violet;
+        background-color: white;
+      }
+    }
+
+    .title {
+      color: white;
+    }
+
+    .time {
+      color: white;
+    }
+
+    .lastMessage {
+      color: white;
+    }
+
+    .unreadCount {
+      background-color: white;
+      color: common.$blue;
+    }
+
+    .deleteConfirm {
+      & > button {
+        background-color: white;
+      }
     }
   }
 }

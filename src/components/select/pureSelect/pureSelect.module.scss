@@ -27,12 +27,14 @@
     transition: border-color 0.35s;
     border: 1px solid common.$grey;
     color: common.$placeholderColor;
+    cursor: pointer;
 
     &.hasValue {
       color: black;
     }
 
     option {
+      cursor: pointer;
       font-size: 12px;
       overflow: hidden;
       width: 190px;

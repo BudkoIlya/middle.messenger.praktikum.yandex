@@ -35,7 +35,7 @@ export class ActiveChatPageCrt extends Block<ActiveChatPageProps> {
         chatItems: new ChatItems(),
         img: new Img({ alt: 'Добавить', src: '/assets/add_btn.svg', className: styles['chat__add-file-btn'] }),
         input: new Input({ name: 'message', placeholder: 'Сообщение', class: styles['form__input'] }),
-        button: new Button({
+        button: new Button<Img>({
           type: 'submit',
           className: styles['form__send-message'],
           name: 'message',

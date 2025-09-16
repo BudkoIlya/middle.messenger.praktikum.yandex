@@ -35,7 +35,6 @@ export abstract class Block<P extends Props = Props> {
   // Храним функцию для снятия всех обработчиков, навешанных последним рендером
   private _removeEvents?: () => void;
 
-  // Для стрелочных функций не нужен bind
   private _onInit = () => this._init();
 
   private _onCDM = () => this._componentDidMount();
@@ -258,7 +257,7 @@ export abstract class Block<P extends Props = Props> {
     return temp.content;
   }
 
-  protected abstract render(): string;
+  abstract render(): string;
 
   getContent(): HTMLElement | null {
     return this._element;
@@ -310,3 +309,5 @@ export abstract class Block<P extends Props = Props> {
 
   private _makePropsProxy = (props: P, setIsUpdated: (value: boolean) => void): P => createProxy(props, setIsUpdated);
 }
+
+export abstract class CustomBlock<P extends Props> extends Block<P> {}

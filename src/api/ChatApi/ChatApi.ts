@@ -10,8 +10,7 @@ enum Paths {
   chatToken = 'chats/token/',
   searchUsers = 'user/search',
   chatUsers = 'chats/:id/users',
-  addUsers = 'chats/users',
-  deleteUsers = 'chats/delete',
+  chatsUsers = 'chats/users',
 }
 
 class ChatApiCr extends HTTPTransport {
@@ -32,11 +31,11 @@ class ChatApiCr extends HTTPTransport {
   }
 
   addUsersToChat(data: RequestAddUsersToChat) {
-    return this.fetch<void, RequestAddUsersToChat>(Method.PUT, Paths.addUsers, { data });
+    return this.fetch<void, RequestAddUsersToChat>(Method.PUT, Paths.chatsUsers, { data });
   }
 
   deleteUsersFromChat(data: RequestAddUsersToChat) {
-    return this.fetch<void, RequestAddUsersToChat>(Method.DELETE, Paths.deleteUsers, { data });
+    return this.fetch<void, RequestAddUsersToChat>(Method.DELETE, Paths.chatsUsers, { data });
   }
 
   getChatUsers(chatId: number) {

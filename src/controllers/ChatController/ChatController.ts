@@ -4,7 +4,7 @@ import { WSTransportEvents } from '@api/WSTrasnsport/WSTransport';
 import { Router } from '@common/Router';
 import { LinksPages } from '@common/Router/PathConfig';
 import { chatStore, store } from '@store';
-import { isArray } from '@utils';
+import { isArray, withLoader } from '@utils';
 import { withTryCatch } from '@utils/withTryCatch';
 import type { RequestAddUsersToChat, RequestDeleteUsersFromChat } from '@api/ChatApi';
 import type { BaseWsMessage } from '@api/WSTrasnsport/WSTransport';
@@ -60,29 +60,32 @@ class ChatControllerCrt extends BaseController<{ message: string }> {
   };
 
   async connectToChat(chatId: number, redirect = true) {
-    await withTryCatch(async () => {
-      this.disconnectChat();
+    await withLoader(
+      async () =>
+        await withTryCatch(async () => {
+          this.disconnectChat();
 
-      const data = await ChatApi.getChatTokens(chatId);
-      const token = data?.token;
-      const userId = store.state.user?.id;
-      if (!token || !userId) return;
+          const data = await ChatApi.getChatTokens(chatId);
+          const token = data?.token;
+          const userId = store.state.user?.id;
+          if (!token || !userId) return;
 
-      this._websocket.on(WSTransportEvents.Connected, this._onOpen);
-      this._websocket.on(WSTransportEvents.Message, this._onMsg);
+          this._websocket.on(WSTransportEvents.Connected, this._onOpen);
+          this._websocket.on(WSTransportEvents.Message, this._onMsg);
 
-      await this._websocket.connect(`chats/${userId}/${chatId}/${token}`);
-      this.isConnected = true;
+          await this._websocket.connect(`chats/${userId}/${chatId}/${token}`);
+          this.isConnected = true;
 
-      const users = await ChatApi.getChatUsers(chatId);
+          const users = await ChatApi.getChatUsers(chatId);
 
-      chatStore.set('activeChat.chatUsers', users);
-      chatStore.set('activeChat.chatId', chatId);
+          chatStore.set('activeChat.chatUsers', users);
+          chatStore.set('activeChat.chatId', chatId);
 
-      if (redirect) {
-        new Router().push(`/${LinksPages.chat}/${chatId}`);
-      }
-    });
+          if (redirect) {
+            new Router().push(`/${LinksPages.chat}/${chatId}`);
+          }
+        }),
+    );
   }
 
   async searchUser(loginPart?: string) {
@@ -92,19 +95,25 @@ class ChatControllerCrt extends BaseController<{ message: string }> {
   }
 
   async addUsersToChat(data: RequestAddUsersToChat) {
-    await withTryCatch(async () => {
-      await ChatApi.addUsersToChat(data);
-      const users = await ChatApi.getChatUsers(data.chatId);
-      chatStore.set('activeChat.chatUsers', users);
-    });
+    await withLoader(
+      async () =>
+        await withTryCatch(async () => {
+          await ChatApi.addUsersToChat(data);
+          const users = await ChatApi.getChatUsers(data.chatId);
+          chatStore.set('activeChat.chatUsers', users);
+        }),
+    );
   }
 
   async deleteUsersFromChat(data: RequestDeleteUsersFromChat) {
-    await withTryCatch(async () => {
-      await ChatApi.deleteUsersFromChat(data);
-      const users = await ChatApi.getChatUsers(data.chatId);
-      chatStore.set('activeChat.chatUsers', users);
-    });
+    await withLoader(
+      async () =>
+        await withTryCatch(async () => {
+          await ChatApi.deleteUsersFromChat(data);
+          const users = await ChatApi.getChatUsers(data.chatId);
+          chatStore.set('activeChat.chatUsers', users);
+        }),
+    );
   }
 
   disconnectChat() {

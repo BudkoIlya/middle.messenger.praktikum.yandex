@@ -14,7 +14,7 @@ export class Message extends Block {
       {
         ...props,
         img: new Img({
-          src: '../../../assets/check_all.svg',
+          src: '/assets/check_all.svg',
           alt: 'check_all',
           className: styles['message__check-img'],
         }),

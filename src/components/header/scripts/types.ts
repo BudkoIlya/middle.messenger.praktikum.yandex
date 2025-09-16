@@ -21,6 +21,6 @@ export type IPageVariantsByLink = {
 
 export interface NavigationProps extends Props {
   user?: IUser;
-  links: unknown;
+  links: { path: string; text: string; hidden?: 'hidden' }[];
   styles: CSSModuleClasses;
 }

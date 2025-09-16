@@ -1,14 +1,11 @@
 import type { Block } from '@common';
-import type { Events } from '@common/Block/types';
+import type { Props } from '@common/Block/types';
 
-export interface IButton {
-  text: string | Block | Block[];
+export interface IButton<Child extends Block = Block> extends Props {
+  text: string | Child | Child[];
   type?: HTMLButtonElement['type'];
   className?: string;
   path?: string;
   name?: string;
-  events?: Events;
-  styles?: CSSModuleClasses;
   theme?: 'default' | null;
-  [key: string]: unknown;
 }

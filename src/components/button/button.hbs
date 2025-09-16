@@ -3,8 +3,9 @@ export default `
     {{#if path}}data-path='{{path}}'{{/if}}
     type='{{#if type}}{{type}}{{else}}button{{/if}}'
     {{#if (eq theme "default")}}class='btn {{styles.btn}} {{className}}'
-    {{else}}class='btn {{className}}'{{/if}}
-    name='{{name}}'>
+    {{else}}class='btn {{className}}' {{/if}}
+    {{#if name}}name='{{name}}'{{/if}}
+>
   {{{text}}}
 </button>`
 ;

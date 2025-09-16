@@ -1,4 +1,4 @@
-import type { Block } from './Block';
+import type { Block } from '@src/common';
 
 export type EventsMap = Record<string, EventListener>;
 
