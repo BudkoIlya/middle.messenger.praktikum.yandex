@@ -6,7 +6,7 @@ import pluginChecker from 'vite-plugin-checker';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(() => {
-  const base = import.meta?.env?.VITE_MODE === 'production' ? 'praktikumchat.netlify.app' : '/';
+  const base = import.meta?.env?.VITE_MODE === 'production' ? 'praktikumchat.netlify.app/' : '/';
   return {
     base,
     root: resolve(__dirname, 'src'),
