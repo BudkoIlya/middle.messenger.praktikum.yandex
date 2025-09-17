@@ -1,4 +1,4 @@
-import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import { PathConfig } from '@common/Router/PathConfig';
 import type { IButton, IInput } from '@components';
 import type { IUser } from '@store/UserStore/types';
 
@@ -35,12 +35,12 @@ export const getContext = (isViewMode: boolean, styles: CSSModuleClasses, user?:
         text: 'Редактировать',
         name: 'edit_profile',
         className: styles.editProfileBtn,
-        path: PathConfig[LinksPages.profile].edit,
+        path: PathConfig.settings.edit,
       },
       editPasswordBtn: {
         text: 'Изменить пароль',
         name: 'edit_password',
-        path: PathConfig[LinksPages.editPassword],
+        path: PathConfig.editPassword,
       },
       exitBtn: {
         text: 'Выйти',
@@ -52,7 +52,7 @@ export const getContext = (isViewMode: boolean, styles: CSSModuleClasses, user?:
         text: 'Отменить',
         name: 'cancel',
         className: `${styles.cancelBtn} ${styles.customBtn}`,
-        path: PathConfig[LinksPages.profile].view,
+        path: PathConfig.settings.view,
         theme: null,
       },
     },

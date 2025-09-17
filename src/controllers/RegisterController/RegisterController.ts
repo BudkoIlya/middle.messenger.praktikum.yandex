@@ -1,6 +1,6 @@
 import { AuthApi } from '@api';
 import { Router } from '@common/Router';
-import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import { PathConfig } from '@common/Router/PathConfig';
 import { withTryCatch } from '@src/utils/withTryCatch';
 import { store } from '@store';
 import type { SignUpRequest } from '@api/AuthApi';
@@ -21,7 +21,7 @@ class RegisterControllerCrt extends BaseController<SignUpRequestConfirmPassword>
     await withTryCatch(async () => {
       await this.getUser();
 
-      new Router().push(PathConfig[LinksPages.chat].notActive);
+      new Router().push(PathConfig.messenger.notActive);
     });
   }
 

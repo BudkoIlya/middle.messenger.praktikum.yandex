@@ -89,7 +89,7 @@ class ChatControllerCrt extends BaseController<{ message: string }> {
           chatStore.set('activeChat.chatId', chatId);
 
           if (redirect) {
-            new Router().push(`/${LinksPages.chat}/${chatId}`);
+            new Router().push(`${LinksPages.messenger}/${chatId}`);
           }
         }),
     );
