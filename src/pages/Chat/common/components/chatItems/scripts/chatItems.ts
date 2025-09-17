@@ -71,7 +71,7 @@ class ChatNameInput extends Block<IChatNameInput> {
     const { applyBtn, cancelBtn, input } = this.props;
 
     const closeCreateChat = () => {
-      input.setProps({ ...this.props.input.props, value: undefined, error: false });
+      input.setProps({ ...this.props.input.props, value: '', error: false });
       this.setProps({ ...this.props, showClassName: '' });
     };
 
