@@ -3,11 +3,13 @@ import { Router } from '@common/Router';
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { withTryCatch } from '@src/utils/withTryCatch';
 import { store } from '@store';
-import type { SignInRequest } from '@api/AuthApi';
+import type { IUser } from '@store/UserStore/types';
 
 import { BaseController } from '../BaseController';
 
-class ProfileControllerCrt extends BaseController<SignInRequest> {
+type ISubmitData = Omit<IUser, 'avatar' | 'id'>;
+
+class ProfileControllerCrt extends BaseController<ISubmitData> {
   async logOut() {
     await withTryCatch(async () => {
       await AuthApi?.logout();
@@ -22,6 +24,14 @@ class ProfileControllerCrt extends BaseController<SignInRequest> {
       store.set('user', user);
     });
   }
+
+  onSubmit = async (data: ISubmitData) => {
+    await withTryCatch(async () => {
+      const user = await ProfileApi.updateProfile(data);
+      store.set('user', user);
+      new Router().push(PathConfig[LinksPages.profile].view);
+    });
+  };
 }
 
 export const ProfileController = new ProfileControllerCrt();

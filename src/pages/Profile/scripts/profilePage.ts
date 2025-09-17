@@ -2,6 +2,7 @@ import { Block } from '@common';
 import { ProfileController } from '@controllers';
 import { connect } from '@store';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
+import type { IUser } from '@store/UserStore/types';
 
 import { ProfileComp } from '../templates';
 import { getProps } from './helpers';
@@ -49,7 +50,15 @@ class ProfilePageCtr extends Block<ProfilePageProps> {
       },
     });
 
-    checkValidationByFields({ root: element, inputs, button: saveBtn });
+    checkValidationByFields({
+      root: element,
+      inputs: inputs,
+      button: saveBtn,
+      onSubmit: async (values: IUser) => {
+        const { id: _id, avatar: _avatar, ...rest } = values;
+        await ProfileController.onSubmit(rest);
+      },
+    });
     addRoutChangeListener({ element: editBtn });
     addRoutChangeListener({ element: cancelBtn });
     addRoutChangeListener({ element: editPasswordBtn });
