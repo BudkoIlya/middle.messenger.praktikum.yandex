@@ -5,9 +5,9 @@ export type InputsName =
   | 'display_name'
   | 'email'
   | 'password'
-  | 'new_password'
-  | 'old_password'
-  | 'confirm_password'
+  | 'newPassword'
+  | 'oldPassword'
+  | 'confirmPassword'
   | 'phone'
   | 'message';
 
@@ -24,9 +24,9 @@ export const REG_EXP_BY_INPUT_NAME: Record<InputsName, RegExp> = {
   display_name: /^(?=.*[A-Za-z])[A-Za-z0-9_-]{3,20}$/,
   email: /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]+$/,
   password: COMMON_REG_EXP.password,
-  new_password: COMMON_REG_EXP.password,
-  confirm_password: COMMON_REG_EXP.password,
-  old_password: COMMON_REG_EXP.password,
+  newPassword: COMMON_REG_EXP.password,
+  confirmPassword: COMMON_REG_EXP.password,
+  oldPassword: COMMON_REG_EXP.password,
   phone: /^\+?\d{10,15}$/,
   message: /.+/,
 };

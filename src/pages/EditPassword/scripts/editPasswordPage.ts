@@ -1,8 +1,8 @@
 import { Block } from '@common';
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
-import { Img } from '@components/img';
 import { Input } from '@components/input';
+import { ProfileController } from '@controllers';
 import { addRoutChangeListener, checkValidationByFields } from '@utils';
 import type { Props } from '@common/Block/types';
 import type { IButton, IInput } from '@components';
@@ -18,8 +18,6 @@ interface IContext {
 }
 
 export interface EditPasswordPageProps extends Props {
-  avatarImg: Img;
-  imgInput: Input;
   styles: CSSModuleClasses;
   inputs: Input[];
   saveBtn: Button;
@@ -28,9 +26,9 @@ export interface EditPasswordPageProps extends Props {
 
 const CONTEXT: IContext = {
   inputs: [
-    { label: 'Старый пароль', name: 'old_password', type: 'password' },
-    { label: 'Новый пароль', name: 'new_password', type: 'password' },
-    { label: 'Повторите пароль', name: 'confirm_password', type: 'password' },
+    { label: 'Старый пароль', name: 'oldPassword', type: 'password' },
+    { label: 'Новый пароль', name: 'newPassword', type: 'password' },
+    { label: 'Повторите пароль', name: 'confirmPassword', type: 'password' },
   ],
   saveBtn: { text: 'Сохранить', name: 'save_password', className: styles.saveBtn },
   cancelBtn: {
@@ -41,38 +39,12 @@ const CONTEXT: IContext = {
     theme: null,
   },
 };
-
-class EditAvatarImg extends Block {
-  constructor({ className }: { className?: string }) {
-    super('', {
-      img: new Img({ alt: 'Редактировать', src: '/assets/edit.svg', className: styles.editAvatarImg }),
-      className,
-    });
-  }
-
-  render() {
-    return `
-      <span class="{{className}}">
-        {{{img}}}
-        <span>Изменить</span>
-      </span>
-    `;
-  }
-}
-
 export class EditPasswordPage extends Block<EditPasswordPageProps> {
   constructor() {
     const { inputs: inputsData, saveBtn, cancelBtn } = CONTEXT;
 
     const inputs = inputsData.map((el) => new Input(el));
     super('', {
-      avatarImg: new Img({ src: '', alt: 'Аватар', className: styles.avatar }),
-      imgInput: new Input({
-        label: new EditAvatarImg({ className: styles.editProfileTitle }),
-        name: 'avatar',
-        accept: 'image/jpeg',
-        type: 'file',
-      }),
       inputs,
       saveBtn: new Button(saveBtn),
       cancelBtn: new Button(cancelBtn),
@@ -86,7 +58,19 @@ export class EditPasswordPage extends Block<EditPasswordPageProps> {
 
     const { inputs, saveBtn, cancelBtn } = this.props;
 
-    checkValidationByFields({ root: element, inputs, button: saveBtn });
+    checkValidationByFields({
+      root: element,
+      inputs,
+      button: saveBtn,
+      onSubmit: async (v: { newPassword: string; oldPassword: string; confirmPassword: string }) => {
+        if (v.newPassword !== v.confirmPassword) {
+          window.alert('Пароли не совпадают');
+          return;
+        }
+        await ProfileController.updatePassword({ newPassword: v.newPassword, oldPassword: v.oldPassword });
+        window.alert('Пароль изменён');
+      },
+    });
     addRoutChangeListener({ element: cancelBtn });
   }
 

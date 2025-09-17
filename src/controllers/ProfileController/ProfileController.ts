@@ -3,6 +3,7 @@ import { Router } from '@common/Router';
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { withTryCatch } from '@src/utils/withTryCatch';
 import { store } from '@store';
+import type { PasswordRequest } from '@api/ProfileApi/ProfileApi';
 import type { IUser } from '@store/UserStore/types';
 
 import { BaseController } from '../BaseController';
@@ -31,6 +32,10 @@ class ProfileControllerCrt extends BaseController<ISubmitData> {
       store.set('user', user);
       new Router().push(PathConfig[LinksPages.profile].view);
     });
+  };
+
+  updatePassword = async (data: PasswordRequest) => {
+    await ProfileApi.updatePassword(data);
   };
 }
 
