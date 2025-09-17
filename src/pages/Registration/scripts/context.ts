@@ -1,6 +1,6 @@
 import type { IButton, IInput } from '@components';
 
-import { registerButton } from '../styles/styles.module.scss';
+import styles from '../styles/styles.module.scss';
 
 interface IContext {
   inputs: IInput[];
@@ -17,5 +17,5 @@ export const CONTEXT: IContext = {
     { label: 'Пароль', name: 'password', type: 'password' },
     { label: 'Подтверждение пароля', name: 'confirm_password', type: 'password' },
   ],
-  button: { type: 'submit', name: 'register', text: 'Зарегистрироваться', className: registerButton },
+  button: { type: 'submit', name: 'register', text: 'Зарегистрироваться', className: styles.registerButton },
 };
