@@ -1,4 +1,4 @@
-import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import { PathConfig } from '@common/Router/PathConfig';
 import { Link } from '@components/link';
 import { ChatItem } from '@pages/Chat/common/components/chatItems/chatItem';
 import { formatDate } from '@utils';
@@ -29,7 +29,7 @@ export const getContext: GetContext = ({ chat, user }) => {
     chatItems,
     link: new Link({
       className: styles['chat__user-link'],
-      path: PathConfig[LinksPages.profile].view,
+      path: PathConfig.settings.view,
       text: user?.login,
     }),
   };

@@ -43,7 +43,7 @@ export class ActiveChatPageCrt extends Block<ActiveChatPageProps> {
         }),
         styles,
       },
-      [{ key: LinksPages.chat, template: ActivePageComp }],
+      [{ key: LinksPages.messenger, template: ActivePageComp }],
     );
   }
 

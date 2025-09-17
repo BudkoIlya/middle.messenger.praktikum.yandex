@@ -1,6 +1,6 @@
 import { AuthApi, ProfileApi } from '@api';
 import { Router } from '@common/Router';
-import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import { PathConfig } from '@common/Router/PathConfig';
 import { withTryCatch } from '@src/utils/withTryCatch';
 import { store } from '@store';
 import type { PasswordRequest } from '@api/ProfileApi/ProfileApi';
@@ -14,7 +14,7 @@ class ProfileControllerCrt extends BaseController<ISubmitData> {
   async logOut() {
     await withTryCatch(async () => {
       await AuthApi?.logout();
-      new Router().push(PathConfig[LinksPages.login]);
+      new Router().push(PathConfig.login);
       store.clear();
     });
   }
@@ -30,7 +30,7 @@ class ProfileControllerCrt extends BaseController<ISubmitData> {
     await withTryCatch(async () => {
       const user = await ProfileApi.updateProfile(data);
       store.set('user', user);
-      new Router().push(PathConfig[LinksPages.profile].view);
+      new Router().push(PathConfig.settings.view);
     });
   };
 

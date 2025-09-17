@@ -19,7 +19,7 @@ interface INotActiveChatPageCrt extends Props {
 
 export class NotActiveChatPage extends Block<INotActiveChatPageCrt> {
   constructor() {
-    super('', { chatItems: new ChatItems(), styles }, [{ key: LinksPages.chat, template: NotActivePageComp }]);
+    super('', { chatItems: new ChatItems(), styles }, [{ key: LinksPages.messenger, template: NotActivePageComp }]);
   }
 
   async dispatchComponentDidMount() {

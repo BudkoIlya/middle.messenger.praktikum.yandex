@@ -1,5 +1,5 @@
 import { Block } from '@common';
-import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import { PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
 import { Input } from '@components/input';
 import { Link } from '@components/link';
@@ -35,7 +35,7 @@ export class LoginPage extends Block<LoginPageProps> {
   constructor() {
     const inputs = CONTEXT.inputs.map((el) => new Input(el));
     const link = new Link({
-      path: PathConfig[LinksPages.register],
+      path: PathConfig.register,
       className: styles.registerButton,
       text: 'Регистрация',
     });

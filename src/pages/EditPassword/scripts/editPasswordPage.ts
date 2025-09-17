@@ -1,5 +1,5 @@
 import { Block } from '@common';
-import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import { PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
 import { Input } from '@components/input';
 import { ProfileController } from '@controllers';
@@ -35,7 +35,7 @@ const CONTEXT: IContext = {
     text: 'Отменить',
     type: 'submit',
     className: styles.cancelBtn,
-    path: PathConfig[LinksPages.profile].view,
+    path: PathConfig.settings.view,
     theme: null,
   },
 };

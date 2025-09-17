@@ -1,5 +1,5 @@
 import { Block } from '@common';
-import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import { PathConfig } from '@common/Router/PathConfig';
 import { Button } from '@components/button';
 import { Input } from '@components/input';
 import { Link } from '@components/link';
@@ -22,7 +22,7 @@ export interface RegisterPageProps extends Props {
 export class RegisterPage extends Block<RegisterPageProps> {
   constructor() {
     const inputs = CONTEXT.inputs.map((el) => new Input(el));
-    const link = new Link({ path: PathConfig[LinksPages.login], className: styles.loginLink, text: 'Вход' });
+    const link = new Link({ path: PathConfig.login, className: styles.loginLink, text: 'Вход' });
 
     super('', {
       inputs,

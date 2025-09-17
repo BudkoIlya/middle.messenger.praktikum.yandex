@@ -1,6 +1,6 @@
 import { AuthApi } from '@api';
 import { Router } from '@common/Router';
-import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import { PathConfig } from '@common/Router/PathConfig';
 import { withTryCatch } from '@src/utils/withTryCatch';
 import { store } from '@store';
 import type { SignInRequest } from '@api/AuthApi';
@@ -18,7 +18,7 @@ class LoginControllerCrt extends BaseController<SignInRequest> {
       await AuthApi.signIn(data);
       await this.getUser();
 
-      new Router().push(PathConfig[LinksPages.chat].notActive);
+      new Router().push(PathConfig.messenger.notActive);
     });
   }
 
