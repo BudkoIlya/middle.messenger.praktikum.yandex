@@ -11,7 +11,7 @@ import type { Props } from '@common/Block/types';
 import type { Link } from '@components/link';
 
 import { getContext } from '../../../scripts';
-import { default as chatItemsTemplate } from '../chatItems.hbs';
+import chatItemsTemplate from '../chatItems.hbs';
 import type { ChatItem } from '../chatItem';
 
 import styles from '../styles/chatItems.module.scss';
