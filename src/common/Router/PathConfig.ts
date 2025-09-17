@@ -1,16 +1,7 @@
 const prefixPath =
-  (import.meta?.env?.MODE ?? import.meta?.env?.NODE_ENV) === 'production'
-    ? '/praktikumchat.netlify.app' // <-- именно путь, не домен
-    : '';
+  (import.meta?.env?.MODE ?? import.meta?.env?.NODE_ENV) === 'production' ? '/praktikumchat.netlify.app' : '';
 
 export type Links = 'register' | 'login' | 'settings' | 'editPassword' | 'messenger' | 'error';
-
-// export const register = 'register' as const;
-// export const login = 'login' as const;
-// export const profile = 'profile' as const;
-// export const editPassword = 'editPassword' as const;
-// export const chat = 'chat' as const;
-// export const error = 'error' as const;
 
 export const LinksPages: Record<Links, string> = {
   register: `${prefixPath}/sign-up`,
@@ -21,7 +12,6 @@ export const LinksPages: Record<Links, string> = {
   error: `${prefixPath}/error`,
 } as const;
 
-// Явная форма PathConfig — тип гарантирует наличие .view/.edit/.active
 type IPathConfig = {
   register: string;
   login: string;
