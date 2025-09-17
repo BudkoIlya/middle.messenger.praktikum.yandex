@@ -46,6 +46,7 @@ class Route {
   private _render() {
     if (!this._view) return;
     this._view.mount('#main');
+    this._view.afterRender?.();
   }
 }
 

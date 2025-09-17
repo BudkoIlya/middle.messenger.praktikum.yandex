@@ -126,7 +126,7 @@ export abstract class Block<P extends Props = Props> {
     this._isUpdated = isUpdated;
   }
 
-  protected afterRender?(): void;
+  afterRender?(): void;
 
   private _afterRender() {
     this.afterRender?.();
@@ -309,5 +309,3 @@ export abstract class Block<P extends Props = Props> {
 
   private _makePropsProxy = (props: P, setIsUpdated: (value: boolean) => void): P => createProxy(props, setIsUpdated);
 }
-
-export abstract class CustomBlock<P extends Props> extends Block<P> {}

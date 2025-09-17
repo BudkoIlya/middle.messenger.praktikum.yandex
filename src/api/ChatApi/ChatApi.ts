@@ -22,6 +22,10 @@ class ChatApiCr extends HTTPTransport {
     return this.fetch(Method.POST, Paths.chats, { data: { title } });
   }
 
+  deleteChat(chatId: number) {
+    return this.fetch(Method.DELETE, Paths.chats, { data: { chatId } });
+  }
+
   getChatTokens(chatId: number) {
     return this.fetch<IToken>(Method.POST, `${Paths.chatToken}/${chatId}`);
   }

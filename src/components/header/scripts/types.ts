@@ -11,8 +11,8 @@ export interface Page {
 }
 
 type PageVariants2 = {
-  profile: Page[];
-  chat: Page[];
+  settings: Page[];
+  messenger: Page[];
 };
 
 export type IPageVariantsByLink = {

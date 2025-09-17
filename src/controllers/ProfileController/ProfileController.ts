@@ -1,4 +1,4 @@
-import { AuthApi } from '@api';
+import { AuthApi, ProfileApi } from '@api';
 import { Router } from '@common/Router';
 import { LinksPages, PathConfig } from '@common/Router/PathConfig';
 import { withTryCatch } from '@src/utils/withTryCatch';
@@ -13,6 +13,13 @@ class ProfileControllerCrt extends BaseController<SignInRequest> {
       await AuthApi?.logout();
       new Router().push(PathConfig[LinksPages.login]);
       store.clear();
+    });
+  }
+
+  async changeAvatar(data: FormData) {
+    await withTryCatch(async () => {
+      const user = await ProfileApi.changeAvatar(data);
+      store.set('user', user);
     });
   }
 }

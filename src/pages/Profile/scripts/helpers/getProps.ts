@@ -1,3 +1,4 @@
+import { BASE_URL } from '@api/constants';
 import { Block } from '@common';
 import { Button } from '@components/button';
 import { Img } from '@components/img';
@@ -55,12 +56,14 @@ export const getProps = (user?: IUser): ProfilePageProps => {
     saveBtn: new Button(btns.saveBtn),
   } satisfies ProfilePageProps['buttons'];
 
+  const src = user?.avatar ? `${BASE_URL}/resources${user?.avatar}` : '';
+
   return {
-    avatar: new Img({ src: '', alt: 'Аватар', className: styles.avatar }),
+    avatar: new Img({ src, alt: 'Аватар', className: styles.avatar }),
     imgInput: new Input({
       label: new EditAvatarImg({ className: styles.editProfileTitle }),
       name: 'avatar',
-      accept: 'image/jpeg',
+      accept: 'image/jpeg, image/png, image/gif, image/webp',
       type: 'file',
     }),
     buttons,

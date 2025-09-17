@@ -2,20 +2,14 @@ import { HTTPTransport } from '@api/HTTPTransport/HTTPTransport';
 import { Method } from '@api/HTTPTransport/types';
 import type { IUser } from '@store/UserStore/types';
 
-import type { SignInRequest } from '../AuthApi';
-
 enum Paths {
-  sign = 'auth/signin',
+  changeAvatar = 'user/profile/avatar',
   user = 'auth/user',
 }
 
 class ProfileApiCrt extends HTTPTransport {
-  sign(data: SignInRequest) {
-    return this.fetch(Method.POST, Paths.sign, { data });
-  }
-
-  getUser() {
-    return this.fetch<IUser>(Method.GET, Paths.user);
+  changeAvatar(data: FormData) {
+    return this.fetch<IUser>(Method.PUT, Paths.changeAvatar, { data: data });
   }
 }
 

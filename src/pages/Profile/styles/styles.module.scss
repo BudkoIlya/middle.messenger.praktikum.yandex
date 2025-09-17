@@ -14,10 +14,10 @@ $bgColorBtn: white;
   .avatar {
     width: 80px;
     height: 80px;
-    background: common.$grey;
     border-radius: 50%;
     position: relative;
-    align-items: center;
+    object-fit: cover;
+    border: 1px solid common.$blue;
 
     &[src='']::before {
       content: attr(alt);

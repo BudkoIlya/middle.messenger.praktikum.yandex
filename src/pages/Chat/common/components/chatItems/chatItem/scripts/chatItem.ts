@@ -1,4 +1,4 @@
-import { CustomBlock } from '@common/Block/Block';
+import { Block } from '@common/Block/Block';
 import { ElementsKeys } from '@common/HandlebarsRegistration/types';
 import { ChatController } from '@controllers/ChatController';
 import { Button } from '@src/components/button';
@@ -22,9 +22,10 @@ interface IConfirmDelete extends Props {
   show?: boolean;
   imgBtn?: Img;
   onClose?: () => void; // Сброс родительского флага
+  chatId?: number;
 }
 
-export class ConfirmDelete extends CustomBlock<IConfirmDelete> {
+export class ConfirmDelete extends Block<IConfirmDelete> {
   constructor(onClose?: () => void) {
     super('', {
       styles: stylesConfirm,
@@ -52,7 +53,7 @@ export class ConfirmDelete extends CustomBlock<IConfirmDelete> {
   }
 
   afterRender() {
-    const { cancelBtn, onClose } = this.props;
+    const { cancelBtn, onClose, deleteBtn, chatId } = this.props;
 
     cancelBtn?.setProps({
       events: {
@@ -63,10 +64,22 @@ export class ConfirmDelete extends CustomBlock<IConfirmDelete> {
         },
       },
     });
+
+    deleteBtn?.setProps({
+      events: {
+        click: async (e) => {
+          e.stopPropagation();
+          if (chatId) {
+            await ChatController.deleteChat(chatId);
+            onClose?.();
+          }
+        },
+      },
+    });
   }
 }
 
-export class ChatItem extends CustomBlock<IChatItemCrt> {
+export class ChatItem extends Block<IChatItemCrt> {
   constructor(props: IChatItem) {
     super(
       '',
@@ -95,7 +108,7 @@ export class ChatItem extends CustomBlock<IChatItemCrt> {
           e.stopPropagation();
 
           this.setProps({ confirmOpen: true });
-          (deleteConfirm.props.text as ConfirmDelete).setProps({ show: true });
+          (deleteConfirm.props.text as ConfirmDelete).setProps({ show: true, chatId: id });
         },
       },
     });

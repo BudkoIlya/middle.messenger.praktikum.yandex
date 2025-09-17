@@ -8,7 +8,7 @@ export default `
 
     class="input {{styles.input}}{{#if class}} {{class}}{{/if}}{{#if error}} {{styles.error}}{{/if}}"
 
-    {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}
+    {{#if placeholder}}placeholder="{{placeholder}}" {{/if}}
 
     {{#if title}}title="{{title}}"{{/if}}
 
@@ -16,7 +16,7 @@ export default `
 
     {{disabled}}
 
-    {{#if accept}}accept={{accept}}{{/if}}>
+    {{#if accept}}accept="{{accept}}"{{/if}}>
   <span
     class="{{styles.helpText}}{{#if helperTextClass}} {{helperTextClass}}{{/if}}">
     Недопустимые символы

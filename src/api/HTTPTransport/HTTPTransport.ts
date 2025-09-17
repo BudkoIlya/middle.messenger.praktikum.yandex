@@ -82,9 +82,13 @@ export abstract class HTTPTransport {
 
       const willSendFormData = data instanceof FormData;
       const headersToSend: Record<string, string> = { ...headers };
+
       if (willSendFormData) {
-        const key = Object.keys(headersToSend).find((v) => v === 'content-type');
-        if (key) delete headersToSend[key];
+        for (const k of Object.keys(headersToSend)) {
+          if (k.toLowerCase() === 'content-type') {
+            delete headersToSend[k];
+          }
+        }
       }
 
       typedObjectEntries(headersToSend).forEach(([key, value]) => xhr.setRequestHeader(key, value));
@@ -95,6 +99,7 @@ export abstract class HTTPTransport {
         const status = xhr.status;
         const statusText = xhr.statusText || '';
         const rawHeaders = xhr.getAllResponseHeaders?.() ?? '';
+
         const headersMap = parseAllHeaders(rawHeaders);
         const contentType = xhr.getResponseHeader('Content-Type') || headersMap['content-type'] || '';
         const isJson = contentType.includes('application/json');
@@ -136,21 +141,12 @@ export abstract class HTTPTransport {
 
       if (isGet || data == null) {
         xhr.send();
+      } else if (willSendFormData) {
+        xhr.send(data as FormData);
+      } else if (isObject(data) && !(data instanceof URLSearchParams)) {
+        xhr.send(JSON.stringify(data));
       } else {
-        if (
-          typeof data === 'string' ||
-          data instanceof Blob ||
-          data instanceof FormData ||
-          data instanceof URLSearchParams ||
-          data instanceof ArrayBuffer ||
-          ArrayBuffer.isView(data)
-        ) {
-          xhr.send(data as XMLHttpRequestBodyInit);
-        } else if (isObject(data)) {
-          xhr.send(JSON.stringify(data));
-        } else {
-          xhr.send(JSON.stringify(data));
-        }
+        xhr.send(data as XMLHttpRequestBodyInit);
       }
     });
   }

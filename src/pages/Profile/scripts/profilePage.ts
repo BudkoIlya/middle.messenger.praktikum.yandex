@@ -24,7 +24,7 @@ class ProfilePageCtr extends Block<ProfilePageProps> {
     const element = this.getContent();
     if (!element) return;
 
-    const { inputs, buttons } = this.props;
+    const { inputs, buttons, imgInput } = this.props;
     const { saveBtn, editBtn, editPasswordBtn, cancelBtn, exitBtn } = buttons;
 
     exitBtn.setProps({
@@ -34,6 +34,21 @@ class ProfilePageCtr extends Block<ProfilePageProps> {
         },
       },
     });
+
+    imgInput.setProps({
+      events: {
+        change: async (e) => {
+          const files = (e.target as HTMLInputElement).files;
+          if (!files || files.length === 0 || !files[0]) return;
+
+          const formData = new FormData();
+          formData.append('avatar', files[0]);
+
+          await ProfileController.changeAvatar(formData);
+        },
+      },
+    });
+
     checkValidationByFields({ root: element, inputs, button: saveBtn });
     addRoutChangeListener({ element: editBtn });
     addRoutChangeListener({ element: cancelBtn });

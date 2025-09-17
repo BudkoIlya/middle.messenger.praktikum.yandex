@@ -48,9 +48,7 @@ export const makeLazyComponent = function (loader: ComponentLoader, opts: MakeLa
       else this._page = v;
     }
 
-    getContent(): HTMLElement | null {
-      return this.page?.getContent() ?? super.getContent();
-    }
+    getContent = (): HTMLElement | null => this.page?.getContent() ?? super.getContent();
 
     static getCtor(): Promise<BlockConstructor> {
       if (!this.ctorP) {
@@ -60,7 +58,7 @@ export const makeLazyComponent = function (loader: ComponentLoader, opts: MakeLa
       return this.ctorP;
     }
 
-    async componentDidMount(): Promise<void> {
+    componentDidMount = async () => {
       const host = super.getContent();
       if (!host) return;
 
@@ -83,24 +81,36 @@ export const makeLazyComponent = function (loader: ComponentLoader, opts: MakeLa
       const el = page.getContent();
       if (el) host.replaceWith(el);
       page.dispatchComponentDidMount?.();
-    }
+    };
 
-    unmount() {
+    mount = (selector: string) => {
+      const page = this.page;
+      if (page?.mount) page?.mount(selector);
+      super.mount?.(selector);
+    };
+
+    unmount = () => {
       if (this.page) {
         this.page.unmount();
         return;
       }
       super.unmount();
-    }
+    };
 
     render() {
       return `<div></div>`;
     }
 
-    destroy(): void {
+    afterRender = () => {
+      const page = this.page;
+      if (page?.afterRender) page.afterRender();
+      super.afterRender?.();
+    };
+
+    destroy = (): void => {
       if (!keepAlive) this.page?.destroy();
       if (!keepAlive) this.page = null;
       super.destroy?.();
-    }
+    };
   };
 };

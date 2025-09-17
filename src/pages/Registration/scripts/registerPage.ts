@@ -36,7 +36,7 @@ export class RegisterPage extends Block<RegisterPageProps> {
     return RegisterPageComp;
   }
 
-  protected afterRender() {
+  afterRender() {
     const element = this.getContent();
     if (!element) return;
 

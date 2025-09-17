@@ -38,6 +38,13 @@ class ChatControllerCrt extends BaseController<{ message: string }> {
     });
   }
 
+  async deleteChat(id: number) {
+    await withTryCatch(async () => {
+      await ChatApi.deleteChat(id);
+      await this.getChats();
+    });
+  }
+
   private _onMsg = (msg: WSChatMessage | WSChatMessage[]) => {
     const prev = store.state?.chat.activeChat?.messages ?? [];
     const msgs = (() => {
