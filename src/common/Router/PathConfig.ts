@@ -1,12 +1,15 @@
+const prefixPath =
+  (import.meta?.env?.MODE ?? import.meta?.env?.NODE_ENV) === 'production' ? '/praktikumchat.netlify.app' : '';
+
 export type Links = 'register' | 'login' | 'settings' | 'editPassword' | 'messenger' | 'error';
 
 export const LinksPages: Record<Links, string> = {
-  register: '/sign-up',
-  login: '/',
-  settings: '/settings',
-  editPassword: '/settings/password',
-  messenger: '/messenger',
-  error: '/error',
+  register: `${prefixPath}/sign-up`,
+  login: `${prefixPath}/`,
+  settings: `${prefixPath}/settings`,
+  editPassword: `${prefixPath}/settings/password`,
+  messenger: `${prefixPath}/messenger`,
+  error: `${prefixPath}/error`,
 } as const;
 
 type IPathConfig = {
