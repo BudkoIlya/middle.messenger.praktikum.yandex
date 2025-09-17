@@ -35,7 +35,7 @@ interface IChatItems extends Props {
 
 interface IChatNameInput extends Props {
   input: Input;
-  className: string;
+  className?: string;
   showClassName?: string;
   applyBtn: Button;
   cancelBtn: Button;
@@ -50,7 +50,7 @@ class ChatNameInput extends Block<IChatNameInput> {
         class: styles.chatTitleInput,
         helperTextClass: styles.helperText,
       }),
-      className: styles['chatTitleInputWrapper'],
+      className: styles.chatTitleInputWrapper,
       applyBtn: new Button({ name: 'Create', text: 'Создать', type: 'submit', theme: null }),
       cancelBtn: new Button({ name: 'cancel', text: 'Отменить', theme: null }),
       createChatButtons: styles.createChatButtons,
@@ -136,7 +136,7 @@ export class ChatItemsCrt extends Block<IChatItems> {
     button.setProps({
       events: {
         click: () => {
-          chatTitlePropsSetProps({ ...chatTitleProps, showClassName: styles['show'] });
+          chatTitlePropsSetProps({ ...chatTitleProps, showClassName: styles.show });
         },
       },
     });
