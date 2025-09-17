@@ -1,1 +1,1 @@
-export { ChatItems } from './chatItems';
+export { ChatItems, ChatItemsCrt } from './chatItems';

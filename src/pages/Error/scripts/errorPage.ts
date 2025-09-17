@@ -1,15 +1,26 @@
-import { Block } from '../../../common/Block';
+import { Block } from '@common';
+import { LinksPages } from '@common/Router/PathConfig';
+import type { Props } from '@common/Block/types';
+
 import { ErrorComp } from '../template';
 
-export class ErrorPage extends Block {
-  constructor(props: { text: string }) {
-    super('div', props);
+import styles from '../styles/styles.module.scss';
 
-    const div = this.getContent();
-    if (div) div.className = 'errorPage';
+interface IErrorPage extends Props {
+  text?: string;
+}
+
+export class ErrorPage extends Block<IErrorPage> {
+  constructor() {
+    const statusCode = (() => {
+      const parts = window.location.pathname.split('/'); // ["", "chat", "4646"]
+      return parts[parts.length - 1];
+    })();
+
+    super('', { styles, text: statusCode }, [{ key: LinksPages.error, template: ErrorComp }]);
   }
 
-  protected render(): string {
+  render(): string {
     return ErrorComp;
   }
 }

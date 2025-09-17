@@ -1,18 +1,25 @@
 export default `
-<label class="label">
-  {{#if title}}<span class="title">{{{title}}}</span>{{/if}}
+<label class="label {{styles.label}}">
+  {{#if label}}<span class="{{styles.title}}">{{{label}}}</span>{{/if}}
   <input
-     type="{{#if type}}{{type}}{{else}}text{{/if}}"
-     value="{{value}}"
-     {{#if class}}
-       class="input {{class}}"
-       {{else}}class="input
-     {{/if}}
-     placeholder="{{placeholder}}"
-     title="{{title}}"
-     name="{{name}}"
-     {{disabled}}
-     {{#if accept}}accept={{accept}}{{/if}}>
-  <span class="helpText">Недопустимые символы</span>
+    type="{{#if type}}{{type}}{{else}}text{{/if}}"
+
+    {{#if value}}value="{{value}}"{{/if}}
+
+    class="input {{styles.input}}{{#if class}} {{class}}{{/if}}{{#if error}} {{styles.error}}{{/if}}"
+
+    {{#if placeholder}}placeholder="{{placeholder}}" {{/if}}
+
+    {{#if title}}title="{{title}}"{{/if}}
+
+    name="{{name}}"
+
+    {{disabled}}
+
+    {{#if accept}}accept="{{accept}}"{{/if}}>
+  <span
+    class="{{styles.helpText}}{{#if helperTextClass}} {{helperTextClass}}{{/if}}">
+    Недопустимые символы
+  </span>
 </label>
 `;

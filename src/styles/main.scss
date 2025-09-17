@@ -3,20 +3,91 @@
 $mainPadding: 20px;
 $mainMargin: 15px;
 $mainColorShadow: rgb(0 0 0 / 35%);
-$navHeight: 59px;
+$navHeight: 68px;
+$shadowColor: rgb(0 0 0 / 35%);
+$boxShadowSize: 10px;
+
+@font-face {
+  font-family: Comfortaa;
+  src: url('/assets/fonts/Comfortaa-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Comfortaa;
+  src: url('/assets/fonts/Comfortaa-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Comfortaa;
+  src: url('/assets/fonts/Comfortaa-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Comfortaa;
+  src: url('/assets/fonts/Comfortaa-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Comfortaa;
+  src: url('/assets/fonts/Comfortaa-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 * {
+  font-family: Comfortaa, sans-serif;
   box-sizing: border-box;
 }
 
-#app {
-  margin: $mainMargin;
-  padding: $mainPadding;
-  height: calc(100vh - #{$mainMargin} * 2);
-  border-radius: 10px;
-  box-shadow: 0 0 10px $mainColorShadow;
+::-webkit-scrollbar,
+::-webkit-scrollbar:horizontal {
+  width: 6px;
 }
 
-#main {
-  height: calc(100% - #{$navHeight});
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c3d0dd;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+#app {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  margin: $mainMargin;
+  height: 100%;
+  min-height: calc(100vh - #{$mainMargin} * 2);
+  border-radius: 10px;
+  box-shadow: 0 0 $boxShadowSize $mainColorShadow;
+}
+
+@mixin formWrapper {
+  height: 97%;
+  width: 30%;
+  box-shadow: 0 0 10px $shadowColor;
+  padding: 20px 40px;
+  border-radius: 10px;
+  margin: auto;
 }

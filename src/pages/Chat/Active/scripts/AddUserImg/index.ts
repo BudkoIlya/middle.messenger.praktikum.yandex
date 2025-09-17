@@ -1,0 +1,1 @@
+export { AddUserImg } from './addUserImg';

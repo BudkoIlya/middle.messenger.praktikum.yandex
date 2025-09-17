@@ -1,0 +1,22 @@
+@use 'src/styles/main';
+@use 'src/styles/common';
+
+.nav {
+  // background: common.$lightGrey;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 5px 10px rgb(151 151 151 / 35%);
+
+  ul {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 25px 0;
+    list-style-type: none;
+    margin: 0;
+    height: main.$navHeight;
+
+    a {
+      @include common.hoverText($link: true);
+    }
+  }
+}

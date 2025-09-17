@@ -1,8 +1,9 @@
 export interface IChatItem {
   class?: string;
-  userName: string;
-  lastMessage: string;
-  time: string;
-  unreadCount?: string;
+  title: string;
+  lastMessage?: string;
+  time?: string;
+  unreadCount?: number;
+  id: number;
   [key: string]: unknown;
 }

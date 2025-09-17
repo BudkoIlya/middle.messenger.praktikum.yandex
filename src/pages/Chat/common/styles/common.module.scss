@@ -1,0 +1,119 @@
+@use 'src/styles/common';
+@use 'src/styles/main';
+
+@mixin chat {
+  form {
+    margin-bottom: 10px;
+  }
+
+  height: calc(100dvh - 98px);
+  display: grid;
+  grid-template-columns: 500px 1.5fr;
+}
+
+@mixin chatItems {
+  display: grid;
+  grid-template-rows: min-content min-content 1fr;
+  border-top: 1px solid #edecec;
+  width: 500px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 0 0 0 10px;
+  box-shadow: 8px 2px 16px -10px rgb(0 0 0 / 25%);
+  min-height: 0;
+
+  .chat__sidebar-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .add_btn {
+      background: transparent;
+      font-size: 14px;
+      width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      cursor: pointer;
+      border: none;
+
+      @include common.hoverText;
+
+      &:hover {
+        :global(.img) {
+          transform: scale(0.9);
+        }
+      }
+    }
+
+    :global(.img) {
+      transition: transform 0.25s;
+      margin-top: -2px;
+      transform: scale(0.8);
+    }
+  }
+
+  .chat__user-link {
+    display: block;
+    font-size: 20px;
+    font-weight: normal;
+    margin-bottom: 10px;
+    text-decoration: none;
+
+    @include common.hoverText;
+  }
+
+  .chat__search {
+    width: 100%;
+    background: common.$lightGrey;
+    border: 1px solid transparent;
+
+    &::placeholder {
+      color: common.$grey;
+    }
+
+    &:focus {
+      border: 1px solid common.$grey;
+    }
+  }
+
+  .chatTitleInputWrapper {
+    background: white;
+    position: absolute;
+    right: -330px;
+    top: 0;
+    z-index: 1;
+    border-radius: 5px;
+    display: none;
+    padding: 10px;
+
+    &.show {
+      width: 300px;
+      box-shadow: 3px 3px 10px common.$shadowColor;
+      display: block;
+    }
+
+    .chatTitleInput {
+      width: 100%;
+    }
+
+    .helperText {
+      display: none;
+    }
+
+    .createChatButtons {
+      margin-top: 5px;
+      display: flex;
+      gap: 5px;
+
+      :global(.btn) {
+        background-color: transparent;
+        cursor: pointer;
+        border: none;
+
+        @include common.hoverText;
+      }
+    }
+  }
+}

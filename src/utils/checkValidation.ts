@@ -1,119 +1,158 @@
-import type { Input } from '../components';
-import type { Button } from '../components/button';
-import { type InputsName, REG_EXP_BY_INPUT_NAME } from './constants';
+import type { Button, Input, Select } from '@components';
 
-const isUpdatingOnFocus = new WeakMap<Input, boolean>();
+import { REG_EXP_BY_INPUT_NAME } from './constants';
+import type { InputsName } from './constants';
 
-const getInput = (element: HTMLElement, input: Input) =>
-  element.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
+type CustomValidate = (name: string, value: string) => boolean;
 
-const validate = (name: InputsName, value: string): boolean => {
-  const rule = REG_EXP_BY_INPUT_NAME[name];
-  return rule.test(value);
+type FieldLike = Input | Select;
+
+const isUpdatingOnFocus = new WeakMap<FieldLike, boolean>();
+
+const getFieldEl = (root: HTMLElement, field: FieldLike) => {
+  const name = field.props.name;
+  const input = root.querySelector(`input[name="${name}"]`) as HTMLInputElement | null;
+  if (input) return input;
+  return root.querySelector(`select[name="${name}"]`) as HTMLSelectElement | null;
 };
 
-const norm = (s: string) => s.replace(/\s+/g, ' ').trim();
-const classFromProps = (input: Input) => norm(String(input.props.class ?? '').replace(/\berror\b/g, ''));
-
-const buildClass = (base: string, withError: boolean) => norm([base, withError ? 'error' : ''].join(' '));
-
-const validateInput = (input: Input, element: HTMLElement): boolean => {
-  const inputEl = element.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
-
-  if (!inputEl) return true;
-  const { name, value } = inputEl;
-
-  const isValid = validate(name as InputsName, value.trim());
-  const propsClass = classFromProps(input);
-  const nextClass = buildClass(propsClass, !isValid);
-
-  if (input.props.value !== value || norm(String(input.props.class ?? '')) !== nextClass) {
-    input.setProps({ ...input.props, value, class: nextClass });
+const validateByField = (name: string, value: string, opts?: { kind?: 'input' | 'select' }): boolean => {
+  if (opts?.kind === 'select') {
+    // Для select: просто проверяем, что есть выбранное значение (не пустая строка)
+    return value.trim() !== '';
   }
+  // Для input: валидируем по словарю (если правила нет — считаем валидным)
+  const re = (REG_EXP_BY_INPUT_NAME as Record<string, RegExp>)[name as InputsName];
+  return re ? re.test(value) : true;
+};
+
+const patchIfChanged = (field: FieldLike, patch: Partial<FieldLike['props']>) => {
+  const nextValue = patch.value ?? field.props.value;
+  const nextError = patch.error ?? field.props.error;
+  const sameValue = nextValue === field.props.value;
+  const sameError = nextError === field.props.error;
+  if (sameValue && sameError) return;
+  field.setProps({ ...field.props, ...patch });
+};
+
+const validateField = (field: FieldLike, root: HTMLElement, customValidate?: CustomValidate): boolean => {
+  const el = getFieldEl(root, field);
+  if (!el) return true;
+
+  const isSelect = el instanceof HTMLSelectElement;
+  const { name } = el;
+  const value = isSelect || el instanceof HTMLInputElement ? el.value : '';
+
+  const isValid = customValidate
+    ? customValidate(name, value)
+    : validateByField(name, value, { kind: isSelect ? 'select' : 'input' });
+
+  patchIfChanged(field, { value, error: !isValid });
   return isValid;
 };
+type Params<T> = {
+  root: HTMLElement;
+  inputs?: Input[];
+  selects?: Select[];
+  button?: Button;
+  onSubmit?(values: T): void;
+  customValidate?: CustomValidate;
+};
 
-export const checkValidationByFields = (
-  element: HTMLElement,
-  inputs: Input[],
-  button?: Button,
-): (() => void) | void => {
-  inputs.forEach((input) => {
-    const prevEvents = input.props.events || {};
+export const checkValidationByFields = <T = unknown>({
+  root,
+  inputs,
+  selects,
+  button,
+  onSubmit,
+  customValidate,
+}: Params<T>): (() => void) | void => {
+  const fields: FieldLike[] = [...(inputs ?? []), ...(selects ?? [])];
 
+  // Если полей нет вовсе — делать нечего
+  if (fields.length === 0 && !button) return;
+
+  // Для каждого поля вешаем одинаковую логику
+  fields.forEach((field) => {
+    const prevEvents = field.props.events || {};
+
+    // Клик по контейнеру/label — переносим фокус в реальный элемент поля
     const onMouseDown = (e: Event) => {
-      const inputEl = getInput(element, input);
-      if (!inputEl) return;
+      const el = getFieldEl(root, field);
+      if (!el) return;
 
       const tgt = e.target as HTMLElement | null;
-      if (tgt && (tgt === inputEl || inputEl.contains(tgt))) return;
+      if (tgt && (tgt === el || el.contains(tgt))) return; // прямой клик в контрол
 
-      inputEl.focus();
+      e.preventDefault();
+      el.focus();
     };
 
+    // Сброс ошибки на фокус
     const onFocusIn = () => {
-      if (isUpdatingOnFocus.get(input)) return;
+      if (isUpdatingOnFocus.get(field)) return;
+      const el = getFieldEl(root, field);
+      if (!el) return;
 
-      const inputEl = getInput(element, input);
-      if (!inputEl) return;
+      if (field.props.error !== true) return;
 
-      const base = classFromProps(input);
-      const current = (input.props.class as string | undefined)?.trim() || '';
-      if (current === base) return; // не вызываем ререндер
+      isUpdatingOnFocus.set(field, true);
+      patchIfChanged(field, { error: false });
 
-      isUpdatingOnFocus.set(input, true);
-      input.setProps({ ...input.props, class: base });
-
-      // Рефокусим уже новый инпут после рендера
       requestAnimationFrame(() => {
-        const nextEl = getInput(element, input);
-        if (nextEl && document.activeElement !== nextEl) {
-          nextEl.focus();
-          const len = nextEl.value.length;
-          nextEl.setSelectionRange(len, len);
-        }
-        isUpdatingOnFocus.set(input, false);
+        const nextEl = getFieldEl(root, field);
+        if (nextEl && document.activeElement !== nextEl) nextEl.focus();
+        isUpdatingOnFocus.set(field, false);
       });
     };
 
-    const onFocusOut = () => {
-      const inputEl = getInput(element, input);
-      if (!inputEl) return;
+    // Валидация на blur
+    const onFocusOut = (e: Event) => {
+      if (isUpdatingOnFocus.get(field)) return;
+      const el = getFieldEl(root, field);
+      if (!el) return;
 
-      const { name, value } = inputEl;
-      const isValid = validate(name as InputsName, value.trim());
-      const base = classFromProps(input);
-      const nextClass = isValid ? base : `${base} error`;
+      // Если уходим на элемент внутри того же поля — пропускаем
+      const rel = (e as FocusEvent).relatedTarget as HTMLElement | null;
+      if (rel && (rel === el || el.contains(rel))) return;
 
-      const sameClass = ((input.props.class as string | undefined)?.trim() || '') === nextClass;
-      const sameValue = input.props.value === value;
-      if (sameClass && sameValue) return; // не вызываем ререндер
-
-      input.setProps({ ...input.props, value, class: nextClass });
+      validateField(field, root, customValidate);
     };
 
-    input.setProps({
-      ...input.props,
+    field.setProps({
+      ...field.props,
       events: { ...prevEvents, mousedown: onMouseDown, focusin: onFocusIn, focusout: onFocusOut },
     });
   });
 
   if (button) {
-    const handler = (e: Event) => {
+    const prev = button.props.events || {};
+    const onSubmitClick = (e: Event) => {
       e.preventDefault();
-      const results = inputs.map((input) => ({ input, isValid: validateInput(input, element) }));
 
-      const values = results.reduce<Record<string, string>>((acc, { input }) => {
-        const el = element.querySelector(`input[name="${input.props.name}"]`) as HTMLInputElement | null;
-        if (el) acc[el.name] = el.value;
+      // Валидируем все имеющиеся поля
+      const results = fields.map((fld) => ({
+        field: fld,
+        isValid: validateField(fld, root, customValidate),
+      }));
+
+      // Собираем значения из инпутов и селектов
+      const values = results.reduce<Record<string, string>>((acc, { field }) => {
+        const el = getFieldEl(root, field);
+        if (!el) {
+          return acc;
+        }
+        const name = (el as HTMLInputElement | HTMLSelectElement).name;
+        const value = (el as HTMLInputElement | HTMLSelectElement).value;
+        if (name) acc[name] = value;
         return acc;
-      }, {});
-      console.table({ values });
+      }, {}) as T;
 
       if (results.some(({ isValid }) => !isValid)) return;
+
+      onSubmit?.(values);
     };
 
-    const prevEvents = button.props.events || {};
-    button.setProps({ ...button.props, events: { ...prevEvents, click: handler } });
+    button.setProps({ ...button.props, events: { ...prev, click: onSubmitClick } });
   }
 };

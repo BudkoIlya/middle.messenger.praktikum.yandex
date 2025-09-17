@@ -1,13 +1,15 @@
-import { Block } from '../../../common/Block';
+import { Block } from '@common/Block';
+import { ElementsKeys } from '@common/HandlebarsRegistration/types';
+
+import { link } from '../template';
 import type { ILink } from '../types';
-import { LinkComp } from '../template';
 
 export class Link extends Block {
   constructor(props: ILink) {
-    super('', props);
+    super('', props, [{ key: ElementsKeys.link, template: link }]);
   }
 
   render(): string {
-    return LinkComp;
+    return link;
   }
 }

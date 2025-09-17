@@ -1,0 +1,56 @@
+@use 'src/styles/common';
+
+.label {
+  font-size: 20px;
+  position: relative;
+
+  .helpText {
+    display: none;
+  }
+
+  & > .error + .helpText {
+    display: inline-block;
+    color: common.$red;
+    font-size: 13px;
+    position: absolute;
+    left: 0;
+    bottom: -18px;
+  }
+
+  .select {
+    appearance: none;
+    outline: none;
+    height: 36px;
+    border-radius: 5px;
+    padding: 5px 15px;
+    width: 300px;
+    transition: border-color 0.35s;
+    border: 1px solid common.$grey;
+    color: common.$placeholderColor;
+    cursor: pointer;
+
+    &.hasValue {
+      color: black;
+    }
+
+    option {
+      cursor: pointer;
+      font-size: 12px;
+      overflow: hidden;
+      width: 190px;
+      color: black;
+
+      &:first-child {
+        color: common.$placeholderColor;
+      }
+    }
+
+    &.error {
+      border: 1px solid common.$red;
+    }
+
+    &:focus {
+      border: 1px solid common.$blue;
+    }
+  }
+}

@@ -1,13 +1,20 @@
-import { Block } from '../../../../../../common/Block';
-import { ChatItem } from '../chatItem';
+import { Block } from '@common';
+import { ElementsKeys } from '@common/HandlebarsRegistration/types';
+import { Button } from '@components/button';
+import { Img } from '@components/img';
+import { Input } from '@components/input';
+import { ChatController } from '@controllers/ChatController';
+import { connect } from '@store';
+import { addRoutChangeListener, checkValidationByFields } from '@utils';
+import { COMMON_REG_EXP } from '@utils/constants';
+import type { Props } from '@common/Block/types';
+import type { Link } from '@components/link';
+
 import { getContext } from '../../../scripts';
-import { default as chatItemsTemplate } from '../chatItems.hbs';
-import { Input } from '../../../../../../components/input';
-import { Button } from '../../../../../../components/button';
-import { Img } from '../../../../../../components/img/';
-import { Link } from '../../../../../../components/link';
-import { Paths } from '../../../../../../components/header/scripts/contants';
-import { addRoutChangeListener } from '../../../../../../utils';
+import chatItemsTemplate from '../chatItems.hbs';
+import type { ChatItem } from '../chatItem';
+
+import styles from '../styles/chatItems.module.scss';
 
 export class ButtonText extends Block {
   constructor() {
@@ -18,42 +25,124 @@ export class ButtonText extends Block {
     return 'Добавить';
   }
 }
+interface IChatItems extends Props {
+  chatItems?: ChatItem[];
+  link?: Link;
+  input: Input;
+  button: Button;
+  chatNameInput: ChatNameInput;
+}
 
-export class ChatItems extends Block {
-  constructor({ active }: { active: boolean }) {
-    const chatItems = getContext(active).chatItems.map((item) => new ChatItem(item));
+interface IChatNameInput extends Props {
+  input: Input;
+  className?: string;
+  showClassName?: string;
+  applyBtn: Button;
+  cancelBtn: Button;
+}
 
-    super('aside', {
-      chatItems,
-      link: new Link({
-        className: 'chat__user-link',
-        id: Paths.profile.view.id,
-        path: Paths.profile.view.path,
-        text: 'Имя Фамилия',
+class ChatNameInput extends Block<IChatNameInput> {
+  constructor() {
+    super('', {
+      input: new Input({
+        name: 'title',
+        placeholder: 'Название чата',
+        class: styles.chatTitleInput,
+        helperTextClass: styles.helperText,
       }),
-      input: new Input({ name: 'search', placeholder: 'Поиск', class: 'chat__search' }),
-      button: new Button({
-        name: 'add',
-        text: [new Img({ src: '/assets/add_btn.svg', alt: 'Добавить' }), new ButtonText()],
-        className: 'add_btn',
-      }),
+      className: styles.chatTitleInputWrapper,
+      applyBtn: new Button({ name: 'Create', text: 'Создать', type: 'submit', theme: null }),
+      cancelBtn: new Button({ name: 'cancel', text: 'Отменить', theme: null }),
+      createChatButtons: styles.createChatButtons,
     });
-
-    const aside = this.getContent();
-    if (aside) {
-      aside.classList.add('chat__sidebar');
-    }
   }
 
-  componentDidMount(): void {
+  render(): string {
+    return `<form class="{{className}} {{showClassName}}">
+        {{{input}}}
+      <div class="{{createChatButtons}}">{{{applyBtn}}}{{{cancelBtn}}}</div>
+    </form>`;
+  }
+
+  afterRender() {
     const element = this.getContent();
     if (!element) return;
 
-    const link = this.props.link as Link;
-    addRoutChangeListener({ element: link });
+    const { applyBtn, cancelBtn, input } = this.props;
+
+    const closeCreateChat = () => {
+      input.setProps({ ...this.props.input.props, value: '', error: false });
+      this.setProps({ ...this.props, showClassName: '' });
+    };
+
+    checkValidationByFields<{ title: string }>({
+      root: element,
+      inputs: [input],
+      button: applyBtn,
+      customValidate: (_name, value) => COMMON_REG_EXP.textWithNumber.test(value),
+      async onSubmit(values) {
+        try {
+          await ChatController.createChat(values.title);
+          closeCreateChat();
+        } catch (e) {}
+      },
+    });
+
+    cancelBtn.setProps({
+      events: {
+        click: () => {
+          closeCreateChat();
+        },
+      },
+    });
+  }
+}
+
+export class ChatItemsCrt extends Block<IChatItems> {
+  constructor() {
+    super(
+      '',
+      {
+        input: new Input({
+          name: 'search',
+          placeholder: 'Поиск',
+          class: styles['chat__search'],
+        }),
+        chatNameInput: new ChatNameInput(),
+        button: new Button({
+          name: 'add',
+          text: [new Img({ src: '/assets/add_btn.svg', alt: 'Добавить' }), new ButtonText()],
+          className: styles['add_btn'],
+          theme: null,
+        }),
+        styles,
+      },
+      [{ key: ElementsKeys.chatItems, template: chatItemsTemplate }],
+    );
   }
 
   render(): string {
     return chatItemsTemplate;
   }
+
+  afterRender() {
+    const element = this.getContent();
+    if (!element) return;
+
+    const { link, button, chatNameInput } = this.props;
+
+    const { props: chatTitleProps, setProps: chatTitlePropsSetProps } = chatNameInput;
+
+    button.setProps({
+      events: {
+        click: () => {
+          chatTitlePropsSetProps({ ...chatTitleProps, showClassName: styles.show });
+        },
+      },
+    });
+
+    addRoutChangeListener({ element: link });
+  }
 }
+
+export const ChatItems = connect(ChatItemsCrt, ({ chat, user }) => getContext({ chat, user }));

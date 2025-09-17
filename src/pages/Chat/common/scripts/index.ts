@@ -1,1 +1,1 @@
-export { getContext } from './constants';
+export { getContext } from './context';

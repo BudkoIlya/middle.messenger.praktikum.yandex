@@ -1,10 +1,15 @@
-import { Block } from '../../../common/Block';
+import { Block } from '@common';
+import { LinksPages, PathConfig } from '@common/Router/PathConfig';
+import { Button } from '@components/button';
+import { Input } from '@components/input';
+import { ProfileController } from '@controllers';
+import { addRoutChangeListener, checkValidationByFields } from '@utils';
+import type { Props } from '@common/Block/types';
+import type { IButton, IInput } from '@components';
+
 import { EditPasswordComp } from '../templates';
-import { type IButton } from '../../../components/button';
-import { type IInput, Input } from '../../../components/input';
-import { Links, Paths } from '../../../components/header/scripts/contants';
-import { Button } from '../../../components/button';
-import { addRoutChangeListener, checkValidationByFields } from '../../../utils';
+
+import styles from '../styles/styles.module.scss';
 
 interface IContext {
   inputs: IInput[];
@@ -12,47 +17,60 @@ interface IContext {
   cancelBtn: IButton;
 }
 
+export interface EditPasswordPageProps extends Props {
+  styles: CSSModuleClasses;
+  inputs: Input[];
+  saveBtn: Button;
+  cancelBtn: Button;
+}
+
 const CONTEXT: IContext = {
   inputs: [
-    { title: 'Старый пароль', name: 'old_password', type: 'password' },
-    { title: 'Новый пароль', name: 'new_password', type: 'password' },
-    { title: 'Повторите пароль', name: 'confirm_password', type: 'password' },
+    { label: 'Старый пароль', name: 'oldPassword', type: 'password' },
+    { label: 'Новый пароль', name: 'newPassword', type: 'password' },
+    { label: 'Повторите пароль', name: 'confirmPassword', type: 'password' },
   ],
-  saveBtn: { text: 'Сохранить', name: 'save_password', className: 'saveBtn' },
+  saveBtn: { text: 'Сохранить', name: 'save_password', className: styles.saveBtn },
   cancelBtn: {
     text: 'Отменить',
     type: 'submit',
-    className: 'cancelBtn',
-    id: Links.profile,
-    path: Paths.profile.view.path,
+    className: styles.cancelBtn,
+    path: PathConfig[LinksPages.profile].view,
+    theme: null,
   },
 };
-
-export class EditPasswordPage extends Block {
+export class EditPasswordPage extends Block<EditPasswordPageProps> {
   constructor() {
     const { inputs: inputsData, saveBtn, cancelBtn } = CONTEXT;
 
     const inputs = inputsData.map((el) => new Input(el));
-    super('div', {
+    super('', {
       inputs,
       saveBtn: new Button(saveBtn),
       cancelBtn: new Button(cancelBtn),
+      styles,
     });
-
-    const div = this.getContent();
-    if (div) {
-      div.className = 'formProfilePasswordPage';
-    }
   }
 
   componentDidMount(): void {
     const element = this.getContent();
     if (!element) return;
 
-    const inputs = this.props.inputs as Input[];
-    const saveBtn = this.props.saveBtn as Button;
-    const cancelBtn = this.props.cancelBtn as Button;
-    checkValidationByFields(element, inputs, saveBtn);
+    const { inputs, saveBtn, cancelBtn } = this.props;
+
+    checkValidationByFields({
+      root: element,
+      inputs,
+      button: saveBtn,
+      onSubmit: async (v: { newPassword: string; oldPassword: string; confirmPassword: string }) => {
+        if (v.newPassword !== v.confirmPassword) {
+          window.alert('Пароли не совпадают');
+          return;
+        }
+        await ProfileController.updatePassword({ newPassword: v.newPassword, oldPassword: v.oldPassword });
+        window.alert('Пароль изменён');
+      },
+    });
     addRoutChangeListener({ element: cancelBtn });
   }
 

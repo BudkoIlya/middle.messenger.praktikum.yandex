@@ -1,0 +1,16 @@
+export default `<label class="label {{styles.label}}">
+  <select
+    class="select {{styles.select}}{{#if class}} {{class}}{{/if}}{{#if error}} {{styles.error}}{{/if}}{{#if
+      hasValue}} {{styles.hasValue}}{{/if}}"
+    name="{{name}}"
+  >
+    <option value="">Выберите</option>
+    {{#each options}}
+      <option value="{{this.value}}" {{this.selected}}>{{this.text}}</option>
+    {{/each}}
+  </select>
+  <span
+    class="{{styles.helpText}}{{#if helperTextClass}} {{helperTextClass}}{{/if}}">
+      Недопустимые символы
+  </span>
+</label>`;

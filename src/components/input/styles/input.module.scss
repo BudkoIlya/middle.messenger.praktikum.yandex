@@ -1,0 +1,40 @@
+@use 'src/styles/common';
+
+.label {
+  font-size: 20px;
+  position: relative;
+
+  .helpText {
+    display: none;
+  }
+
+  & > .error + .helpText {
+    display: inline-block;
+    color: common.$red;
+    font-size: 13px;
+    position: absolute;
+    left: 0;
+    bottom: -18px;
+  }
+
+  .input {
+    height: 36px;
+    border-radius: 5px;
+    padding: 0 15px;
+    border: 1px solid common.$grey;
+    transition: border-color 0.35s;
+    outline: none;
+
+    &::placeholder {
+      color: common.$placeholderColor;
+    }
+
+    &.error {
+      border: 1px solid common.$red;
+    }
+
+    &:focus {
+      border: 1px solid common.$blue;
+    }
+  }
+}

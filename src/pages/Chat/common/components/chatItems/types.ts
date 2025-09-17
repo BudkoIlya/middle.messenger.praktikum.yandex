@@ -1,8 +1,10 @@
-import type { IChatItem } from './chatItem';
+import type { Props } from '@common/Block/types';
+import type { Link } from '@components';
 
-export interface IChatItems {
-  id: string;
-  path: string;
+import type { ChatItem } from './chatItem';
+
+export interface IChatItems extends Props {
   class?: string;
-  chatItems: IChatItem[];
+  chatItems?: ChatItem[];
+  link?: Link;
 }
