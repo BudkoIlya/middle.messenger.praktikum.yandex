@@ -1,17 +1,19 @@
 export default `
-{{{chatItems}}}
-<section class="chat__dialog">
-  <div class="chat__header">
-    <h3 class="chat_user-title">Артём</h3>
-    <span class="chat__edit">...</span>
-  </div>
-  <div class="chat__messages">
-    {{{messages}}}
-  </div>
-  <form class="chat__form form">
-    {{{img}}}
-    {{{input}}}
-    {{{button}}}
-  </form>
-</section>
+<div class="{{styles.activeChat}}">
+  {{{chatItems}}}
+  <section class="{{{styles.chat__dialog}}}">
+    <div class="{{styles.chat__header}}">
+      <h3 class="{{styles.chat-title}}">{{title}}</h3>
+      {{{addUserBtn}}}
+    </div>
+    <div class="{{styles.chat__messages}}">
+      {{{messages}}}
+    </div>
+    <form class="{{styles.chat__form}} {{styles.form}}">
+      {{{img}}}
+      {{{input}}}
+      {{{button}}}
+    </form>
+  </section>
+</div>
 `;

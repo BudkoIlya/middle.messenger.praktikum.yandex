@@ -1,0 +1,13 @@
+@use 'src/styles/common';
+
+.container {
+  @include common.form;
+
+  .registerButton {
+    @include common.hoverText($link: true);
+  }
+
+  .signInBtn {
+    margin-top: 10px;
+  }
+}

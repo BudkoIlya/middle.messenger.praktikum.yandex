@@ -4,19 +4,19 @@ const checkPrivateProp = (prop: string) => {
   if (prop.startsWith('_')) throw new Error('Нет доступа');
 };
 
-export function createProxy(props: Props, setIsUpdated: (value: boolean) => void): Props {
+export function createProxy<P extends Props>(props: P, setIsUpdated: (value: boolean) => void): P {
   return new Proxy(props, {
-    get(target: Props, prop: string) {
+    get(target: P, prop: string) {
       checkPrivateProp(prop);
-      const value = target[prop as keyof Props];
+      const value = target[prop as keyof P];
       if (typeof value === 'function') {
         return value.bind(target);
       }
       return value;
     },
-    set(target: Props, prop: string, value: Props[keyof Props]) {
+    set(target: P, prop: string, value: P[keyof P]) {
       checkPrivateProp(prop as string);
-      const key = prop as keyof Props;
+      const key = prop as keyof P;
       if (target[key] !== value) {
         target[key] = value;
         setIsUpdated(true);
@@ -24,7 +24,7 @@ export function createProxy(props: Props, setIsUpdated: (value: boolean) => void
 
       return true;
     },
-    deleteProperty(target: Props, prop: string) {
+    deleteProperty(target: P, prop: string) {
       if (prop in target) {
         throw new Error('Нет доступа');
       }

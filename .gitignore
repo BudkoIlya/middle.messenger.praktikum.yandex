@@ -2,3 +2,4 @@
 .idea
 .vscode
 /dist
+*.scss.d.ts

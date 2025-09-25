@@ -1,0 +1,26 @@
+@use 'src/styles/common';
+
+.container {
+  @include common.form;
+
+  display: grid;
+  grid-template-rows: max-content min-content max-content min-content;
+  place-items: center center;
+  justify-items: center;
+
+  .saveBtn {
+    margin-top: 10px;
+  }
+
+  .cancelBtn {
+    cursor: pointer;
+    background: white;
+    border: none;
+    color: black;
+    width: 100px;
+    font-size: 14px;
+    margin-top: 10px;
+
+    @include common.hoverText(black, common.$blue);
+  }
+}

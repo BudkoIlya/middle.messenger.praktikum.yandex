@@ -1,4 +1,5 @@
-import type { Events } from '../../common/Block/types';
+import type { Block } from '@common';
+import type { Events } from '@common/Block/types';
 
 export interface IInput {
   title?: string;
@@ -10,5 +11,9 @@ export interface IInput {
   placeholder?: string;
   value?: string;
   events?: Events;
+  styles?: CSSModuleClasses;
+  label?: string | Block;
+  helpTextClass?: string;
+  error?: boolean;
   [key: string]: unknown;
 }

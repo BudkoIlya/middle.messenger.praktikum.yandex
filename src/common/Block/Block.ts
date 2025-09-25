@@ -1,29 +1,32 @@
 import Handlebars from 'handlebars';
 import { v4 } from 'uuid';
 
+import { isEqual } from '@utils/isEqual';
+
 import { EventBus } from '../EvenBus';
+import { HandlebarsRegister } from '../HandlebarsRegistration';
 import { createProxy } from '../Proxy';
-import type { Props } from './types';
+import type { IItem } from '../HandlebarsRegistration/types';
+import type { BlockEvents, EventsMap, Props } from './types';
 
-type EventsMap = Record<string, EventListener>;
-
-export abstract class Block {
-  static EVENTS = {
+export abstract class Block<P extends Props = Props> {
+  private static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
     FLOW_RENDER: 'flow:render',
+    FLOW_RENDERED: 'flow:rendered',
   } as const;
 
   private _id: string = v4();
 
   private _element: HTMLElement | null = null;
 
-  private _meta: { tagName?: string; props: Props };
+  private _meta: { tagName?: string; props: P };
 
-  private _eventBus: EventBus;
+  private _eventBus: EventBus<BlockEvents<P>>;
 
-  private _rootless = false;
+  private readonly _rootless: boolean = false;
 
   private _isUpdated = false;
 
@@ -32,22 +35,27 @@ export abstract class Block {
   // Храним функцию для снятия всех обработчиков, навешанных последним рендером
   private _removeEvents?: () => void;
 
-  private _onInit = this._init.bind(this);
+  private _onInit = () => this._init();
 
-  private _onCDM = this._componentDidMount.bind(this);
+  private _onCDM = () => this._componentDidMount();
 
-  private _onCDU = this._componentDidUpdate.bind(this);
+  private _onCDU = (oldProps: P, newProps: P) => this._componentDidUpdate(oldProps, newProps);
 
-  private _onRender = this._render.bind(this);
+  private _onRender = () => this._render();
 
-  props: Props;
+  private _onAfterRender = () => this._afterRender();
 
-  protected constructor(tagName: string = '', props: Props) {
-    const eventBus = new EventBus();
+  handlebarsRegister = new HandlebarsRegister();
+
+  props: P;
+
+  protected constructor(tagName: string = '', props: P, registerItems?: IItem[]) {
+    const eventBus = new EventBus<BlockEvents<P>>();
     this._eventBus = eventBus;
     this._rootless = !tagName;
     this._meta = { tagName, props };
     this.props = this._makePropsProxy(props, this._setIsUpdated.bind(this));
+    this.handlebarsRegister.register(registerItems);
 
     this._registerEvents(eventBus);
     eventBus.emit(Block.EVENTS.INIT);
@@ -57,11 +65,12 @@ export abstract class Block {
     return this._id;
   }
 
-  private _registerEvents(eventBus: EventBus) {
+  private _registerEvents(eventBus: EventBus<BlockEvents<P>>) {
     eventBus.on(Block.EVENTS.INIT, this._onInit);
     eventBus.on(Block.EVENTS.FLOW_CDM, this._onCDM);
     eventBus.on(Block.EVENTS.FLOW_CDU, this._onCDU);
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._onRender);
+    eventBus.on(Block.EVENTS.FLOW_RENDERED, this._onAfterRender);
   }
 
   private _createResources() {
@@ -89,16 +98,16 @@ export abstract class Block {
     this._eventBus.emit(Block.EVENTS.FLOW_CDM);
   }
 
-  private _componentDidUpdate(oldProps: Props, newProps: Props) {
+  private _componentDidUpdate(oldProps: P, newProps: P) {
     const shouldUpdate = this.componentDidUpdate(oldProps, newProps);
     if (shouldUpdate) this._eventBus.emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  protected componentDidUpdate(_oldProps: Props, _newProps: Props) {
-    return true;
+  protected componentDidUpdate(_oldProps: P, _newProps: P) {
+    return !isEqual(_oldProps, _newProps);
   }
 
-  setProps = (nextProps: Props) => {
+  setProps = (nextProps: P | Partial<P>) => {
     if (!nextProps) return;
     const oldValue = { ...this.props };
     Object.assign(this.props, nextProps);
@@ -108,8 +117,19 @@ export abstract class Block {
     }
   };
 
+  forceUpdate(props?: P) {
+    if (props) this.setProps(props);
+    else this._eventBus.emit(Block.EVENTS.FLOW_CDU, this.props, this.props);
+  }
+
   private _setIsUpdated(isUpdated: boolean) {
     this._isUpdated = isUpdated;
+  }
+
+  afterRender?(): void;
+
+  private _afterRender() {
+    this.afterRender?.();
   }
 
   private _addEvents() {
@@ -160,7 +180,7 @@ export abstract class Block {
     return value;
   }
 
-  private _prepareContext(props: Props): Record<string, unknown> {
+  private _prepareContext(props: P): Record<string, unknown> {
     const context: Record<string, unknown> = {};
     Object.entries(props).forEach(([key, value]) => {
       context[key] = this._unwrap(value);
@@ -168,7 +188,7 @@ export abstract class Block {
     return context;
   }
 
-  private _forEachChild(value: unknown, cb: (child: Block) => void): void {
+  private _forEachChild(value: unknown, cb: (child: Block<P>) => void): void {
     if (Array.isArray(value)) {
       value.forEach((item) => this._forEachChild(item, cb));
     } else if (value instanceof Block) {
@@ -182,9 +202,8 @@ export abstract class Block {
     this._forEachChild(this.props, (child) => {
       const stub = fragment.querySelector(`[data-block-id="${child.id}"]`);
       const node = child.getContent();
-      if (stub && node) {
-        stub.replaceWith(node);
-      }
+
+      if (stub && node) stub.replaceWith(node);
     });
   }
 
@@ -203,6 +222,7 @@ export abstract class Block {
 
       if (!newRoot) {
         this._addEvents();
+        this._eventBus.emit(Block.EVENTS.FLOW_RENDERED);
         return;
       }
 
@@ -225,6 +245,8 @@ export abstract class Block {
     this._forEachChild(props, (child) => child.dispatchComponentDidMount());
 
     this._addEvents();
+
+    this._eventBus.emit(Block.EVENTS.FLOW_RENDERED);
   }
 
   private _compile(template: string, context: Record<string, unknown>): DocumentFragment {
@@ -235,7 +257,7 @@ export abstract class Block {
     return temp.content;
   }
 
-  protected abstract render(): string;
+  abstract render(): string;
 
   getContent(): HTMLElement | null {
     return this._element;
@@ -252,11 +274,19 @@ export abstract class Block {
 
   unmount(): void {
     this._removeAllEvents();
-    this._destroy();
+    this._cleanupChildren();
   }
 
-  private _cleanupChildren() {
-    this._forEachChild(this.props, (child) => child.unmount());
+  destroy(): void {
+    this._destroy();
+    this.handlebarsRegister.unRegister();
+  }
+
+  private _cleanupChildren(destroy = false) {
+    this._forEachChild(this.props, (child) => {
+      if (destroy) child.destroy();
+      else child.unmount();
+    });
   }
 
   private _destroy(): void {
@@ -264,10 +294,7 @@ export abstract class Block {
     this._isDestroyed = true;
 
     this._removeAllEvents?.();
-
     this._cleanupChildren();
-
-    this._element?.remove();
 
     this._eventBus.off(Block.EVENTS.INIT, this._onInit);
     this._eventBus.off(Block.EVENTS.FLOW_CDM, this._onCDM);
@@ -276,10 +303,9 @@ export abstract class Block {
 
     this._eventBus = null as unknown as EventBus;
     this._element = null;
-    this._meta = {} as unknown as { tagName: string; props: Props };
-    this.props = {} as unknown as Props;
+    this._meta = {} as unknown as { tagName: string; props: P };
+    this.props = {} as unknown as P;
   }
 
-  private _makePropsProxy = (props: Props, setIsUpdated: (value: boolean) => void): Props =>
-    createProxy(props, setIsUpdated);
+  private _makePropsProxy = (props: P, setIsUpdated: (value: boolean) => void): P => createProxy(props, setIsUpdated);
 }

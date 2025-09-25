@@ -1,0 +1,92 @@
+@use 'src/styles/common';
+@use 'src/styles/main';
+@use '../../common/styles/common.module' as chatCommon;
+
+.activeChat {
+  @include chatCommon.chat;
+
+  .chat__dialog {
+    display: grid;
+    grid-template-rows: 55px 1fr 80px;
+    height: calc(100dvh - 98px);
+
+    .chat__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid common.$grey;
+      width: 100%;
+      padding: 10px 20px;
+
+      .chat-title {
+        margin: 0;
+      }
+    }
+  }
+
+  .chat__messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: scroll;
+
+    .chat__received_message,
+    .chat__answer_message {
+      max-width: 48%;
+    }
+
+    .chat__received_message {
+      background-color: common.$violet;
+      color: white;
+      border-radius: 0 8px 8px;
+    }
+
+    .chat__answer_message {
+      background-color: common.$blue;
+      color: white;
+      align-self: end;
+      border-radius: 8px 8px 0;
+
+      .message__time {
+        color: common.$blue;
+      }
+    }
+  }
+
+  .chat__messages,
+  .chat__form {
+    padding: 20px;
+  }
+
+  .chat__form {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 30px 1fr 50px;
+    align-items: center;
+
+    .chat__add-file-btn,
+    .chat__send-message {
+      cursor: pointer;
+    }
+
+    .form__send-message {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .form__input {
+      width: 100%;
+      background: #edecec;
+      border: none;
+      border-radius: 15px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

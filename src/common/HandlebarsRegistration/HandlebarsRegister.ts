@@ -1,9 +1,19 @@
 import Handlebars from 'handlebars';
 
-import type { IMountBlock, IItem } from './types';
+import type { IItem, IMountBlock } from './types';
+
+Handlebars.registerHelper('eq', (a, b) => a === b);
 
 export class HandlebarsRegister {
   items: IMountBlock = new Map();
+
+  private static __instance: HandlebarsRegister;
+
+  constructor(items?: IItem[]) {
+    if (HandlebarsRegister.__instance) return HandlebarsRegister.__instance;
+    this._setItems(items);
+    HandlebarsRegister.__instance = this;
+  }
 
   private _setItems(items?: IItem[]) {
     items?.forEach(({ key, template }) => {
@@ -12,14 +22,9 @@ export class HandlebarsRegister {
     });
   }
 
-  constructor(items?: IItem[]) {
-    this._setItems(items);
-  }
-
   register = (items?: IItem[]) => {
-    if (items) {
-      this._setItems(items);
-    }
+    if (items) this._setItems(items);
+
     this.items.forEach((template, key) => {
       if (!template) return;
       Handlebars.registerPartial(key, template);

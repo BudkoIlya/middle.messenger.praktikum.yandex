@@ -1,28 +1,30 @@
-import { NotActivePageComp } from '../templates';
-import { Block } from '../../../../common/Block';
-import { Input } from '../../../../components/input';
-import { Button } from '../../../../components/button';
-import { Img } from '../../../../components/img';
+import { Block } from '@common';
+import { LinksPages } from '@common/Router/PathConfig';
+import { ChatController } from '@controllers/ChatController';
+import { store } from '@store';
+import type { Props } from '@common/Block/types';
+import type { ChatItemsCrt } from '@pages/Chat/common/components/chatItems/scripts';
+import type { IUser } from '@store/UserStore/types';
+
 import { ChatItems } from '../../common/components/chatItems';
+import { NotActivePageComp } from '../templates';
 
-export class NotActiveChatPage extends Block {
+import styles from '../styles/styles.module.scss';
+
+interface INotActiveChatPageCrt extends Props {
+  chatItems: ChatItemsCrt;
+  styles: CSSModuleClasses;
+  user?: IUser;
+}
+
+export class NotActiveChatPage extends Block<INotActiveChatPageCrt> {
   constructor() {
-    super('div', {
-      chatItems: new ChatItems({ active: false }),
-      img: new Img({ alt: 'Добавить', src: '/assets/add_btn.svg', class: 'chat__add-file-btn' }),
-      input: new Input({ name: 'message', placeholder: 'Сообщение' }),
-      button: new Button({
-        type: 'submit',
-        className: 'form__send-message',
-        name: 'message',
-        text: new Img({ alt: 'Отправить', src: '/assets/arrow.svg', class: 'chat__add-file-btn' }),
-      }),
-    });
+    super('', { chatItems: new ChatItems(), styles }, [{ key: LinksPages.messenger, template: NotActivePageComp }]);
+  }
 
-    const div = this.getContent();
-    if (div) {
-      div.className = 'notActiveChat';
-    }
+  async dispatchComponentDidMount() {
+    if (!store.state?.chat.chatList) await ChatController.getChats();
+    super.dispatchComponentDidMount();
   }
 
   render(): string {

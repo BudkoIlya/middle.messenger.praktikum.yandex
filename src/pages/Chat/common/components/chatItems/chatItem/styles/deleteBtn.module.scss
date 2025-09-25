@@ -1,0 +1,41 @@
+@use 'src/styles/common';
+
+.wrapper {
+  display: flex;
+  place-items: center;
+
+  .confirm {
+    display: none;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 3px 5px common.$shadowColor;
+    border-radius: 8px;
+
+    &.show {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+
+      .buttons {
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+
+        button:first-of-type {
+          width: 150px;
+          background-color: common.$red;
+        }
+
+        button:last-of-type {
+          cursor: pointer;
+          width: fit-content;
+          align-self: center;
+          background-color: transparent;
+          border: none;
+
+          @include common.hoverText;
+        }
+      }
+    }
+  }
+}

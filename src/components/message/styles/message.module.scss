@@ -1,0 +1,27 @@
+.message {
+  padding: 10px 10px 5px;
+  background: #cdcdcdff;
+  color: #555;
+  width: fit-content;
+
+  .message__text {
+    font-size: 18px;
+  }
+
+  .message__status {
+    display: grid;
+    grid-template-columns: 1fr 16px;
+    justify-content: end;
+    align-items: center;
+
+    .message__time {
+      text-align: end;
+      font-weight: bold;
+      font-size: 10px;
+    }
+
+    .message__check-img {
+      transform: scale(0.5);
+    }
+  }
+}

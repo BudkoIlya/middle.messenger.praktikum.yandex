@@ -7,15 +7,17 @@ export enum ElementsKeys {
   input = 'input',
   button = 'button',
   img = 'img',
+  link = 'link',
+  select = 'select',
   // Компоненты чата
   chatItem = 'chatItem',
   chatItems = 'chatItems',
   message = 'message',
 }
 
-export type IMountBlock = Map<ElementsKeys, Template<unknown>>;
+export type IMountBlock = Map<ElementsKeys | string, Template<unknown>>;
 
 export interface IItem {
-  key: ElementsKeys;
+  key: ElementsKeys | string;
   template: Template<unknown>;
 }

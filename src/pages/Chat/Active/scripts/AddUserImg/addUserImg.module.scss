@@ -1,0 +1,80 @@
+@use 'src/styles/common';
+
+.wrapper {
+  position: relative;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  padding: 4px;
+  transition: all 0.25s ease;
+
+  &:hover {
+    padding: 2px;
+    border-radius: 50%;
+    box-shadow: 0 3px 5px common.$shadowColor;
+  }
+
+  .actions {
+    position: absolute;
+    top: 0;
+    left: -350px;
+    box-shadow: 0 3px 10px common.$shadowColor;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    z-index: 1;
+    display: none;
+
+    & > button {
+      @include common.hoverText;
+
+      cursor: pointer;
+      background: transparent;
+      border: none;
+    }
+
+    &.show {
+      cursor: default;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form {
+      display: grid;
+      grid-template-rows: repeat(3, min-content);
+      grid-gap: 5px;
+      justify-items: center;
+      padding-bottom: 15px;
+      border-bottom: 1px solid common.$grey;
+
+      .title {
+        margin: 5px 0;
+        justify-self: start;
+      }
+
+      & > button {
+        margin-top: 5px;
+        width: 100%;
+      }
+
+      input {
+        width: 350px;
+      }
+    }
+  }
+
+  .select {
+    width: 350px;
+  }
+
+  .addUserImg {
+    cursor: pointer;
+  }
+}
+
+.deleteBtn {
+  background-color: common.$red;
+}

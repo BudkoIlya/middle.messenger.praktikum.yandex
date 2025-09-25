@@ -1,55 +1,67 @@
-import type { INavigation } from '../template';
+import { PathConfig } from '@common/Router/PathConfig';
+import type { BlockConstructor } from '@common/Router/Router';
+import type { IUser } from '@store/UserStore/types';
 
-export enum Links {
-  register = 'register',
-  homepage = 'homepage',
-  login = 'login',
-  profile = 'profile',
-  editPassword = 'editPassword',
-  chat = 'chat',
-  activeChat = 'activeChat',
-  error404 = 'error404',
-  error500 = 'error500',
-}
+import type { IPageVariantsByLink, NavigationProps } from './types';
 
-interface Page {
-  id: Links;
-  path: string;
-}
+import styles from '../styles/navigation.module.scss';
 
-type PageVariants = {
-  [Links.profile]: { view: Page; edit: Page };
-};
+export const named = (exportName: string) => (m: Record<string, unknown>) => ({
+  default: m[exportName] as BlockConstructor,
+});
 
-export type IPageVariantsByLink = {
-  [K in Links]: K extends keyof PageVariants ? PageVariants[K] : Page;
-};
-
-export const Paths: IPageVariantsByLink = {
-  [Links.homepage]: { id: Links.homepage, path: '/' },
-  [Links.register]: { id: Links.register, path: `/${Links.register}` },
-  [Links.login]: { id: Links.login, path: `/${Links.login}` },
-  [Links.profile]: {
-    view: { id: Links.profile, path: `/${Links.profile}?mode=view` },
-    edit: { id: Links.profile, path: `/${Links.profile}?mode=edit` },
+export const Routers: IPageVariantsByLink = {
+  register: {
+    path: PathConfig.register,
+    component: () => import('@pages/Registration/scripts/registerPage').then(named('RegisterPage')),
   },
-  [Links.editPassword]: { id: Links.editPassword, path: `/${Links.editPassword}` },
-  [Links.chat]: { id: Links.chat, path: `/${Links.chat}` },
-  [Links.activeChat]: { id: Links.activeChat, path: `/${Links.activeChat}` },
-  [Links.error404]: { id: Links.error404, path: `/${Links.error404}` },
-  [Links.error500]: { id: Links.error500, path: `/${Links.error500}` },
+  login: {
+    path: PathConfig.login,
+    component: () => import('@pages/Login/scripts/loginPage').then(named('LoginPage')),
+  },
+  settings: [
+    {
+      path: PathConfig.settings.view,
+      component: () => import('@pages/Profile/scripts/profilePage').then(named('ProfilePage')),
+    },
+    {
+      path: PathConfig.settings.edit,
+      component: () => import('@pages/Profile/scripts/profilePage').then(named('ProfilePage')),
+    },
+  ],
+  editPassword: {
+    path: PathConfig.editPassword,
+    component: () => import('@pages/EditPassword/scripts/editPasswordPage').then(named('EditPasswordPage')),
+  },
+  messenger: [
+    {
+      path: PathConfig.messenger.notActive,
+      component: () => import('@pages/Chat/NotActive/scripts/notActiveChat').then(named('NotActiveChatPage')),
+    },
+    {
+      path: PathConfig.messenger.active,
+      component: () => import('@pages/Chat/Active/scripts/activeChat').then(named('ActiveChatPage')),
+    },
+  ],
+  error: {
+    path: PathConfig.error,
+    component: () => import('@pages/Error/scripts/errorPage').then(named('ErrorPage')),
+  },
 };
 
-export const NAVIGATION_CONTEXT: { links: INavigation[] } = {
-  links: [
-    { ...Paths[Links.homepage], text: 'Главная' },
-    { ...Paths[Links.register], text: 'Регистрация' },
-    { ...Paths[Links.login], text: 'Вход' },
-    { ...Paths[Links.profile].view, text: 'Профиль' },
-    { ...Paths[Links.editPassword], text: 'Изменить пароль' },
-    { ...Paths[Links.chat], text: 'Чат' },
-    { ...Paths[Links.activeChat], text: 'Выбранный чат' },
-    { ...Paths[Links.error404], text: '404' },
-    { ...Paths[Links.error500], text: '500' },
-  ],
+export const getNavigationProps = (user?: IUser): NavigationProps => {
+  const hiddenPage = Object.values(user ?? {}).every((v) => !v) ? 'hidden' : undefined;
+  const hiddenAuthPath = hiddenPage ? undefined : 'hidden';
+  return {
+    user,
+    links: [
+      { path: PathConfig.register, text: 'Регистрация', hidden: hiddenAuthPath },
+      { path: PathConfig.login, text: 'Вход', hidden: hiddenAuthPath },
+      { path: PathConfig.settings.view, text: 'Профиль', hidden: hiddenPage },
+      { path: PathConfig.editPassword, text: 'Изменить пароль', hidden: 'hidden' },
+      { path: PathConfig.messenger.notActive, text: 'Чат', hidden: hiddenPage },
+      { path: PathConfig.error, text: 'Ошибка', hidden: 'hidden' },
+    ],
+    styles,
+  };
 };

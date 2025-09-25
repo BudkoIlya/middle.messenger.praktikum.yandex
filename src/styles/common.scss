@@ -1,28 +1,35 @@
 $blue: #4585fd;
+$violet: #6d4af9;
 $grey: #afadad;
+$lightGrey: #faf8f8;
 $red: #f44336;
-$shadowColor: rgb(0 0 0 / 35%);
+$darkRed: #f50202;
+$shadowColor: rgb(87 87 87 / 35%);
 
-@mixin form($className) {
-  .#{$className} {
-    height: 97%;
-    width: 30%;
-    box-shadow: 0 0 10px $shadowColor;
-    padding: 20px 40px;
-    border-radius: 10px;
-    margin: auto;
+// Form
+$placeholderColor: #afadad;
 
-    .form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
+@mixin form() {
+  height: 97%;
+  width: 30%;
+  min-width: 500px;
+  box-shadow: 0 3px 10px $shadowColor;
+  padding: 20px 40px;
+  border-radius: 10px;
+  margin: 10px auto auto;
 
-      .title {
-        text-align: center;
-      }
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
 
+    .title {
+      text-align: center;
+    }
+
+    :global {
       .label {
         display: flex;
         gap: 5px;
@@ -35,5 +42,19 @@ $shadowColor: rgb(0 0 0 / 35%);
         }
       }
     }
+  }
+}
+
+@mixin hoverText($color: $blue, $hoverColor: $violet, $link: false) {
+  @if $link {
+    text-decoration: none;
+  }
+
+  color: $color;
+  transition: color 0.25s;
+
+  &:hover {
+    color: $hoverColor;
+    transition: color 0.5s;
   }
 }
