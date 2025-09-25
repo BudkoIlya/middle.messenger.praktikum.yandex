@@ -39,9 +39,9 @@
     "tsc": "tsc --noEmit",
     "format": "prettier --write src",
     "prepare": "husky",
-    "clear-vite-cache": "rimraf node_modules/.vite",
-    "clear-eslint-cache": "rimraf node_modules/.cache/eslint",
-    "clear-stylelint-cache": "rimraf node_modules/.cache/stylelint"
+    "clear-vite-cache": "rimraf ./node_modules/.vite",
+    "clear-eslint-cache": "rimraf ./node_modules/.cache/eslint",
+    "clear-stylelint-cache": "rimraf ./node_modules/.cache/stylelint"
   },
   "lint-staged": {
     "**/*.ts": [

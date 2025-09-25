@@ -2,12 +2,9 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 if [ "$3" = "1" ]; then
-  echo "[husky] post-checkout: clearing caches..."
   if [ -d "node_modules" ]; then
     npm run -s clear-vite-cache || true
     npm run -s clear-eslint-cache || true
     npm run -s clear-stylelint-cache || true
-  else
-    echo "[husky] node_modules not found, skipping cache clear"
   fi
 fi
