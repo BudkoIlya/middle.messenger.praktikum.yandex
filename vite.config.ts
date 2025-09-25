@@ -16,11 +16,15 @@ export default defineConfig(() => ({
       typescript: { tsconfigPath: `./tsconfig.json` },
       eslint: {
         watchPath: 'src',
-        lintCommand: `eslint "**/*.ts"`,
+        lintCommand: 'eslint "**/*.ts" --cache --cache-location ../node_modules/.cache/eslint/.eslintcache',
         useFlatConfig: true,
         dev: { logLevel: ['error'] },
       },
-      stylelint: { watchPath: 'src', lintCommand: `stylelint "**/*.scss"`, dev: { logLevel: ['error'] } },
+      stylelint: {
+        watchPath: 'src',
+        lintCommand: 'stylelint "**/*.scss" --cache --cache-location ../node_modules/.cache/stylelint/.stylelintcache',
+        dev: { logLevel: ['error'] },
+      },
     }),
   ],
   css: { modules: { generateScopedName: '[name]_[local]__[hash:base64:5]' } },
