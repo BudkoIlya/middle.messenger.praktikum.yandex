@@ -1,10 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-if [ "$3" = "1" ]; then
-  if [ -d "node_modules" ]; then
-    npm run -s clear-vite-cache || true
-    npm run -s clear-eslint-cache || true
-    npm run -s clear-stylelint-cache || true
-  fi
-fi
+npm run -s clear-vite-cache && npm run -s clear-eslint-cache && npm run -s clear-stylelint-cache
