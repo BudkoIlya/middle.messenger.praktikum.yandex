@@ -15,6 +15,7 @@
     "handlebars": "^4.7.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.1",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "sass-embedded": "^1.91.0",
@@ -32,7 +33,7 @@
   "scripts": {
     "dev": "vite",
     "start": "npm run build && vite preview",
-    "prebuild": "npm run format && npm run tsc && npm run lint && npm run lint:scss",
+    "prebuild": "npm run format && npm-run-all --parallel tsc lint lint:scss",
     "build": "npm run prebuild && vite build",
     "lint": "eslint --ext .ts src --max-warnings=0",
     "lint:scss": "stylelint src/**/*.scss",
@@ -41,7 +42,8 @@
     "prepare": "husky",
     "clear-vite-cache": "rimraf ./node_modules/.vite",
     "clear-eslint-cache": "rimraf ./node_modules/.cache/eslint",
-    "clear-stylelint-cache": "rimraf ./node_modules/.cache/stylelint"
+    "clear-stylelint-cache": "rimraf ./node_modules/.cache/stylelint",
+    "clear-cache": "npm-run-all --parallel clear-vite-cache clear-eslint-cache clear-stylelint-cache"
   },
   "lint-staged": {
     "**/*.ts": [

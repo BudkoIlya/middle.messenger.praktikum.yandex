@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run -s clear-vite-cache && npm run -s clear-eslint-cache && npm run -s clear-stylelint-cache
+npm run clear-cache
