@@ -9,6 +9,7 @@ export default defineConfig(() => ({
   base: '/',
   root: resolve(__dirname, 'src'),
   publicDir: resolve(__dirname, 'public'),
+  cacheDir: resolve(__dirname, 'node_modules/.vite'),
   plugins: [
     patchCssModules({ generateSourceTypes: true }),
     viteTsconfigPaths(),
@@ -44,4 +45,5 @@ export default defineConfig(() => ({
   resolve: { alias: { src: resolve(__dirname, './src') } },
   server: { open: true, port: 3000 },
   preview: { port: 3000 },
+  test: { environment: 'jsdom' },
 }));
