@@ -9,6 +9,7 @@ export default defineConfig(() => ({
   base: '/',
   root: resolve(__dirname, 'src'),
   publicDir: resolve(__dirname, 'public'),
+  cacheDir: resolve(__dirname, 'node_modules/.vite'),
   plugins: [
     patchCssModules({ generateSourceTypes: true }),
     viteTsconfigPaths(),
@@ -16,11 +17,15 @@ export default defineConfig(() => ({
       typescript: { tsconfigPath: `./tsconfig.json` },
       eslint: {
         watchPath: 'src',
-        lintCommand: `eslint "**/*.ts"`,
+        lintCommand: 'eslint "**/*.ts" --cache --cache-location ../node_modules/.cache/eslint/.eslintcache',
         useFlatConfig: true,
         dev: { logLevel: ['error'] },
       },
-      stylelint: { watchPath: 'src', lintCommand: `stylelint "**/*.scss"`, dev: { logLevel: ['error'] } },
+      stylelint: {
+        watchPath: 'src',
+        lintCommand: 'stylelint "**/*.scss" --cache --cache-location ../node_modules/.cache/stylelint/.stylelintcache',
+        dev: { logLevel: ['error'] },
+      },
     }),
   ],
   css: { modules: { generateScopedName: '[name]_[local]__[hash:base64:5]' } },
@@ -38,9 +43,7 @@ export default defineConfig(() => ({
     },
   },
   resolve: { alias: { src: resolve(__dirname, './src') } },
-  server: {
-    open: true,
-    port: 3000,
-  },
+  server: { open: true, port: 3000 },
   preview: { port: 3000 },
+  test: { environment: 'jsdom' },
 }));
