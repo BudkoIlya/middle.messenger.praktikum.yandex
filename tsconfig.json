@@ -22,7 +22,7 @@
     "useDefineForClassFields": true,
     "target": "ES2023",
     "lib": ["dom", "dom.iterable", "ES2023"],
-    "types": ["vite/client"],
+    "types": ["vite/client", "vitest"],
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
